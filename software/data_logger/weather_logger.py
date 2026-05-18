@@ -41,9 +41,9 @@ PROC_DIR.mkdir(parents=True, exist_ok=True)
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 # Default coordinates: Lomé, Togo
-DEFAULT_LAT = 6.1375
-DEFAULT_LON = 1.2123
-DEFAULT_LOC = "Lome_Togo"
+DEFAULT_LAT = 9.2488
+DEFAULT_LON = 0.7685
+DEFAULT_LOC = "Bangeli_Bassar_Togo"
 
 # ── Penman-Monteith ET₀ (FAO-56) ──────────────────────────
 
@@ -79,7 +79,7 @@ def ET0_Penman_Monteith(
     RH_mean: float,
     u2: float,
     Rs: float,
-    altitude_m: float = 20.0,
+    altitude_m: float = 333.0,
     G: float = 0.0,
 ) -> float:
     """

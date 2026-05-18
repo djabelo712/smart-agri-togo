@@ -13,9 +13,9 @@ GRID_COLS        = 5
 N_CELLS          = GRID_ROWS * GRID_COLS   # 25
 
 # ── Site location ─────────────────────────────────────────
-LATITUDE_DEG     = 6.1375    # Lomé, Togo
-LONGITUDE_DEG    = 1.2123
-ALTITUDE_M       = 20.0      # elevation above sea level [m]
+LATITUDE_DEG     = 9.2488    # Bangeli, Bassar District, Kara Region, Togo
+LONGITUDE_DEG    = 0.7685
+ALTITUDE_M       = 333.0      # elevation above sea level [m]
 
 # ── Soil parameters (update after lab analysis) ───────────
 # Default values for sandy loam — southern Togo
