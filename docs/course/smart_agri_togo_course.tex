@@ -1,0 +1,1681 @@
+% ================================================================
+%  SMART AGRI-TOGO — COMPLETE TECHNICAL COURSE
+%  Mathematics, Irrigation, Organic Fertilization, Energy Systems
+%  Author: Ounimborbitibou DJABON
+% ================================================================
+\documentclass[12pt,a4paper,openany]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{top=2.4cm,bottom=2.4cm,left=3cm,right=2.5cm}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,backgrounds,calc,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,theorems}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{parskip}
+\setlength{\parskip}{5pt}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=teal!80!black,citecolor=teal!70!black,urlcolor=teal!60!black}
+
+% ── COLORS ──
+\definecolor{agrigreen}{RGB}{22,100,45}
+\definecolor{skyblue}{RGB}{20,110,190}
+\definecolor{soilorange}{RGB}{190,90,20}
+\definecolor{sunyellow}{RGB}{200,160,10}
+\definecolor{lightgrey}{RGB}{248,248,248}
+\definecolor{darkgrey}{RGB}{70,70,70}
+\definecolor{biogreen}{RGB}{50,130,50}
+\definecolor{energygold}{RGB}{200,155,0}
+
+% ── HEADERS ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textit{Smart Agri-Togo — Technical Course}}
+\fancyhead[RO]{\small\textit{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% ── CHAPTER/SECTION STYLE ──
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{agrigreen}}
+  {\chaptertitlename\ \thechapter}{12pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{agrigreen!80!black}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{agrigreen!60!black}}{\thesubsection}{1em}{}
+
+% ── TCOLORBOX ENVIRONMENTS ──
+\newtcolorbox{defbox}[1]{
+  colback=skyblue!7,colframe=skyblue!60!black,
+  title=\textbf{Definition: #1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{thmbox}[1]{
+  colback=agrigreen!7,colframe=agrigreen!60!black,
+  title=\textbf{#1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{exbox}[1]{
+  colback=soilorange!7,colframe=soilorange!60,
+  title=\textbf{Example — #1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{exobox}[1]{
+  colback=sunyellow!10,colframe=sunyellow!70!black,
+  title=\textbf{Exercise #1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{solbox}[1]{
+  colback=lightgrey,colframe=darkgrey!50,
+  title=\textbf{Solution to Exercise #1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{keybox}[1]{
+  colback=agrigreen!10,colframe=agrigreen!70!black,
+  title=\textbf{#1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{energybox}[1]{
+  colback=energygold!10,colframe=energygold!70!black,
+  title=\textbf{#1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+\newtcolorbox{biobox}[1]{
+  colback=biogreen!8,colframe=biogreen!60!black,
+  title=\textbf{#1},fonttitle=\normalfont\bfseries,
+  arc=4pt,breakable}
+
+% ── THEOREM ENVIRONMENTS ──
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}{Remark}[chapter]
+\newcounter{exoctr}[chapter]
+\renewcommand{\theexoctr}{\thechapter.\arabic{exoctr}}
+
+% ── MATH SHORTCUTS ──
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\bx}{\bm{x}}
+\newcommand{\bu}{\bm{u}}
+\newcommand{\bth}{\bm{\theta}}
+\newcommand{\ddt}{\frac{d}{dt}}
+\newcommand{\dt}{\,\mathrm{d}t}
+\newcommand{\dx}{\,\mathrm{d}x}
+\newcommand{\Tr}{\mathrm{T}}
+
+% ================================================================
+\begin{document}
+\onehalfspacing
+
+% ── TITLE PAGE ──
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[agrigreen!18] (current page.north west)
+        rectangle ([yshift=-5cm]current page.north east);
+  \fill[agrigreen] (current page.south west)
+        rectangle ([yshift=1.8cm]current page.south east);
+\end{tikzpicture}
+\vspace*{0.8cm}
+\begin{center}
+{\color{agrigreen}\rule{\linewidth}{2pt}}\\[0.4cm]
+{\fontsize{28}{34}\selectfont\bfseries\color{agrigreen!80!black}
+  SMART AGRI-TOGO}\\[0.3cm]
+{\LARGE\bfseries Complete Technical Course}\\[0.25cm]
+{\color{agrigreen}\rule{\linewidth}{1pt}}\\[0.7cm]
+\begin{tcolorbox}[colback=agrigreen!10,colframe=agrigreen!70,
+  arc=6pt,width=0.88\textwidth]
+\centering
+{\large\bfseries From Mathematics to the Living Farm}\\[0.3cm]
+{\normalsize
+Differential Equations $\cdot$ Optimal Control $\cdot$ Machine Learning\\
+Soil Physics $\cdot$ Irrigation Science $\cdot$ Organic Fertilization\\
+Biogas \& Composting $\cdot$ Solar Energy Systems\\[0.3cm]
+\textit{With worked examples and exercises for self-study}}
+\end{tcolorbox}
+\vspace{1.2cm}
+{\Large\bfseries Ounimborbitibou DJABON}\\[0.3cm]
+{\normalsize
+Master's Student — MPFA-PT (Physique Théorique)\\
+Université de Lomé, Togo\quad|\quad AgroLab Africa, AIMS Ghana}\\[1.2cm]
+{\small\color{darkgrey}\textbf{Version 1.0} $\cdot$ \today\\[0.2cm]
+\textit{A living document — to be updated as the project progresses}}\\[1.5cm]
+{\color{agrigreen}\rule{\linewidth}{1pt}}
+\end{center}
+\end{titlepage}
+
+% ── PREFACE ──
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+\markboth{Preface}{Preface}
+
+This course is your personal companion for the Smart Agri-Togo project. It is not a textbook written for a general audience — it is written specifically \textit{for you}, starting from your background in theoretical physics and building up every mathematical, agronomic, and engineering concept you will need to design, build, and operate an intelligent counter-season farm in Togo.
+
+The course is organised in four parts:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Part I — Mathematics}: the differential equations, linear algebra, optimisation theory, optimal control, and machine learning that power the intelligent irrigation system.
+  \item \textbf{Part II — Irrigation Science}: soil physics, evapotranspiration, and crop water models — translating your mathematical tools into real agronomic quantities.
+  \item \textbf{Part III — Organic Fertilization}: the complete plan to nourish your crops using only biomass, animal manure, and human biosolids — no synthetic chemicals — with the biochemistry and the practical protocols.
+  \item \textbf{Part IV — Energy Systems}: a rigorous analysis of your energy needs and a full solar power system design, sized for your specific conditions in southern Togo.
+\end{itemize}
+
+Every chapter contains \textbf{worked examples} drawn from the actual Smart Agri-Togo context and \textbf{exercises with full solutions}. The exercises are not optional — they are the fastest path to genuine understanding.
+
+\tableofcontents
+\newpage
+
+% ================================================================
+\part{Mathematical Foundations}
+% ================================================================
+
+% ────────────────────────────────────────────────
+\chapter{Ordinary Differential Equations and Dynamical Systems}
+\label{chap:ode}
+% ────────────────────────────────────────────────
+
+\section{Why ODEs? The Physics of Soil Water}
+
+At the heart of Smart Agri-Togo lies one equation: the soil water balance. Like all physical conservation laws, it is a differential equation. Understanding it mathematically is the first step to controlling it optimally.
+
+\begin{defbox}{Ordinary Differential Equation (ODE)}
+An \textbf{ordinary differential equation} of order $n$ for the unknown function
+$x(t)$ is a relation of the form
+\[F\bigl(t,\,x,\,x',\,x'',\ldots,x^{(n)}\bigr)=0.\]
+It is called \textit{autonomous} if $t$ does not appear explicitly.
+It is called \textit{linear} if it is linear in $x$ and all its derivatives.
+\end{defbox}
+
+\section{The Soil Water Balance ODE}
+
+Let $\theta(t)$ [m$^3$/m$^3$] be the volumetric soil water content in a single field cell, averaged over root depth $z_r$ [m]. The mass balance over a unit surface area gives:
+
+\begin{thmbox}{Soil Water Balance (single cell)}
+\begin{equation}
+  z_r\,\frac{d\theta}{dt} = I(t) + P(t) - ET_c(t) - D(t)
+  \label{eq:swb}
+\end{equation}
+where $I$ [mm/h] is the irrigation rate (the \emph{control input}),
+$P$ [mm/h] is precipitation, $ET_c$ [mm/h] is crop evapotranspiration,
+and $D$ [mm/h] is drainage below the root zone.
+\end{thmbox}
+
+In the dry season, $P\approx 0$ and $D\approx 0$ when $\theta < \theta_{fc}$. Equation~\eqref{eq:swb} reduces to:
+\begin{equation}
+  z_r\,\frac{d\theta}{dt} = I(t) - ET_c(t),
+  \label{eq:swb_dry}
+\end{equation}
+which is a \textit{first-order linear non-autonomous ODE} (non-autonomous because $I$ and $ET_c$ are functions of time).
+
+\subsection{General Solution by Integration}
+
+Rewrite Eq.~\eqref{eq:swb_dry} as:
+\begin{equation}
+  \frac{d\theta}{dt} = f(t),\quad f(t) = \frac{I(t)-ET_c(t)}{z_r}.
+\end{equation}
+By direct integration, starting from initial condition $\theta(0)=\theta_0$:
+\begin{equation}
+  \boxed{\theta(t) = \theta_0 + \int_0^t f(\tau)\,d\tau = \theta_0 + \frac{1}{z_r}\int_0^t\bigl[I(\tau)-ET_c(\tau)\bigr]\,d\tau.}
+  \label{eq:theta_solution}
+\end{equation}
+This tells us directly how the moisture changes due to net water input.
+
+\section{Numerical Solution: Euler and Runge-Kutta}
+
+In practice, $I(t)$ and $ET_c(t)$ are only known at discrete time steps (e.g., every 30 minutes). We use numerical integration.
+
+\subsection{Euler Method}
+
+With time step $\Delta t$, the Euler method discretises Eq.~\eqref{eq:swb_dry} as:
+\begin{equation}
+  \theta^{k+1} = \theta^k + \Delta t \cdot f(t_k)
+  = \theta^k + \frac{\Delta t}{z_r}\bigl[I^k - ET_c^k\bigr].
+  \label{eq:euler}
+\end{equation}
+This is the equation the Raspberry Pi solves at every time step. It is first-order accurate: error $\propto (\Delta t)^2$ per step.
+
+\subsection{Runge-Kutta 4th Order (RK4)}
+
+For systems where higher accuracy matters (e.g., calibrating soil models), RK4 uses four evaluations of $f$:
+\begin{align}
+  k_1 &= f(t_n,\,\theta^n),\\
+  k_2 &= f\!\left(t_n+\tfrac{\Delta t}{2},\,\theta^n+\tfrac{\Delta t}{2}k_1\right),\\
+  k_3 &= f\!\left(t_n+\tfrac{\Delta t}{2},\,\theta^n+\tfrac{\Delta t}{2}k_2\right),\\
+  k_4 &= f\!\left(t_n+\Delta t,\,\theta^n+\Delta t\,k_3\right),\\
+  \theta^{n+1} &= \theta^n + \frac{\Delta t}{6}(k_1+2k_2+2k_3+k_4).
+\end{align}
+RK4 is fourth-order accurate (error $\propto(\Delta t)^5$ per step). For the soil water balance, the Euler method with $\Delta t=30$ min is sufficient, but RK4 is used when calibrating the van Genuchten soil model.
+
+\begin{exbox}{Daily moisture dynamics for onion (dry season)}
+\textbf{Given:} $z_r=0.3$ m, $\theta_0=0.60$, $ET_c = 0.3$ mm/h (constant),
+$I(t)=0.8$ mm/h for $t\in[6\text{ h},\,9\text{ h}]$ and $I=0$ otherwise.
+$\Delta t = 1$ h. Find $\theta(t)$ for $t=0$ to $t=24$ h using Euler.
+
+\textbf{Solution:} $f(t) = (I-ET_c)/z_r$ so $f = (0-0.3)/0.3 = -1$ mm/(h$\cdot$m$^3$/m$^3$)
+when not irrigating, and $f=(0.8-0.3)/0.3=1.667$ when irrigating.
+
+Euler steps ($\Delta t=1$ h):
+$t=0$: $\theta^1 = 0.60 + 1\times(-1)\times10^{-3} = 0.600 - 0.001 = 0.599$. At $t=6$ h, $\theta=0.594$.
+During irrigation ($t=6,7,8$): $\theta$ increases by $1.667\times10^{-3}\approx 0.00167$ per hour.
+After 3 h irrigation: $\theta(9)\approx 0.594+3\times0.00167=0.599$.
+Then declines again at $-0.001$/h until $t=24$: $\theta(24)\approx 0.599-15\times0.001=0.584$.
+\end{exbox}
+
+\begin{exobox}{1.\stepcounter{exoctr}\theexoctr}
+A carrot cell has $z_r=0.25$ m, $\theta_0=0.45$, and $ET_c=0.25$ mm/h.
+Irrigation is applied at rate $I=1.0$ mm/h for 4 hours starting at $t=8$ h.
+Using the Euler method with $\Delta t=1$ h:
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\theta(t)$ from $t=0$ to $t=24$ h.
+  \item At what time does $\theta$ first drop below the wilting-point threshold $\theta_{wp}=0.15$?
+  \item Plot (sketch) $\theta(t)$.
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{1.\theexoctr}
+\textbf{(a)} $f_{dry}=(0-0.25)/0.25=-1.0$ (mm/h)/(m$^3$/m$^3$) $= -0.001$ per hour in practice since $I$ and $ET_c$ are in mm/h and $z_r$ is in m (converting: $\Delta\theta = \Delta t \times (I-ET_c)/(z_r \times 1000)$; or keeping all in consistent mm units: $z_r=250$ mm, so $f_{dry}=-0.25/250=-0.001$ h$^{-1}$).
+
+Let us keep consistent units throughout (all lengths in mm, $z_r=250$ mm):
+\[\theta^{k+1}=\theta^k+\frac{\Delta t}{250}(I^k-ET_c^k)\]
+\begin{itemize}
+  \item $t=0\to8$ h: $I=0$, $f=-0.25/250=-0.001$. After 8 h: $\theta(8)=0.45-8\times0.001=0.442$.
+  \item $t=8\to12$ h: $I=1.0$ mm/h, $f=(1.0-0.25)/250=0.003$. After 4 h: $\theta(12)=0.442+4\times0.003=0.454$.
+  \item $t=12\to24$ h: $I=0$, $f=-0.001$. After 12 h: $\theta(24)=0.454-12\times0.001=0.442$.
+\end{itemize}
+\textbf{(b)} Without irrigation, $\theta$ would decline from 0.45 at rate 0.001/h. Time to reach 0.15: $(0.45-0.15)/0.001=300$ h $\approx 12.5$ days. With irrigation every few days, it never reaches $\theta_{wp}$ during the growing season.
+
+\textbf{(c)} The plot shows a piecewise linear decrease, a brief rise during the 4-hour irrigation window ($t=8$ to $12$ h), then a linear decrease again. The shape is a sawtooth wave repeating each irrigation cycle.
+\end{solbox}
+
+\section{Stability of the Soil Water ODE}
+
+Setting $I=ET_c$ (perfectly balanced irrigation), the system reaches a stationary point $\bar\theta$. Perturbing: $\theta = \bar\theta + \varepsilon$. The linearised equation is $\dot\varepsilon = -\lambda\varepsilon$ where $\lambda>0$ (because $ET_c$ increases with $\theta$ through the stress coefficient $K_s$). This means the equilibrium is \textbf{stable}: small perturbations decay exponentially.
+
+% ────────────────────────────────────────────────
+\chapter{Linear Algebra for Multi-Cell Systems}
+\label{chap:linalg}
+% ────────────────────────────────────────────────
+
+\section{From One Cell to 25 Cells}
+
+The 5$\times$5 field has $N=25$ cells, each with its own moisture $\theta_i$. We group them into a \textbf{state vector}:
+\begin{equation}
+  \bth = (\theta_1,\theta_2,\ldots,\theta_{25})^T \in \R^{25}.
+\end{equation}
+Similarly, the irrigation rates form a \textbf{control vector} $\bu=(I_1,\ldots,I_{25})^T\in\R^{25}$.
+
+\section{State-Space Representation}
+
+Writing Eq.~\eqref{eq:euler} for all cells simultaneously:
+\begin{equation}
+  \bth^{k+1} = A\bth^k + B\bu^k + \bm{d}^k,
+  \label{eq:state_space}
+\end{equation}
+where:
+\begin{itemize}[leftmargin=2em]
+  \item $A = I_{25} - \frac{\Delta t}{z_r}\,\mathrm{diag}(\lambda_1,\ldots,\lambda_{25})$ is the state transition matrix ($I_{25}$ is the identity), with $\lambda_i$ accounting for drainage and stress-dependent ET.
+  \item $B = \frac{\Delta t}{z_r}\,I_{25}$ is the input matrix (diagonal, since each valve controls only its own cell).
+  \item $\bm{d}^k = \frac{\Delta t}{z_r}(-ET_{c,1}^k,\ldots,-ET_{c,25}^k)^T$ is the disturbance vector.
+\end{itemize}
+In the simplified model (no lateral flow), $A$ and $B$ are both \textbf{diagonal} — the 25-cell system decouples into 25 independent scalar ODEs.
+
+\section{Key Matrix Operations}
+
+\begin{defbox}{Matrix-Vector Product}
+If $A\in\R^{m\times n}$ and $\bx\in\R^n$, then $(A\bx)_i=\sum_{j=1}^n A_{ij}x_j$.
+\end{defbox}
+
+\begin{defbox}{Eigenvalues and Eigenvectors}
+$\lambda\in\R$ is an eigenvalue of $A$ with eigenvector $\bm{v}\neq\bm{0}$ if $A\bm{v}=\lambda\bm{v}$.
+The eigenvalues determine system stability: if all $|\lambda_i|<1$ (discrete time) or $\mathrm{Re}(\lambda_i)<0$ (continuous time), the system is stable.
+\end{defbox}
+
+For our diagonal system, eigenvalues are the diagonal entries $A_{ii}$. Since $A_{ii} = 1-\frac{\Delta t\lambda_i}{z_r} < 1$ for $\lambda_i>0$ and small $\Delta t$, the system is stable.
+
+\section{Lifted (Stacked) Representation for MPC}
+
+Model Predictive Control requires predicting the future state trajectory over a horizon $H$ steps. Stacking states and inputs:
+\[
+\mathbf{X} = \begin{pmatrix}\bth^1\\\bth^2\\\vdots\\\bth^H\end{pmatrix}\in\R^{NH},\quad
+\mathbf{U} = \begin{pmatrix}\bu^0\\\bu^1\\\vdots\\\bu^{H-1}\end{pmatrix}\in\R^{NH},
+\]
+the prediction is compactly written as:
+\begin{equation}
+  \mathbf{X} = \mathcal{A}\bth^0 + \mathcal{B}\mathbf{U} + \mathcal{D},
+  \label{eq:lifted}
+\end{equation}
+where $\mathcal{A}\in\R^{NH\times N}$, $\mathcal{B}\in\R^{NH\times NH}$ (lower triangular block Toeplitz matrix), and $\mathcal{D}$ collects the disturbances. This \textbf{lifted system} converts the MPC problem into a single quadratic program (Chapter~\ref{chap:ocp}).
+
+\begin{exbox}{3-cell lifted system}
+Let $N=3$ cells, $H=2$ steps, $A=0.98\,I_3$, $B=0.01\,I_3$.
+\[
+\mathcal{A}=\begin{pmatrix}A\\A^2\end{pmatrix}=\begin{pmatrix}0.98&0&0\\0&0.98&0\\0&0&0.98\\0.9604&0&0\\0&0.9604&0\\0&0&0.9604\end{pmatrix},
+\]
+\[
+\mathcal{B}=\begin{pmatrix}B&0\\AB&B\end{pmatrix}=\begin{pmatrix}0.01I_3&0\\0.0098I_3&0.01I_3\end{pmatrix}.
+\]
+Given $\bth^0=(0.5,0.4,0.6)^T$ and $\mathbf{U}=(I_3,I_3)^T\cdot 2$ (irrigation rate 2 mm/h in all cells):
+\[\bth^1=0.98\bth^0+0.01\times 2\mathbf{1}_3=(0.49+0.02, 0.392+0.02, 0.588+0.02)=(0.51,0.412,0.608).\]
+\end{exbox}
+
+\begin{exobox}{2.\stepcounter{exoctr}\theexoctr}
+A simplified 4-cell system has $z_r=300$ mm, $\Delta t=0.5$ h, $ET_c=[0.3,0.25,0.4,0.2]^T$ mm/h, $I=[0.8,0,0.8,0]^T$ mm/h.
+\begin{enumerate}[label=(\alph*)]
+  \item Write $A$ and $B$ explicitly.
+  \item Starting from $\bth^0=(0.55,0.60,0.48,0.65)^T$, compute $\bth^1$ and $\bth^2$.
+  \item Which cells need irrigation most urgently if $\theta_{low}=0.40$?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{2.\theexoctr}
+\textbf{(a)} $B=\frac{\Delta t}{z_r}I_4=\frac{0.5}{300}I_4$. For $A$: since we include a simple ET loss term, $A=(1-\frac{\Delta t\,ET_c}{z_r\,\theta})I$ but in the linearised version around an operating point $A\approx I_4$ (drainage negligible, stress $K_s\approx 1$). More precisely: $\bm{d}^k = -\frac{\Delta t}{z_r}ET_c$. So $A=I_4$, $B=\frac{1}{600}I_4$, $d^k=\frac{-0.5}{300}[0.3,0.25,0.4,0.2]^T=[-0.0005,-0.000417,-0.000667,-0.000333]^T$.
+
+\textbf{(b)} $\bth^1=\bth^0+B\bu^0+d^0$:
+\[\theta_1^1=0.55+\frac{0.8}{600}-0.0005=0.55+0.001333-0.0005=0.5508\]
+\[\theta_2^1=0.60+0-0.000417=0.5996\]
+\[\theta_3^1=0.48+0.001333-0.000667=0.4807\]
+\[\theta_4^1=0.65+0-0.000333=0.6497\]
+Step 2: repeat with same inputs → $\theta_3$ continues to be the lowest.
+
+\textbf{(c)} No cell is below 0.40 yet. Cell 3 (moisture 0.4807, declining most rapidly at rate 0.000667/step) will reach 0.40 fastest: time = $(0.4807-0.40)/0.000667\approx121$ steps $\approx 60.5$ h without irrigation.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Optimisation Theory}
+\label{chap:optim}
+% ────────────────────────────────────────────────
+
+\section{The Core Problem}
+
+All intelligent decisions in Smart Agri-Togo reduce to: ``find the irrigation strategy $\bu$ that minimises water use while maximising crop yield.'' This is an \textbf{optimisation problem}.
+
+\begin{defbox}{Optimisation Problem (general form)}
+\[\min_{\bx\in\R^n}\;f(\bx)\quad\text{subject to}\quad g_i(\bx)\leq0,\;h_j(\bx)=0.\]
+$f:\R^n\to\R$ is the \emph{objective function}; $g_i$ are inequality constraints; $h_j$ are equality constraints.
+\end{defbox}
+
+\section{Unconstrained Optimisation}
+
+\subsection{Gradient and Necessary Conditions}
+
+For a differentiable $f:\R^n\to\R$, the gradient is:
+\[\nabla f(\bx)=\left(\frac{\partial f}{\partial x_1},\ldots,\frac{\partial f}{\partial x_n}\right)^T.\]
+A necessary condition for $\bx^*$ to be a local minimum: $\nabla f(\bx^*)=\bm{0}$.
+
+The \textbf{Hessian} $H=\nabla^2 f$ is the matrix of second derivatives: $H_{ij}=\frac{\partial^2 f}{\partial x_i\partial x_j}$. If $H(\bx^*)\succ 0$ (positive definite), then $\bx^*$ is a strict local minimum.
+
+\subsection{Gradient Descent}
+
+Update rule: $\bx^{k+1}=\bx^k - \alpha\nabla f(\bx^k)$, where $\alpha>0$ is the learning rate. Converges to a local minimum for smooth $f$ with appropriate $\alpha$.
+
+\section{Constrained Optimisation: KKT Conditions}
+
+\begin{thmbox}{Karush-Kuhn-Tucker (KKT) Conditions}
+For the problem $\min f(\bx)$ s.t.\ $g_i(\bx)\leq0$ ($i=1,\ldots,m$),
+$h_j(\bx)=0$ ($j=1,\ldots,p$), define the \textbf{Lagrangian}:
+\[L(\bx,\bm{\mu},\bm{\lambda})=f(\bx)+\sum_i\mu_i g_i(\bx)+\sum_j\lambda_j h_j(\bx).\]
+At a local minimum $\bx^*$, under constraint qualifications:
+\begin{align}
+&\nabla_{\bx}L=\bm{0}\quad\text{(stationarity)}\label{kkt1}\\
+&g_i(\bx^*)\leq0,\quad h_j(\bx^*)=0\quad\text{(primal feasibility)}\label{kkt2}\\
+&\mu_i\geq0\quad\text{(dual feasibility)}\label{kkt3}\\
+&\mu_i g_i(\bx^*)=0\quad\forall i\quad\text{(complementary slackness)}\label{kkt4}
+\end{align}
+$\mu_i$ and $\lambda_j$ are called \emph{Lagrange multipliers} (or dual variables).
+\end{thmbox}
+
+\section{Quadratic Programs (QP)}
+
+The MPC irrigation problem is a \textbf{Quadratic Program}: objective quadratic, constraints linear:
+
+\begin{thmbox}{Standard QP Form}
+\begin{equation}
+\min_{\bu\in\R^n}\;\frac{1}{2}\bu^T Q\bu + c^T\bu\quad
+\text{s.t.}\quad G\bu\leq\bm{h},\quad A_{eq}\bu=\bm{b}_{eq}
+\label{eq:QP}
+\end{equation}
+where $Q\succ0$ ensures a unique global minimum. Solvable in polynomial time by interior-point or active-set methods. The Python library \texttt{cvxpy} calls the solver \texttt{OSQP} to solve this automatically.
+\end{thmbox}
+
+\begin{exbox}{Simple 2-cell irrigation QP}
+\textbf{Problem:} Two cells, one time step. $\theta_1^*=\theta_2^*=0.65$, current $\theta=(0.40,0.55)$. Minimise $\frac{1}{2}(\theta_1^1-0.65)^2+\frac{1}{2}(\theta_2^1-0.65)^2+0.01(I_1^2+I_2^2)$ subject to $0\leq I_i\leq 5$ and $I_1+I_2\leq 6$. With $\Delta\theta_i = 0.002\,I_i$ (linearised), the QP variables are $I_1,I_2\geq0$.
+
+\textbf{Unconstrained solution:} $\frac{d}{dI_1}[0.5(0.40+0.002I_1-0.65)^2+0.01I_1^2]=0$:
+$(0.40+0.002I_1-0.65)\cdot0.002+0.02I_1=0\Rightarrow -0.0005+0.000004I_1+0.02I_1=0\Rightarrow I_1^*=0.0005/0.020004\approx 0.025$ mm/h. Very small because the water-penalty $\beta=0.01$ is large. With $\beta=0.001$: $I_1^*\approx 0.247$ mm/h. This shows the role of the weighting parameter $\beta$.
+\end{exbox}
+
+\begin{exobox}{3.\stepcounter{exoctr}\theexoctr}
+Write the KKT conditions for the single-cell irrigation problem:
+\[\min_{I\geq0}\;\frac{\alpha}{2}(\theta_0+\delta I - \theta^*)^2 + \frac{\beta}{2}I^2\]
+where $\delta=\Delta t/z_r$, $\alpha,\beta>0$. Solve for the optimal $I^*$ as a function of the parameters. Show that: (a) if $\theta_0\geq\theta^*$, then $I^*=0$; (b) as $\beta\to0$, $I^*\to(\theta^*-\theta_0)/\delta$ (the exact amount needed to reach target).
+\end{exobox}
+
+\begin{solbox}{3.\theexoctr}
+The Lagrangian is $L(I,\mu)=\frac{\alpha}{2}(\theta_0+\delta I-\theta^*)^2+\frac{\beta}{2}I^2-\mu I$.
+KKT conditions: (1) $\frac{\partial L}{\partial I}=\alpha\delta(\theta_0+\delta I-\theta^*)+\beta I-\mu=0$; (2) $\mu\geq0$; (3) $\mu I=0$; (4) $I\geq0$.
+
+\textbf{Case 1:} $\mu=0$ (unconstrained interior solution).
+$\alpha\delta(\theta_0+\delta I-\theta^*)+\beta I=0 \Rightarrow I^*=\frac{-\alpha\delta(\theta_0-\theta^*)}{\alpha\delta^2+\beta}=\frac{\alpha\delta(\theta^*-\theta_0)}{\alpha\delta^2+\beta}$.
+This is valid (i.e., $I^*\geq0$) iff $\theta_0\leq\theta^*$. \textbf{(a)} If $\theta_0\geq\theta^*$, then $I^*\leq0$ which violates $I\geq0$, so the constraint is active: $I^*=0$. \textbf{(b)} As $\beta\to0$: $I^*\to\frac{\alpha\delta(\theta^*-\theta_0)}{\alpha\delta^2}=\frac{\theta^*-\theta_0}{\delta}$. QED.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Optimal Control and Model Predictive Control}
+\label{chap:ocp}
+% ────────────────────────────────────────────────
+
+\section{What is Optimal Control?}
+
+Optimal control asks: \textit{given a dynamical system, what input signal $u(t)$ minimises a cost $J$ over a time horizon?}
+
+\begin{defbox}{Finite-Horizon Optimal Control Problem}
+\begin{align}
+\min_{\bu(\cdot)}\quad& J = \int_0^{T_f}\!L(\bx,\bu,t)\dt + \Phi(\bx(T_f))\\
+\text{s.t.}\quad& \dot{\bx}=f(\bx,\bu,t),\quad \bx(0)=\bx_0,\\
+& \bu(t)\in\mathcal{U},\quad \bx(t)\in\mathcal{X}.
+\end{align}
+$L$ is the \emph{running cost}, $\Phi$ is the \emph{terminal cost}, $\mathcal{U}$ and $\mathcal{X}$ are the feasible sets for control and state.
+\end{defbox}
+
+\section{Pontryagin's Maximum Principle (PMP)}
+
+For continuous-time problems, the PMP provides necessary conditions via the \textbf{Hamiltonian}:
+\begin{equation}
+  H(\bx,\bu,\bm{p},t) = L(\bx,\bu,t) + \bm{p}(t)^T f(\bx,\bu,t),
+\end{equation}
+where $\bm{p}(t)\in\R^n$ is the \textbf{costate} (or adjoint variable), solving:
+\begin{equation}
+  \dot{\bm{p}} = -\frac{\partial H}{\partial \bx},\quad\bm{p}(T_f)=\frac{\partial\Phi}{\partial\bx}(T_f)\quad\text{(transversality)}.
+\end{equation}
+The optimal control minimises $H$ at each instant:
+\begin{equation}
+  \bu^*(t) = \arg\min_{\bu\in\mathcal{U}}\;H(\bx^*,\bu,\bm{p},t).
+\end{equation}
+
+\begin{exbox}{PMP for single-cell irrigation}
+Cost: $J=\int_0^{T}[\alpha(\theta-\theta^*)^2+\beta I^2]\dt$. Dynamics: $\dot\theta=(I-ET_c)/z_r$.
+Hamiltonian: $H=\alpha(\theta-\theta^*)^2+\beta I^2+p(I-ET_c)/z_r$.
+Costate: $\dot p=-\partial H/\partial\theta=-2\alpha(\theta-\theta^*)$, $p(T)=0$.
+Optimal control: $\partial H/\partial I=2\beta I+p/z_r=0\Rightarrow I^*(t)=-p(t)/(2\beta z_r)$.
+The costate $p(t)$ acts as a ``water price'': when $\theta<\theta^*$ (deficit), $p>0$, pushing $I^*>0$.
+\end{exbox}
+
+\section{Dynamic Programming and the Bellman Equation}
+
+For discrete-time systems, the optimal cost-to-go $V^*(k,\bth)$ satisfies:
+
+\begin{thmbox}{Bellman's Principle of Optimality}
+\begin{equation}
+  V^*(k,\bth) = \min_{\bu^k\in\mathcal{U}}\bigl[L(\bth,\bu^k)+V^*(k+1,\,A\bth+B\bu^k)\bigr],
+\end{equation}
+with terminal condition $V^*(H,\bth)=\Phi(\bth)$.
+\end{thmbox}
+
+The optimal policy $\bu^{*k}=\pi^*(k,\bth)$ is obtained by solving the Bellman equation backwards from $t=T_f$.
+
+\section{Model Predictive Control (MPC): Principle and Algorithm}
+
+MPC is the \textbf{practical implementation} of optimal control in real time. Rather than solving the Bellman equation over the full season ($\sim$4800 steps), it solves a short-horizon QP at each step and only applies the first control action.
+
+\begin{thmbox}{MPC Algorithm (one iteration)}
+\begin{enumerate}[leftmargin=2em,label=\arabic*.]
+  \item \textbf{Measure} the current state $\bth^k$ (read all soil moisture sensors).
+  \item \textbf{Forecast} disturbances $\hat{ET}_c^{k:k+H-1}$, $\hat P^{k:k+H-1}$ (LSTM output).
+  \item \textbf{Solve} the QP over horizon $H$:
+    \begin{align}
+      \min_{\mathbf{U}}\quad&J=\sum_{j=0}^{H-1}\!\left[\bm{\alpha}\|\bth^{k+j}-\bth^*\|^2+\bm{\beta}\|\bu^{k+j}\|^2\right]+\Phi(\bth^{k+H})\\
+      \text{s.t.}\quad&\bth^{k+j+1}=A\bth^{k+j}+B\bu^{k+j}+\bm{d}^{k+j}\\
+      &\bm{0}\leq\bu^{k+j}\leq I_{\max}\bm{1}\\
+      &\bm{1}^T\bu^{k+j}\leq Q_{\max}
+    \end{align}
+  \item \textbf{Apply} $\bu^k=\mathbf{U}^*(0)$ (first element of optimal sequence).
+  \item \textbf{Advance} $k\leftarrow k+1$, go to step 1.
+\end{enumerate}
+\end{thmbox}
+
+The key parameters are:
+\begin{itemize}[leftmargin=2em]
+  \item $H$: prediction horizon (we use 48 steps = 24 h with $\Delta t=30$ min).
+  \item $\bm{\alpha}$: crop-stress weight — larger $\alpha$ keeps moisture close to target.
+  \item $\bm{\beta}$: water-use weight — larger $\beta$ saves water but tolerates more stress.
+\end{itemize}
+
+\section{PID Control as a Simpler Baseline}
+
+The Proportional-Integral-Derivative (PID) controller for irrigation:
+\begin{equation}
+  I(t) = K_p e(t) + K_i\int_0^t e(\tau)d\tau + K_d\dot e(t),\quad e(t)=\theta^*-\theta(t).
+\end{equation}
+The PID is simpler to implement and needs no model or forecast. Its main limitation: it cannot handle constraints ($I\geq0$, pump capacity) or coordinate multiple valves.
+
+\begin{exobox}{4.\stepcounter{exoctr}\theexoctr}
+Write out the full MPC QP in matrix form (using the lifted system from Eq.~\eqref{eq:lifted}) for $N=1$ cell, $H=3$ steps, $\alpha=1$, $\beta=0.1$, $\theta^*=0.65$, $I_{\max}=2$ mm/h. Show that it reduces to a $3\times3$ QP with explicit $Q_{\text{QP}}$ and $c_{\text{QP}}$.
+\end{exobox}
+
+\begin{solbox}{4.\theexoctr}
+With $N=1$, $H=3$: $\mathbf{X}=(\theta^1,\theta^2,\theta^3)^T$, $\mathbf{U}=(I^0,I^1,I^2)^T$.
+$\mathcal{B}=\begin{pmatrix}\delta&0&0\\\delta A+\delta&\delta&0\\\delta A^2+\delta A+\delta&\delta A+\delta&\delta\end{pmatrix}$ where $\delta=B=\Delta t/z_r$. Let $A\approx1$, $\delta=0.001$:
+$\mathcal{B}=\delta\begin{pmatrix}1&0&0\\2&1&0\\3&2&1\end{pmatrix}$.
+Stage cost: $\|\mathbf{X}-\theta^*\bm{1}\|^2+0.1\|\mathbf{U}\|^2=\|\mathcal{B}\mathbf{U}+(\mathcal{A}\theta^0+\mathcal{D})-\theta^*\bm{1}\|^2+0.1\|\mathbf{U}\|^2$.
+Expanding: $J=\mathbf{U}^T(\mathcal{B}^T\mathcal{B}+0.1I_3)\mathbf{U}+2(\mathcal{A}\theta^0+\mathcal{D}-\theta^*\bm{1})^T\mathcal{B}\mathbf{U}+\text{const}$.
+So $Q_{\text{QP}}=2(\mathcal{B}^T\mathcal{B}+0.1I_3)$ and $c_{\text{QP}}=2\mathcal{B}^T(\mathcal{A}\theta^0+\mathcal{D}-\theta^*\bm{1})$.
+Constraints: $\mathbf{U}\geq\bm{0}$ and $\mathbf{U}\leq 2\bm{1}$ (box constraints). This is directly passed to \texttt{cvxpy}.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Machine Learning for Irrigation Intelligence}
+\label{chap:ml}
+% ────────────────────────────────────────────────
+
+\section{Overview: Four ML Tasks}
+
+The ML layer of Smart Agri-Togo performs four tasks:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{ET$_0$ forecasting} — predicting the 48-h disturbance sequence for MPC.
+  \item \textbf{Soil moisture nowcasting} — filling sensor gaps.
+  \item \textbf{Crop stress detection} — from camera images.
+  \item \textbf{Yield prediction} — mid-season forecast.
+\end{enumerate}
+
+\section{Supervised Learning Fundamentals}
+
+Given a dataset $\{(\bx_i,y_i)\}_{i=1}^n$ of inputs and outputs, learn a function $\hat{f}:\R^d\to\R$ by minimising a \textbf{loss function}:
+\begin{equation}
+  \hat{f} = \arg\min_{f\in\mathcal{F}}\;\frac{1}{n}\sum_{i=1}^n \ell(f(\bx_i),y_i)+\lambda\,\Omega(f),
+\end{equation}
+where $\ell$ is the prediction error (e.g., squared error) and $\Omega$ is a regulariser.
+
+\textbf{Linear regression:} $\hat f(\bx)=\bm{w}^T\bx+b$, minimising mean squared error (MSE): $\frac{1}{n}\sum_i(y_i-\bm{w}^T\bx_i-b)^2$. Closed-form solution: $\bm{w}=(X^TX)^{-1}X^T\bm{y}$.
+
+\section{Long Short-Term Memory (LSTM) for ET$_0$ Forecasting}
+
+Evapotranspiration is a \textbf{time series}: today's ET$_0$ depends on the past few days of weather. An LSTM is a recurrent neural network that learns temporal dependencies.
+
+At each time step $t$, the LSTM computes:
+\begin{align}
+  f_t &= \sigma(W_f x_t + U_f h_{t-1} + b_f) &&\text{(forget gate)}\\
+  i_t &= \sigma(W_i x_t + U_i h_{t-1} + b_i) &&\text{(input gate)}\\
+  \tilde c_t &= \tanh(W_c x_t + U_c h_{t-1} + b_c) &&\text{(candidate cell)}\\
+  c_t &= f_t\odot c_{t-1} + i_t\odot\tilde c_t &&\text{(cell state)}\\
+  o_t &= \sigma(W_o x_t + U_o h_{t-1} + b_o) &&\text{(output gate)}\\
+  h_t &= o_t\odot\tanh(c_t) &&\text{(hidden state)}
+\end{align}
+where $\sigma$ is the sigmoid function, $\odot$ denotes element-wise multiplication. The LSTM \textbf{forgets} irrelevant past information (via $f_t$) and \textbf{remembers} new relevant information (via $i_t$).
+
+\textbf{Input}: $\bx_t=(T_a,RH,R_s,u_2)_t$ (past 72 h, sampled hourly = 288 features).
+\textbf{Output}: $\hat{ET}_0$ for next 48 steps.
+
+\section{Gaussian Process Regression for Soil Moisture}
+
+A \textbf{Gaussian Process} (GP) is a distribution over functions. Given observations $\{(\bx_i,y_i)\}$, the GP provides a posterior mean $\mu(\bx^*)$ and variance $\sigma^2(\bx^*)$ at any test point $\bx^*$.
+
+The spatial covariance between cells $i$ and $j$:
+\begin{equation}
+  k(\bx_i,\bx_j) = \sigma_f^2\exp\!\left(-\frac{\|\bx_i-\bx_j\|^2}{2\ell^2}\right),
+\end{equation}
+where $\ell$ is the \textit{length-scale} (how quickly correlation decays with distance). If cell $(2,3)$'s sensor fails, the GP infers its moisture from cells $(1,3)$, $(3,3)$, $(2,2)$, $(2,4)$, weighted by their spatial correlation.
+
+\begin{exobox}{5.\stepcounter{exoctr}\theexoctr}
+You have 3 days of hourly ET$_0$ data: $\{ET_0^t\}_{t=1}^{72}$, plus weather API forecasts for temperature and humidity for the next 24 hours.
+\begin{enumerate}[label=(\alph*)]
+  \item Describe the full input vector for the LSTM at time $t=72$.
+  \item If the LSTM has 1 hidden layer with 64 units and predicts 48 future steps, how many trainable parameters does it have? (Count $W$, $U$, $b$ for the gates and output layer.)
+  \item What loss function would you use for training?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{5.\theexoctr}
+\textbf{(a)} Input $\bx_{72}$: either (i) the full 72-step sequence of $(T_a,RH,R_s,u_2,ET_0)$ = 72$\times$5=360 features, or (ii) (preferred for LSTM) feed the sequence step-by-step: at each of the 72 time steps, input 4 weather features + 1 ET$_0$ = 5 features, final state $h_{72}$ carries the history. API forecasts for $T_a$ and $RH$ for next 24h are concatenated as static features (48 values).
+
+\textbf{(b)} Input dim $d=5$, hidden dim $h=64$. Each of 4 gates has $W\in\R^{64\times5}$, $U\in\R^{64\times64}$, $b\in\R^{64}$: total per gate $=64\times5+64\times64+64=320+4096+64=4480$. For 4 gates: $4\times4480=17920$ LSTM params. Output layer: $\R^{64}\to\R^{48}$: $64\times48+48=3120$. Total: $\approx\mathbf{21\,040}$ parameters.
+
+\textbf{(c)} Mean Squared Error (MSE): $\mathcal{L}=\frac{1}{48}\sum_{j=1}^{48}(\hat{ET}_0^j-ET_0^j)^2$. Alternatively, Mean Absolute Error (MAE) is more robust to outliers and preferred for physical quantities.
+\end{solbox}
+
+% ================================================================
+\part{Irrigation Science and Modelling}
+% ================================================================
+
+% ────────────────────────────────────────────────
+\chapter{Soil Physics and the Water Balance}
+\label{chap:soil}
+% ────────────────────────────────────────────────
+
+\section{Soil Water Concepts}
+
+\begin{defbox}{Key Soil Water Constants}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Saturated water content} $\theta_s$ [m$^3$/m$^3$]: all pores filled. For sandy loam: $\approx0.45$.
+  \item \textbf{Field capacity} $\theta_{fc}$: water retained after drainage ceases ($\sim48$ h). Sandy loam: $\approx0.25$; clay loam: $\approx0.38$.
+  \item \textbf{Permanent wilting point} $\theta_{wp}$: plant cannot extract more water. Sandy loam: $\approx0.10$; clay loam: $\approx0.22$.
+  \item \textbf{Available water} $\theta_{aw}=\theta_{fc}-\theta_{wp}$ [m$^3$/m$^3$].
+  \item \textbf{Readily available water} $\theta_{raw}=p\,\theta_{aw}$ where $p$ is the depletion fraction before stress ($p=0.30$--$0.50$, crop-dependent).
+\end{itemize}
+\end{defbox}
+
+\textbf{Example for southern Togo:} Lomé soils are typically sandy loam to loam (FAO texture class). Using $\theta_{fc}=0.30$, $\theta_{wp}=0.12$, $\theta_s=0.45$, $\theta_{aw}=0.18$ m$^3$/m$^3$.
+
+For a root depth $z_r=0.3$ m: total available water = $0.18\times0.3\times1000=54$ mm.
+
+\section{The van Genuchten Model}
+
+The \textbf{van Genuchten-Mualem} model relates pressure head $h$ [m], water content $\theta$, and hydraulic conductivity $K$:
+\begin{align}
+  \Theta &= \frac{\theta-\theta_r}{\theta_s-\theta_r} = \frac{1}{[1+|\alpha h|^n]^m},\quad m=1-1/n,\\
+  K(\Theta) &= K_s\,\Theta^{1/2}[1-(1-\Theta^{1/m})^m]^2,
+\end{align}
+where $\theta_r$ is residual water content, $\alpha$ [m$^{-1}$] and $n>1$ are shape parameters, $K_s$ [m/h] is saturated conductivity. These parameters are fitted from laboratory measurements.
+
+\section{The Water Stress Coefficient $K_s$}
+
+When $\theta$ falls below the readily-available threshold $\theta_p=\theta_{fc}-p\,(\theta_{fc}-\theta_{wp})$:
+\begin{equation}
+  K_s = \begin{cases}1&\text{if }\theta\geq\theta_p\\\dfrac{\theta-\theta_{wp}}{\theta_p-\theta_{wp}}&\text{if }\theta_{wp}<\theta<\theta_p\\0&\text{if }\theta\leq\theta_{wp}\end{cases}
+\end{equation}
+$K_s$ enters the ET calculation and the yield model directly.
+
+\begin{exobox}{6.\stepcounter{exoctr}\theexoctr}
+A clay loam soil in the field has $\theta_{fc}=0.38$, $\theta_{wp}=0.22$, $p=0.45$ (onion). 
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the threshold $\theta_p$ and the readily available water depth for $z_r=0.35$ m.
+  \item If $\theta=0.29$ m$^3$/m$^3$, compute $K_s$.
+  \item If $K_s=0.7$, by what factor does evapotranspiration reduce relative to the well-watered case?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{6.\theexoctr}
+\textbf{(a)} $\theta_p=0.38-0.45\times(0.38-0.22)=0.38-0.072=0.308$. 
+Readily available water depth $= (\theta_{fc}-\theta_p)\times z_r=(0.38-0.308)\times0.35\times1000=25.2$ mm.
+
+\textbf{(b)} $K_s=\frac{0.29-0.22}{0.308-0.22}=\frac{0.07}{0.088}=0.795$.
+
+\textbf{(c)} $ET_c=K_c\cdot K_s\cdot ET_0$. With $K_s=0.7$: $ET_c=0.7\cdot K_c\cdot ET_0$, i.e., 30\% reduction relative to the non-stressed $ET_c=K_c\cdot ET_0$.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Evapotranspiration — The Penman-Monteith Equation}
+\label{chap:et}
+% ────────────────────────────────────────────────
+
+\section{What is Evapotranspiration?}
+
+Evapotranspiration (ET) is the water lost to the atmosphere via two processes: \textbf{evaporation} from the soil surface and \textbf{transpiration} from plant leaves. It is the main water demand term in the soil balance — managing ET is the central task of intelligent irrigation.
+
+\section{The FAO-56 Penman-Monteith Equation}
+
+The reference evapotranspiration $ET_0$ [mm/day] is computed as:
+\begin{equation}
+  \boxed{ET_0 = \frac{0.408\,\Delta(R_n-G)+\gamma\dfrac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34\,u_2)}}
+  \label{eq:PM}
+\end{equation}
+
+\textbf{Variables and how to compute them:}
+
+\paragraph{$\Delta$ [kPa/°C]} — slope of saturation vapour pressure curve:
+\begin{equation}
+  \Delta = \frac{4098\left[0.6108\exp\!\left(\frac{17.27T}{T+237.3}\right)\right]}{(T+237.3)^2}.
+\end{equation}
+
+\paragraph{$e_s$ [kPa]} — saturation vapour pressure:
+\begin{equation}
+  e_s = \frac{e^{\circ}(T_{max})+e^{\circ}(T_{min})}{2},\quad
+  e^{\circ}(T)=0.6108\exp\!\left(\frac{17.27T}{T+237.3}\right).
+\end{equation}
+
+\paragraph{$e_a$ [kPa]} — actual vapour pressure: $e_a=e_s\cdot RH/100$.
+
+\paragraph{$\gamma$ [kPa/°C]} — psychrometric constant: $\gamma=0.665\times10^{-3}P_{atm}$, where $P_{atm}\approx101.3$ kPa at sea level.
+
+\paragraph{$R_n$ [MJ/m²/day]} — net radiation = net shortwave minus net longwave:
+$R_n = (1-\alpha)R_s - R_{nl}$, where $\alpha=0.23$ (grass albedo) and $R_{nl}$ is computed from temperature and actual sunshine hours.
+
+\paragraph{$G$ [MJ/m²/day]} — soil heat flux: for daily calculations, $G\approx0$.
+
+\paragraph{$u_2$ [m/s]} — wind speed at 2 m height (convert from height $z$: $u_2=u_z\ln(2/0.000123)/\ln(z/0.000123)$).
+
+\begin{exbox}{ET$_0$ computation for Lomé, 15 January}
+\textbf{Data:} $T_{max}=34$°C, $T_{min}=24$°C, $T_{mean}=29$°C, $RH_{mean}=62\%$, $u_2=2.1$ m/s, $R_s=18.4$ MJ/m²/day, latitude $6.14°$N.
+
+$e^{\circ}(34)=0.6108\times e^{17.27\times34/(34+237.3)}=0.6108\times e^{2.098}=0.6108\times8.152=4.978$ kPa.
+$e^{\circ}(24)=2.984$ kPa. $e_s=\frac{4.978+2.984}{2}=3.981$ kPa.
+$e_a=3.981\times0.62=2.468$ kPa. VPD=$e_s-e_a=1.513$ kPa.
+$\Delta=4098\times 3.267/(266.3)^2=13384.5/70895.7=0.1888$ kPa/°C.
+$\gamma=0.665\times10^{-3}\times101.3=0.0674$ kPa/°C.
+$R_n\approx(1-0.23)\times18.4-3.5=14.17-3.5=10.67$ MJ/m²/d.
+
+Numerator: $0.408\times0.1888\times10.67+0.0674\times\frac{900}{302}\times2.1\times1.513$
+$=0.821+0.0674\times2.980\times2.1\times1.513=0.821+0.641=1.462$.
+Denominator: $0.1888+0.0674\times(1+0.34\times2.1)=0.1888+0.0674\times1.714=0.1888+0.1155=0.3043$.
+$ET_0=1.462/0.3043=\mathbf{4.80}$ mm/day.
+\end{exbox}
+
+\begin{exobox}{7.\stepcounter{exoctr}\theexoctr}
+During the hot dry period (March, Lomé): $T_{max}=38$°C, $T_{min}=27°$C, $RH=48\%$, $u_2=3.0$ m/s, $R_s=22$ MJ/m²/day.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $ET_0$ using the Penman-Monteith equation.
+  \item If the crop coefficient for lettuce at mid-season is $K_c=1.0$ and $K_s=0.9$: what is the daily water demand per m² for a lettuce row?
+  \item For a full row of 5 cells (25 m²), what is the total irrigation volume required per day (assuming no rain)?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{7.\theexoctr}
+\textbf{(a)} $T_{mean}=32.5$°C. $e^{\circ}(38)=0.6108\times e^{1.886\times17.27/(17.27+1)}$... more carefully:
+$e^{\circ}(38)=0.6108\times\exp(17.27\times38/275.3)=0.6108\times\exp(2.382)=0.6108\times10.83=6.615$ kPa.
+$e^{\circ}(27)=3.601$ kPa. $e_s=5.108$ kPa. $e_a=5.108\times0.48=2.452$ kPa. VPD$=2.656$ kPa.
+$\Delta=4098\times4.031/(269.8)^2=16518.7/72792=0.2269$ kPa/°C.
+$R_n\approx0.77\times22-4.0=16.94-4.0=12.94$ MJ/m²/d.
+Num: $0.408\times0.2269\times12.94+0.0674\times(900/305.5)\times3.0\times2.656=1.198+1.770=2.968$.
+Den: $0.2269+0.0674\times(1+1.02)=0.2269+0.1361=0.363$.
+$ET_0=2.968/0.363=\mathbf{8.18}$ mm/day.
+
+\textbf{(b)} $ET_c=K_c\cdot K_s\cdot ET_0=1.0\times0.9\times8.18=7.36$ mm/day per m². In volume: $7.36\times10^{-3}$ m/day $\times 1$ m² $= 7.36$ L/m²/day.
+
+\textbf{(c)} For 25 m² (one full row): $7.36\times25=\mathbf{184}$ L/day. Plus efficiency factor for drip (efficiency $\approx90\%$): $184/0.9\approx\mathbf{204}$ L of water to pump per row per day.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Crop Water Requirements and Yield Models}
+\label{chap:crop}
+% ────────────────────────────────────────────────
+
+\section{Crop Coefficients (FAO-56)}
+
+The FAO-56 methodology separates the crop-specific water demand into three stages with tabulated coefficients:
+
+\begin{table}[H]
+\centering
+\caption{Crop coefficient $K_c$ values (FAO-56) for our four crops}
+\label{tab:Kc}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Crop}&\textbf{Cycle (d)}&\textbf{Init}&\textbf{Dev}&\textbf{Mid}&\textbf{Late}&$p$\\
+\midrule
+Onion & 100 & 0.70 & 0.70--1.05 & 1.05 & 0.75 & 0.30\\
+Carrot & 90 & 0.70 & 0.70--1.05 & 1.05 & 0.95 & 0.35\\
+Lettuce & 55 & 0.70 & 0.70--1.00 & 1.00 & 0.95 & 0.30\\
+Maize & 110 & 0.30 & 0.30--1.20 & 1.20 & 0.35 & 0.55\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{FAO Yield Response Function}
+
+The relationship between water stress and yield loss (Stewart model):
+\begin{equation}
+  \frac{Y_a}{Y_m} = \prod_{j\in\text{stages}}\left[1-K_{y,j}\left(1-\frac{ET_{a,j}}{ET_{m,j}}\right)\right],
+  \label{eq:yield}
+\end{equation}
+where $K_{y,j}$ is the yield response factor (sensitivity of yield to stress in stage $j$). Table~\ref{tab:Ky} gives FAO values.
+
+\begin{table}[H]
+\centering
+\caption{Yield response factors $K_y$ by growth stage}
+\label{tab:Ky}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Crop}&\textbf{Init}&\textbf{Dev}&\textbf{Mid}&\textbf{Late}\\
+\midrule
+Onion  & 0.45 & 0.80 & 0.30 & 0.20 \\
+Carrot & 0.30 & 0.60 & 0.70 & 0.35 \\
+Lettuce& 0.60 & 0.80 & 1.00 & 0.60 \\
+Maize  & 0.40 & 0.40 & 1.50 & 0.50 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{exobox}{8.\stepcounter{exoctr}\theexoctr}
+An onion crop experiences 20\% water deficit ($ET_a/ET_m=0.80$) during the development stage only (all other stages fully irrigated). Maximum yield $Y_m=20$ t/ha.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the actual yield $Y_a$ using Eq.~\eqref{eq:yield}.
+  \item Compute the revenue loss per hectare if the market price is 450 XOF/kg.
+  \item What does this tell you about the economic value of the MPC over a hand-watered system that sometimes forgets to irrigate?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{8.\theexoctr}
+\textbf{(a)} Only the development stage has stress: $K_{y,dev}=0.80$, $ET_a/ET_m=0.80$.
+$\frac{Y_a}{Y_m}=[1-0.80\times(1-0.80)]\times1\times1\times1=1-0.16=0.84$.
+$Y_a=0.84\times20=\mathbf{16.8}$ t/ha.
+
+\textbf{(b)} Yield loss: $20-16.8=3.2$ t/ha $=3200$ kg/ha. Revenue loss $=3200\times450=\mathbf{1\,440\,000}$ XOF/ha.
+
+\textbf{(c)} A single forgetful irrigation event causing 20\% deficit during the sensitive development stage costs 1.44 million XOF/ha in lost revenue — more than the entire cost of the MPC hardware. The MPC pays for itself in one season by preventing a single stress event.
+\end{solbox}
+
+% ================================================================
+\part{Organic Fertilization — No Chemicals, Only Life}
+% ================================================================
+
+% ────────────────────────────────────────────────
+\chapter{Soil Biology and Nutrient Cycles}
+\label{chap:soil_bio}
+% ────────────────────────────────────────────────
+
+\section{Why Organic? The Science of Soil Health}
+
+Synthetic fertilisers provide nutrients in ionic form ($\text{NO}_3^-$, $\text{NH}_4^+$, $\text{H}_2\text{PO}_4^-$) that plants absorb immediately, but they do not build soil structure, they damage the soil microbiome over time, they leach into groundwater, and they require energy-intensive industrial production. For Smart Agri-Togo, the choice to use only organic inputs is:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Economically rational}: all inputs are locally available at near-zero cost.
+  \item \textbf{Agronomically superior} in the long run: organic matter improves soil water-holding capacity, reducing ET and improving drought resistance.
+  \item \textbf{Market-positioning}: ``produits bio'' can command 20--40\% price premiums in Lomé's upscale markets and export channels.
+\end{itemize}
+
+\section{The Nitrogen Cycle}
+
+Nitrogen is the most important plant nutrient. The organic nitrogen cycle:
+\[
+\text{Organic N (proteins, urea)} \xrightarrow{\text{ammonification}} \text{NH}_4^+ \xrightarrow{\text{nitrification}} \text{NO}_2^- \to \text{NO}_3^- \xleftarrow{\text{plant uptake}}
+\]
+Bacteria (\textit{Nitrosomonas}, \textit{Nitrobacter}) drive nitrification. Temperature (25--35°C), moisture (50--60\% water-filled pore space), and pH (6.5--7.5) are the controlling factors.
+
+\section{Nutrient Content of Organic Materials}
+
+\begin{table}[H]
+\centering
+\caption{Typical nutrient content of organic inputs (\% dry weight)}
+\label{tab:nutrients}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Material}&\textbf{N (\%)}&\textbf{P (\%)}&\textbf{K (\%)}&\textbf{C:N ratio}\\
+\midrule
+Fresh cow manure & 0.45 & 0.20 & 0.35 & 15--20\\
+Composted cow manure & 1.5 & 0.8 & 1.2 & 10--15\\
+Fresh goat manure & 0.75 & 0.35 & 0.65 & 12--16\\
+Poultry manure (dry) & 3.5 & 2.2 & 1.5 & 5--8\\
+Human urine & 4.0--8.0 & 0.5--1.5 & 1.0--3.0 & $<$5\\
+Composted feces & 1.5 & 2.0 & 0.5 & 10--15\\
+Biogas digestate (slurry) & 2.0 & 0.8 & 1.5 & 8--12\\
+Crop residues (maize stover) & 0.6 & 0.1 & 1.2 & 50--80\\
+Grass/green biomass & 2.5 & 0.5 & 2.0 & 10--25\\
+Wood ash & 0 & 0.5 & 4.0--8.0 & — \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Nutrient Requirements of our Crops}
+
+\begin{table}[H]
+\centering
+\caption{Total nutrient uptake per tonne of fresh yield (kg/t)}
+\label{tab:crop_nutrients}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Crop}&\textbf{N (kg/t)}&\textbf{P (kg/t)}&\textbf{K (kg/t)}&\textbf{Target yield (t/ha)}\\
+\midrule
+Onion  & 2.5 & 0.5 & 2.0 & 20\\
+Carrot & 2.0 & 0.5 & 3.0 & 18\\
+Lettuce& 3.0 & 0.5 & 4.0 & 25\\
+Maize  & 20 & 3.5 & 16 & 5\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Total N requirement per hectare, e.g., for onion at 20 t/ha: $20\times2.5=50$ kg N/ha. Of this, perhaps 50\% comes from soil mineralisation; we need to supply $\approx25$ kg N/ha from organic inputs.
+
+% ────────────────────────────────────────────────
+\chapter{Composting: Theory and Practice}
+\label{chap:compost}
+% ────────────────────────────────────────────────
+
+\section{Biochemistry of Composting}
+
+Aerobic decomposition of organic matter by microbial communities:
+\begin{equation}
+  \text{C}_6\text{H}_{12}\text{O}_6 + 6\text{O}_2 \to 6\text{CO}_2 + 6\text{H}_2\text{O} + \text{energy (heat)}
+\end{equation}
+More generally, for a substrate of composition C$_a$H$_b$O$_c$N$_d$:
+\begin{equation}
+  \text{C}_a\text{H}_b\text{O}_c\text{N}_d + \left(a+\frac{b}{4}-\frac{c}{2}-\frac{3d}{4}\right)\text{O}_2 \to a\,\text{CO}_2 + \frac{(b-3d)}{2}\text{H}_2\text{O} + d\,\text{NH}_3.
+\end{equation}
+
+\subsection{The C:N Ratio}
+
+The optimal C:N ratio for rapid composting is \textbf{25--30:1}. Too high (C:N $>$ 40): nitrogen deficiency slows decomposition. Too low (C:N $<$ 15): ammonia volatilises and N is lost.
+
+In practice, we blend:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Brown materials} (high C, low N): maize stover (C:N$\approx$70), dry leaves (C:N$\approx$60), rice straw (C:N$\approx$80).
+  \item \textbf{Green materials} (low C, high N): fresh grass (C:N$\approx$15), food scraps (C:N$\approx$15), animal manure (C:N$\approx$12--20).
+\end{itemize}
+
+\textbf{Blending formula:} to achieve target C:N $= r_T$ from two materials with C:N = $r_1$ and $r_2$ (with $r_1>r_T>r_2$), the mass ratio $m_1:m_2$ is:
+\begin{equation}
+  \frac{m_1}{m_2} = \frac{N_2(r_T-r_2)}{N_1(r_1-r_T)},
+  \label{eq:blend}
+\end{equation}
+where $N_1$, $N_2$ are the N contents (as fractions) of each material.
+
+\section{Composting Process Phases}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Mesophilic phase} (25--45°C, days 1--3): fast-growing bacteria break down easy carbohydrates.
+  \item \textbf{Thermophilic phase} (45--70°C, days 3--14): heat-tolerant bacteria destroy pathogens and weed seeds. \textbf{This is the key sanitisation step.}
+  \item \textbf{Cooling and mesophilic phase 2} (weeks 3--6): temperature drops, actinomycetes and fungi break down lignin.
+  \item \textbf{Maturation / curing} (weeks 6--12): stable humic substances form.
+\end{enumerate}
+
+\section{Compost Pile Design}
+
+For a pile to self-heat, it must be at least 1 m$\times$1 m$\times$1 m. Optimal pile: $1.5\times1.5\times1.5$ m. Moisture: 50--60\% (squeeze test: a handful should just release a few drops). Aeration: turn the pile every 5--7 days.
+
+\begin{exbox}{Compost blend for 1 ha onion field}
+\textbf{Need:} 30 t/ha compost (recommended dose for sandy loam in Togo).
+\textbf{Available:} maize stover (C:N=70, N=0.6\%), goat manure (C:N=14, N=0.75\%).
+\textbf{Target:} C:N=28.
+
+Using Eq.~\eqref{eq:blend}: $m_1/m_2 = \frac{0.0075\times(28-14)}{0.006\times(70-28)}=\frac{0.105}{0.252}=0.417$.
+So: 1 kg stover : 2.4 kg goat manure. For 30 tonnes of raw material (which will compost down to $\sim$10 t mature compost after volume reduction), blend $\approx$9 t stover + 21 t goat manure.
+\end{exbox}
+
+\begin{exobox}{9.\stepcounter{exoctr}\theexoctr}
+You have access to the following materials: 500 kg fresh grass (C:N=18, N=2.5\%), 800 kg dry leaves (C:N=55, N=1.0\%), 300 kg poultry manure (C:N=7, N=3.5\%).
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the C:N ratio of the mixture.
+  \item Is this mixture suitable for composting without amendment? Justify.
+  \item If you want to raise the C:N to 28, how much additional dry leaves do you need to add?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{9.\theexoctr}
+\textbf{(a)} Compute total C and N in the mixture.
+For a material with C:N ratio $r$ and N fraction $N_f$ (as decimal):
+$N_{\text{total}} = m\times N_f$;\quad$C_{\text{total}} = m\times N_f\times r$.
+Grass: $N=500\times0.025=12.5$ kg, $C=12.5\times18=225$ kg.
+Dry leaves: $N=800\times0.01=8$ kg, $C=8\times55=440$ kg.
+Poultry: $N=300\times0.035=10.5$ kg, $C=10.5\times7=73.5$ kg.
+Total: $N_{tot}=31$ kg, $C_{tot}=738.5$ kg. C:N$=738.5/31=\mathbf{23.8}$.
+
+\textbf{(b)} C:N=23.8 is within the acceptable range (20--35) for composting. It is slightly below the optimal 28 but workable. The poultry manure provides abundant N for fast microbial activity.
+
+\textbf{(c)} Add $x$ kg dry leaves (C:N=55, $N_f=0.01$): new totals: $N'=31+0.01x$, $C'=738.5+0.55x$. Target: $C'/N'=28$.
+$738.5+0.55x=28(31+0.01x)\Rightarrow738.5+0.55x=868+0.28x\Rightarrow0.27x=129.5\Rightarrow x=\mathbf{480}$ kg additional dry leaves.
+\end{solbox}
+
+% ────────────────────────────────────────────────
+\chapter{Biogas Digesters and Liquid Fertilizer}
+\label{chap:biogas}
+% ────────────────────────────────────────────────
+
+\section{Anaerobic Digestion}
+
+Anaerobic digestion (AD) converts organic matter into \textbf{biogas} (energy) and \textbf{digestate} (fertiliser) in the absence of oxygen, through four stages:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Hydrolysis}: complex polymers (carbohydrates, proteins, fats) $\to$ monomers (sugars, amino acids, fatty acids).
+  \item \textbf{Acidogenesis}: monomers $\to$ volatile fatty acids (VFAs), $\text{H}_2$, $\text{CO}_2$.
+  \item \textbf{Acetogenesis}: VFAs $\to$ acetate, $\text{H}_2$, $\text{CO}_2$.
+  \item \textbf{Methanogenesis}: $\text{CH}_3\text{COO}^- + \text{H}_2\text{O} \to \text{CH}_4 + \text{HCO}_3^-$ (acetoclastic) and $\text{CO}_2+4\text{H}_2\to\text{CH}_4+2\text{H}_2\text{O}$ (hydrogenotrophic).
+\end{enumerate}
+
+Overall stoichiometry (Buswell equation):
+\begin{equation}
+  \text{C}_n\text{H}_a\text{O}_b\text{N}_c\text{S}_d + \left(n-\frac{a}{4}-\frac{b}{2}+\frac{3c}{4}+\frac{d}{2}\right)\text{H}_2\text{O} \to
+  \left(\frac{n}{2}+\frac{a}{8}-\frac{b}{4}-\frac{3c}{8}-\frac{d}{4}\right)\text{CH}_4 + \ldots
+\end{equation}
+
+\textbf{Practical biogas yields:}
+\begin{itemize}[leftmargin=2em]
+  \item Cattle manure: 22--28 L biogas/kg fresh weight, 60\% CH$_4$.
+  \item Food waste: 80--100 L biogas/kg.
+  \item Human feces: 30--40 L biogas/kg.
+  \item Mixed farm waste (our case): $\sim$30 L biogas/kg fresh input.
+\end{itemize}
+
+\section{Fixed-Dome Biogas Digester Design}
+
+The fixed-dome (Deenbandhu or Chinese model) is the most appropriate for Togo: low cost, no moving parts, locally constructable, long lifespan (20+ years).
+
+\textbf{Design equations:}
+\begin{equation}
+  V_{digester} = Q_{input}\times HRT,
+\end{equation}
+where $Q_{input}$ [m$^3$/day] is the daily slurry volume and $HRT$ is the Hydraulic Retention Time (typically 30--40 days at 30--35°C in Togo's climate).
+
+For a farm producing $D$ kg/day of manure:
+\begin{equation}
+  Q_{input} = \frac{D}{d_s}\text{ m}^3/\text{day},
+\end{equation}
+where $d_s\approx 1000$--$1050$ kg/m$^3$ is the slurry density (1:1 manure:water dilution).
+
+\textbf{Biogas production:} $Q_{gas}=Y_{gas}\times D$ [L/day], where $Y_{gas}$ is the specific yield.
+
+\textbf{Digestate use:} The liquid digestate is a highly available N, P, K source. It can be diluted 1:5 with water and applied through the drip irrigation system (\textbf{fertigation}) — a key advantage of the drip system.
+
+\begin{exbox}{Biogas digester for Smart Agri-Togo}
+\textbf{Available:} 2 cows (12 kg dung/cow/day), 10 goats (1.5 kg/goat/day), kitchen waste from on-site shelter (3 kg/day).
+Total daily input: $D = 24+15+3=42$ kg/day.
+$Q_{input}=42/1000=0.042$ m$^3$/day (after 1:1 dilution, actually 0.084 m$^3$/day).
+$V_{digester}=0.084\times35=2.94$ m$^3$. Use a \textbf{3 m$^3$} fixed-dome digester.
+Biogas: $42\times30=1260$ L/day $=1.26$ m$^3$/day.
+Energy: 1 m$^3$ CH$_4$ $\approx35.9$ MJ. With 60\% CH$_4$: $1.26\times0.6\times35.9=27.1$ MJ/day $\approx$ cooking energy for 5--6 people. This \textbf{replaces LPG or charcoal} for the on-site shelter.
+Digestate: $\approx30$ kg/day of nutrient-rich slurry available for fertigation.
+\end{exbox}
+
+% ────────────────────────────────────────────────
+\chapter{Human Biosolids — Safe, Scientific, Sovereign}
+\label{chap:biosolids}
+% ────────────────────────────────────────────────
+
+\section{The Taboo That Costs Farmers Billions}
+
+Human urine and faeces contain the exact same plant nutrients as expensive synthetic fertilisers — because they \textit{are} the end products of digesting those nutrients. Recovering them closes the nutrient cycle, reduces pollution, and saves money. This practice has been used for millennia and is endorsed by the WHO, FAO, and UNEP when done safely.
+
+\begin{biobox}{Nutrient Content of Human Excreta}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Urine}: $\sim$2 g N/L, 0.25 g P/L, 1.5 g K/L. A person produces $\sim$1.5 L/day, providing $\sim$3 g N/day. One person's annual urine supply = $\sim$1.1 kg N + 0.14 kg P + 0.8 kg K — equivalent to 5 kg of urea fertiliser. Urine is sterile (in a healthy person) and safe to use diluted 1:10 on growing crops.
+  \item \textbf{Faeces}: $\sim$30 g dry weight/person/day, 5--8\% N, 2--5\% P. Requires treatment before safe use (see below).
+\end{itemize}
+\end{biobox}
+
+\section{Treatment Methods}
+
+\subsection{Urine (Struvite / Direct Application)}
+
+Urine can be stored in a sealed container for 1 month (urea hydrolysis raises pH to $\sim$9, killing pathogens) then diluted 1:10 and applied to soil, not directly on leaves. Alternatively, \textbf{struvite} (MgNH$_4$PO$_4\cdot$6H$_2$O) can be precipitated:
+\begin{equation}
+  \text{Mg}^{2+} + \text{NH}_4^+ + \text{PO}_4^{3-} + 6\text{H}_2\text{O} \to \text{MgNH}_4\text{PO}_4\cdot6\text{H}_2\text{O} \downarrow
+\end{equation}
+Struvite is a slow-release N-P fertiliser. By adding magnesium chloride (MgCl$_2$) at a Mg:P molar ratio of 1.2:1 and adjusting pH to 8.5--9.5, 80--90\% of P and 30--40\% of N precipitate.
+
+\subsection{Faecal Matter: Composting and Vermicomposting}
+
+\textbf{WHO category:} faecal matter is a Category A biological hazard; it must be treated to reduce helminth eggs ($<$1 egg/g) and pathogen indicators ($<$10$^3$ faecal coliforms/g) before safe agricultural use.
+
+\textbf{Thermophilic composting:} co-compost with bulking material (straw, wood chips) in a 2-chamber composter. Temperature must exceed 55°C for $\geq$3 days (WHO guideline). After 6 months of maturation, the product is safe for use on crops not eaten raw.
+
+\textbf{Vermicomposting:} add earthworms (\textit{Eisenia fetida}) after thermophilic phase. Worm castings (vermicompost) are exceptional soil conditioners, with 2--5$\times$ higher nutrient availability than ordinary compost.
+
+\subsection{The Urine Diversion Dry Toilet (UDDT)}
+
+A UDDT separates urine from faeces at the source:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Urine diverter}: a specially shaped toilet bowl collects urine in a front channel, faeces in the rear.
+  \item \textbf{Urine container}: 20-L HDPE jerricans, stored in a cool dark place for 1 month.
+  \item \textbf{Dry vault}: faeces fall onto drying ash/lime material; no flush water required. Filled vault composted for 6 months.
+\end{itemize}
+Cost: a UDDT can be constructed locally for $\sim$50\,000--100\,000 XOF. It requires no water for flushing, solving sanitation and fertiliser supply simultaneously.
+
+\section{WHO Safety Guidelines Summary}
+
+\begin{table}[H]
+\centering
+\caption{WHO safety requirements for use of human excreta in agriculture}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{Product}&\textbf{Treatment requirement}&\textbf{Application restriction}\\
+\midrule
+Urine (stored 1 mo) & None (sterile) & Dilute 1:10, not on edible parts\\
+Vermicompost & Thermophilic pre-treatment & Any crop, avoid 2 wk before harvest\\
+Compost ($>$55°C, 3d) & Pathogen reduction verified & Avoid crops eaten raw\\
+Digestate (biogas) & AD process (35°C, 30d HRT) & Dilute, drip application preferred\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ────────────────────────────────────────────────
+\chapter{Integrated Organic Fertilization Plan}
+\label{chap:fert_plan}
+% ────────────────────────────────────────────────
+
+\section{Annual Nutrient Budget for Smart Agri-Togo (1 ha)}
+
+\begin{table}[H]
+\centering
+\caption{Annual N supply from all organic sources (1 ha)}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Source}&\textbf{Quantity}&\textbf{N conc.}&\textbf{Avail. factor}&\textbf{N supplied (kg)}\\
+\midrule
+Composted cow manure & 15 t/ha & 1.5\% & 0.50 & 112.5\\
+Biogas digestate & 5 t/ha & 2.0\% & 0.80 & 80.0\\
+Stored urine (5 people) & 2.7 t/ha & 4.0\% & 0.90 & 97.2\\
+Vermicompost (feces) & 1 t/ha & 2.5\% & 0.70 & 17.5\\
+Wood ash & 0.5 t/ha & 0\% & — & 0.0\\
+\midrule
+\textbf{Total N} & & & & \textbf{307.2 kg/ha}\\
+\midrule
+\multicolumn{4}{l}{\textit{Total N demand (all 4 crops)}} & \textbf{165 kg/ha}\\
+\multicolumn{4}{l}{\textit{N balance}} & \textbf{+142.2 (surplus — build soil organic matter)}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Application Calendar}
+
+\begin{table}[H]
+\centering
+\caption{Organic input application calendar}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{Timing}&\textbf{Input}&\textbf{Method}\\
+\midrule
+4 weeks before planting & Composted manure 15 t/ha & Incorporate to 20 cm depth\\
+At planting & Vermicompost 1 t/ha & Band-placed near root zone\\
+Week 3 & Urine solution 1:10 & Fertigation via drip (2 L/m²)\\
+Week 5 & Biogas digestate 1:5 & Fertigation via drip (2 L/m²)\\
+Week 7 & Urine solution 1:10 & Fertigation (top dressing)\\
+Week 9 & Biogas digestate 1:5 & Fertigation\\
+Post-harvest & Crop residues & Mulch or compost pile\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{exobox}{10.\stepcounter{exoctr}\theexoctr}
+You have 5 workers on the farm, each producing 1.5 L urine/day.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the annual urine production and total N available after 1-month storage.
+  \item How many litres of 1:10 diluted urine solution does this produce for fertigation?
+  \item If drip application rate is 2 L/m² per application, how many 1-ha applications does this cover?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{10.\theexoctr}
+\textbf{(a)} Annual production: $5\times1.5\times365=2737.5$ L $\approx2740$ L/year. N content: $2\times10^{-3}$ kg N/L $\times 2740=5.48$ kg N. With 90\% availability: $5.48\times0.9=4.93$ kg N. Small but valuable (supplement to compost).
+
+\textbf{(b)} Diluted at 1:10: each litre of urine gives 11 L of solution. Total solution: $2740\times11=30140$ L $=30.1$ m$^3$ of solution.
+
+\textbf{(c)} For 1 ha $=10000$ m² at 2 L/m²: need $20000$ L $=20$ m$^3$ per application. Number of applications: $30.1/20=\mathbf{1.5}$. So roughly \textbf{1--2 full-field applications per season} from 5 workers' urine. Scaled to 10 workers (include farm visitors/family): 3 applications.
+\end{solbox}
+
+% ================================================================
+\part{Energy Systems for Smart Agri-Togo}
+% ================================================================
+
+% ────────────────────────────────────────────────
+\chapter{Energy Load Analysis}
+\label{chap:energy_load}
+% ────────────────────────────────────────────────
+
+\section{The Energy Question}
+
+Every component of Smart Agri-Togo consumes electricity: the pump, the sensors, the Raspberry Pi, the lights in the field shelter, the camera, the mobile phone charger. We must first \textit{quantify} this consumption precisely before designing any power system. The design principle: \textbf{minimise but never compromise}.
+
+\section{Fundamental Concepts}
+
+\begin{defbox}{Power, Energy, and Peak Load}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Power} $P$ [W or kW]: rate of energy consumption at any instant.
+  \item \textbf{Energy} $E$ [Wh or kWh]: power integrated over time — $E=P\times t$.
+  \item \textbf{Daily energy demand} $E_d$ [kWh/day]: sum of all loads.
+  \item \textbf{Peak load} $P_{peak}$ [kW]: maximum instantaneous demand (determines inverter size).
+\end{itemize}
+\end{defbox}
+
+\section{Pump Power}
+
+The \textbf{hydraulic power} required to lift water from depth $H_{static}$ [m] at flow rate $Q$ [m$^3$/s] is:
+\begin{equation}
+  P_{hydraulic} = \rho\,g\,Q\,H_{total},
+\end{equation}
+where $\rho=1000$ kg/m$^3$, $g=9.81$ m/s$^2$, $H_{total}=H_{static}+H_{friction}+H_{pressure}$.
+
+The \textbf{electrical power drawn} by the pump motor:
+\begin{equation}
+  P_{electric} = \frac{P_{hydraulic}}{\eta_{pump}\times\eta_{motor}},
+\end{equation}
+where $\eta_{pump}\approx0.65$--$0.75$ (pump efficiency) and $\eta_{motor}\approx0.85$--$0.92$.
+
+\begin{exbox}{Pump power for Smart Agri-Togo}
+\textbf{Data:} $Q=0.8$ L/s $=8\times10^{-4}$ m$^3$/s. $H_{static}=15$ m (borehole depth to water table) + 5 m (tank height) = 20 m. $H_{friction}\approx3$ m (pipe losses). $H_{pressure}\approx5$ m (drip system operating pressure). $H_{total}=28$ m. $\eta_{pump}=0.68$, $\eta_{motor}=0.88$.
+
+$P_{hydraulic}=1000\times9.81\times8\times10^{-4}\times28=220$ W.
+$P_{electric}=220/(0.68\times0.88)=220/0.598=\mathbf{368}$ W $\approx\mathbf{0.37}$ kW.
+\end{exbox}
+
+\section{Complete Load Inventory}
+
+\begin{table}[H]
+\centering
+\caption{Energy load inventory for Smart Agri-Togo}
+\label{tab:loads}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Equipment}&\textbf{Power (W)}&\textbf{Hours/day}&\textbf{Energy (Wh/day)}&\textbf{Notes}\\
+\midrule
+Submersible pump & 370 & 5 & 1850 & Avg over season\\
+Raspberry Pi 4 & 6 & 24 & 144 & Always on (control loop)\\
+Arduino Mega $\times$4 & 0.25 & 24 & 24 & Low power\\
+Soil sensors $\times$25 & 0.5 & 24 & 300 & Capacitive type\\
+Weather station & 0.5 & 24 & 12 & Ecowitt/Davis\\
+GSM/4G modem & 2 & 24 & 48 & SIM7600\\
+Camera (plant health) & 3 & 2 & 6 & Daily scan\\
+LED field lights & 50 & 4 & 200 & 5$\times$10W LEDs\\
+LED shelter/lab & 60 & 6 & 360 & Work space\\
+Laptop (analysis) & 45 & 4 & 180 & Research computing\\
+Phone charging $\times$3 & 10 & 2 & 60 & Farm workers\\
+Misc / safety margin ($+$20\%) & — & — & 637 & \\
+\midrule
+\textbf{Total daily demand} $E_d$ & & & \textbf{3821 Wh/day} & $\approx3.82$ kWh/day\\
+\midrule
+\textbf{Peak load} $P_{peak}$ & \textbf{$\approx$ 520 W} & & & Pump + lights + sensors\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{keybox}{Energy Optimisation Principles}
+\begin{enumerate}[leftmargin=1.5em,label=\arabic*.]
+  \item Use \textbf{LED} lighting throughout (10$\times$ more efficient than incandescent).
+  \item Pump only during \textbf{peak solar hours} (10:00--15:00) to match generation.
+  \item Put the Raspberry Pi in \textbf{low-power mode} during non-control periods.
+  \item Use \textbf{capacitive} (not resistive) soil sensors — 100$\times$ lower power.
+  \item Schedule the laptop for daytime (solar) use only.
+\end{enumerate}
+\end{keybox}
+
+% ────────────────────────────────────────────────
+\chapter{Solar Photovoltaic Fundamentals}
+\label{chap:solar_basics}
+% ────────────────────────────────────────────────
+
+\section{The Photovoltaic Effect}
+
+A solar cell (typically monocrystalline silicon, efficiency 20--22\%) converts photon energy into electrical current via the photoelectric effect. The current-voltage (I-V) characteristic:
+\begin{equation}
+  I = I_{ph} - I_0\left[\exp\!\left(\frac{q(V+IR_s)}{nk_BT}\right)-1\right] - \frac{V+IR_s}{R_{sh}},
+\end{equation}
+where $I_{ph}$ is the photocurrent (proportional to irradiance), $I_0$ is the dark saturation current, $q=1.6\times10^{-19}$ C, $n$ is the ideality factor ($\approx1.3$), $k_B=1.38\times10^{-23}$ J/K, $R_s$ is series resistance, and $R_{sh}$ is shunt resistance.
+
+\textbf{Key points on the I-V curve:}
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Short-circuit current} $I_{sc}$: maximum current, at $V=0$. Proportional to irradiance.
+  \item \textbf{Open-circuit voltage} $V_{oc}$: maximum voltage, at $I=0$. $\approx0.6$--$0.65$ V per cell.
+  \item \textbf{Maximum power point} (MPP): the $(V_{MPP},I_{MPP})$ pair maximising $P=VI$. An \textbf{MPPT controller} tracks this point continuously.
+  \item \textbf{Fill Factor}: $FF=\frac{P_{MPP}}{V_{oc}\times I_{sc}}\approx0.75$--$0.82$ for quality modules.
+\end{itemize}
+
+\section{Solar Resource in Togo}
+
+\begin{table}[H]
+\centering
+\caption{Solar irradiance data for Lomé, Togo (monthly averages)}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Month}&\textbf{GHI (kWh/m²/day)}&\textbf{Peak Sun Hours}&\textbf{Temperature effect}\\
+\midrule
+October  & 5.2 & 5.2 & High T penalty 3\%\\
+November & 5.6 & 5.6 & Moderate\\
+December & 5.8 & 5.8 & Best month\\
+January  & 5.5 & 5.5 & Harmattan dust (-5\%)\\
+February & 5.4 & 5.4 & Harmattan\\
+March    & 5.8 & 5.8 & High irradiance\\
+April    & 5.3 & 5.3 & Start of clouds\\
+\midrule
+\textbf{Season avg.} & \textbf{5.4} & \textbf{5.4} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Important:} During the Harmattan season (December--February), dust particles can reduce panel output by 5--15\%. Panels must be cleaned weekly during this period.
+
+\section{Why Solar is Optimal for Togo}
+
+\begin{energybox}{Comparison of Power Sources for Smart Agri-Togo}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Grid connection (CEET):} Cost of grid extension to a peri-urban field: 2--5 million XOF. Electricity tariff: $\approx80$ XOF/kWh for industry. Grid reliability: 60--70\% uptime (frequent cuts). Control systems require 24/7 power — unacceptable.
+  \item \textbf{Diesel generator:} Initial cost: 500\,000 XOF (3 kVA). Fuel: $\approx0.8$ L diesel/kWh $\times$ 3.82 kWh/day $=3.1$ L/day $\times365=1130$ L/year $\times700$ XOF/L $=791\,000$ XOF/year fuel alone. Maintenance: high. CO$_2$ emissions: 3 kg/L $\times1130=3.4$ t/year. Not compatible with organic/bio brand.
+  \item \textbf{Solar PV + battery (recommended):} Initial cost $\approx$ 1.8--2.5 million XOF. Annual operating cost: near zero (cleaning, battery replacement every 10 years). Zero fuel, zero emissions. 24/7 reliable power. \textbf{Payback vs diesel: 2--3 years.}
+  \item \textbf{Hybrid solar + grid:} Possible if grid connection already exists. Solar covers daytime loads; grid as backup. Reduces dependence on either.
+\end{itemize}
+\textbf{Verdict: Off-grid solar PV with battery storage is the optimal choice.}
+\end{energybox}
+
+% ────────────────────────────────────────────────
+\chapter{Solar System Design for Smart Agri-Togo}
+\label{chap:solar_design}
+% ────────────────────────────────────────────────
+
+\section{System Architecture}
+
+The recommended system is a \textbf{48V DC bus} with:
+\begin{center}
+\begin{tikzpicture}[node distance=1.2cm, every node/.style={font=\small}]
+\node[draw,rounded corners,fill=sunyellow!20,minimum width=2.5cm,minimum height=0.9cm] (panels) {PV Panels};
+\node[draw,rounded corners,fill=skyblue!20,minimum width=2.5cm,minimum height=0.9cm,right=1.5cm of panels] (mppt) {MPPT Charge\\Controller};
+\node[draw,rounded corners,fill=agrigreen!20,minimum width=2.5cm,minimum height=0.9cm,right=1.5cm of mppt] (bat) {Battery Bank\\(48V LiFePO4)};
+\node[draw,rounded corners,fill=soilorange!20,minimum width=2.5cm,minimum height=0.9cm,below=1.2cm of bat] (inv) {Inverter\\(48V→230V AC)};
+\node[draw,rounded corners,fill=gray!15,minimum width=2.5cm,minimum height=0.9cm,left=1.5cm of inv] (loads) {AC Loads\\(Pump, Lights)};
+\node[draw,rounded corners,fill=gray!15,minimum width=2.5cm,minimum height=0.9cm,below=1.2cm of mppt] (dc) {DC Loads\\(RPi, Sensors)};
+\draw[-{Stealth}] (panels)--(mppt);
+\draw[-{Stealth}] (mppt)--(bat);
+\draw[-{Stealth}] (bat)--(inv);
+\draw[-{Stealth}] (inv)--(loads);
+\draw[-{Stealth}] (bat)--(dc);
+\draw[-{Stealth}] (mppt) to[bend right=20] (dc);
+\end{tikzpicture}
+\end{center}
+
+\section{Step-by-Step System Sizing}
+
+\subsection{Step 1: Correct Daily Load for System Losses}
+
+\begin{equation}
+  E_{corrected} = \frac{E_d}{\eta_{system}} = \frac{3820}{0.80} = 4775\text{ Wh/day}\approx 4.78\text{ kWh/day},
+\end{equation}
+where $\eta_{system}=0.80$ accounts for battery charging/discharging losses (0.92), inverter losses (0.93), and wiring losses (0.97): $\eta=0.92\times0.93\times0.97\approx0.83\approx0.80$ (conservative).
+
+\subsection{Step 2: PV Array Sizing}
+
+\begin{equation}
+  P_{PV} = \frac{E_{corrected}}{PSH\times\eta_{temp}} = \frac{4780}{5.4\times0.94} = \frac{4780}{5.076} = 942\text{ W}_p\approx\mathbf{1.0\text{ kW}_p},
+\end{equation}
+where $\eta_{temp}=0.94$ accounts for temperature derating at 35°C (panels lose $\approx0.4\%/°C$ above 25°C, so $10\times0.4=4\%$ loss).
+
+\textbf{Panel selection:} Use 375 W$_p$ monocrystalline panels (commercially available in Accra/Lomé).
+Number of panels: $1000/375=2.67\Rightarrow$ \textbf{3 panels of 375 W$_p$} = 1125 W$_p$ ($+12.5\%$ margin).
+
+\textbf{Array configuration:} In a 48V system, the minimum open-circuit voltage is $V_{oc,min}\approx55$ V. One panel: $V_{oc}\approx46$ V, $V_{MPP}\approx38$ V. Connect \textbf{2 panels in series}: $V_{oc,string}=92$ V, $V_{MPP,string}=76$ V (compatible with most 48V MPPT controllers). The third panel is on a separate string or connected in a 1S1P configuration with a second MPPT input.
+
+\subsection{Step 3: Battery Bank Sizing}
+
+Autonomy required: $N_{aut}=2$ days (2 cloudy days without solar). Maximum depth of discharge: $DoD=0.80$ (LiFePO4 chemistry recommended).
+
+\begin{equation}
+  E_{bat} = \frac{E_d\times N_{aut}}{DoD} = \frac{3820\times2}{0.80} = 9550\text{ Wh}\approx\mathbf{9.6\text{ kWh}}.
+\end{equation}
+
+In a 48V system: $C_{bat}=E_{bat}/V=9600/48=200$ Ah.
+
+\textbf{Battery selection:} 2 $\times$ 100 Ah LiFePO4 batteries at 48V (in parallel) = 200 Ah total. Alternatively, 1 $\times$ 200 Ah LiFePO4 48V battery pack. LiFePO4 is preferred over lead-acid for:
+\begin{itemize}[leftmargin=2em]
+  \item 3000+ charge cycles at 80\% DoD ($\sim$10 years lifespan) vs 500 cycles for AGM lead-acid.
+  \item Temperature performance in Togo's heat (30--35°C is optimal for LiFePO4).
+  \item Built-in Battery Management System (BMS).
+  \item 50\% lighter and more compact.
+\end{itemize}
+
+\subsection{Step 4: MPPT Charge Controller}
+
+Maximum PV current (short-circuit): $I_{sc,total}=3\times10=30$ A (for 3 panels with $I_{sc}=10$ A each, 2 in series + 1 separate). Select a \textbf{60A MPPT controller} with 48V battery voltage and maximum PV input voltage $\geq 120$ V (safety margin above $V_{oc,string}=92$ V).
+
+\subsection{Step 5: Inverter}
+
+Peak load $P_{peak}=520$ W. Surge capacity needed for pump startup (3--5× nameplate): $520\times3=1560$ W. Select a \textbf{2 kVA (2000 W) pure sine wave inverter, 48V DC input, 230V AC output}. Pure sine wave is mandatory for the variable-speed pump and electronic loads.
+
+\section{Complete System Specification}
+
+\begin{table}[H]
+\centering
+\caption{Final solar system specifications}
+\label{tab:solar_specs}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lll}
+\toprule
+\textbf{Component}&\textbf{Specification}&\textbf{Estimated Cost (XOF)}\\
+\midrule
+PV modules & 3 $\times$ 375 W$_p$ mono, 48V string & 360\,000\\
+MPPT controller & Victron SmartSolar 75/60A & 180\,000\\
+Battery bank & 200 Ah / 48V LiFePO4 & 600\,000\\
+Inverter & 2 kVA pure sine, 48V, Victron/Growatt & 250\,000\\
+Mounting structure & Galvanised steel, 15° tilt & 80\,000\\
+Wiring \& protection & 6 mm² PV cable, circuit breakers & 60\,000\\
+Monitoring system & Victron CCGX / Raspberry Pi addon & 80\,000\\
+\midrule
+\textbf{Total} & & \textbf{$\approx$1\,610\,000 XOF}\\
+\midrule
+\multicolumn{3}{l}{\textit{Annual savings vs diesel: 791\,000 XOF. Payback: $\approx$ 2 years.}}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Panel Placement and Tilt Optimisation}
+
+In Togo (latitude $\phi\approx6°$N), the optimal panel tilt angle for year-round energy maximisation:
+\begin{equation}
+  \beta_{opt} \approx |\phi| + 10° = 6+10 = 16° \approx \mathbf{15°}.
+\end{equation}
+Panels should face \textbf{south} (or slightly southeast to capture morning sun during harmattan when afternoons are dustier). The shelter/lab building can serve as the mounting base.
+
+\begin{exobox}{11.\stepcounter{exoctr}\theexoctr}
+During the harmattan (January), dust reduces panel output by 12\%. The pump runs 6 hours/day instead of 5 (drier conditions).
+\begin{enumerate}[label=(\alph*)]
+  \item Recompute the new daily energy demand.
+  \item Recompute the available solar generation with 3 panels of 375 W$_p$ at 5.5 PSH and 12\% derating.
+  \item Is there an energy deficit? If so, by how much, and what strategy do you recommend?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{11.\theexoctr}
+\textbf{(a)} Original pump energy: $370\times5=1850$ Wh. New pump energy: $370\times6=2220$ Wh. Difference: $+370$ Wh. New total: $3820+370=4190$ Wh/day. Corrected: $4190/0.80=5238$ Wh/day.
+
+\textbf{(b)} Available generation: $1125\text{ W}_p\times5.5\text{ PSH}\times(1-0.12)\times0.94$
+$=1125\times5.5\times0.88\times0.94=1125\times4.577=5149$ Wh/day.
+
+\textbf{(c)} Deficit: $5238-5149=89$ Wh/day (small, $\approx2\%$). Strategies:
+\begin{enumerate}[label=\roman*.]
+  \item \textbf{Clean panels daily} during harmattan — restores most of the 12\% loss.
+  \item \textbf{Reduce pump run time} by 15 min — saves $\approx90$ Wh.
+  \item Draw $\approx90$ Wh from battery reserve (negligible — battery holds 9600 Wh).
+\end{enumerate}
+Practical recommendation: clean panels every 2 days during harmattan season (15 minutes of work), completely eliminating the deficit.
+\end{solbox}
+
+\begin{exobox}{12.\stepcounter{exoctr}\theexoctr}
+\textbf{System economics:} 
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the levelised cost of electricity (LCOE) for the solar system over 20 years, assuming: initial cost = 1\,610\,000 XOF, annual maintenance = 30\,000 XOF, annual generation = $1125\times5.4\times365\times0.80=1780$ kWh (accounting for system efficiency).
+  \item Compare to: (i) grid electricity at 80 XOF/kWh, (ii) diesel at 700 XOF/L consuming 0.8 L/kWh.
+  \item At what year does solar break even vs diesel?
+\end{enumerate}
+\end{exobox}
+
+\begin{solbox}{12.\theexoctr}
+\textbf{(a)} Total 20-year cost: $1\,610\,000 + 20\times30\,000 = 2\,210\,000$ XOF.
+Total energy: $1780\times20=35\,600$ kWh.
+LCOE $= 2\,210\,000/35\,600 = \mathbf{62.1}$ XOF/kWh.
+
+\textbf{(b)} Grid: 80 XOF/kWh. Diesel: $0.8\times700=560$ XOF/kWh.
+Solar LCOE (62 XOF/kWh) is cheaper than both grid (80) and diesel (560).
+
+\textbf{(c)} Annual energy consumption: $\approx1400$ kWh (net useful energy). Annual diesel cost: $1400\times560=784\,000$ XOF/year. Solar annual cost equivalent: $2\,210\,000/20+1400\times0=110\,500+0=110\,500$ XOF/year. 
+Savings vs diesel: $784\,000-110\,500=673\,500$ XOF/year. 
+Payback: $1\,610\,000/673\,500=\mathbf{2.4}$ years. After payback, nearly pure profit on energy savings.
+\end{solbox}
+
+% ================================================================
+%  APPENDIX
+% ================================================================
+\appendix
+
+\chapter{Quick Reference: Key Equations}
+\label{app:equations}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{lll}
+\toprule
+\textbf{Equation}&\textbf{Formula}&\textbf{Chapter}\\
+\midrule
+Soil water balance & $z_r\dot\theta = I+P-ET_c-D$ & \ref{chap:ode}\\
+Euler method & $\theta^{k+1}=\theta^k+\frac{\Delta t}{z_r}(I^k-ET_c^k)$ & \ref{chap:ode}\\
+Lifted MPC system & $\mathbf{X}=\mathcal{A}\bth^0+\mathcal{B}\mathbf{U}+\mathcal{D}$ & \ref{chap:linalg}\\
+KKT stationarity & $\nabla f+\sum\mu_i\nabla g_i=\bm{0}$ & \ref{chap:optim}\\
+MPC QP cost & $J=\|\bth-\bth^*\|_Q^2+\|\bu\|_R^2$ & \ref{chap:ocp}\\
+Penman-Monteith & $ET_0=\frac{0.408\Delta(R_n-G)+\gamma\frac{900}{T+273}u_2(e_s-e_a)}{\Delta+\gamma(1+0.34u_2)}$ & \ref{chap:et}\\
+Stress coefficient & $K_s=(\theta-\theta_{wp})/(\theta_p-\theta_{wp})$ & \ref{chap:soil}\\
+Yield response & $Y_a/Y_m=\prod_j[1-K_{y,j}(1-ET_{a,j}/ET_{m,j})]$ & \ref{chap:crop}\\
+Compost C:N blend & $m_1/m_2=N_2(r_T-r_2)/[N_1(r_1-r_T)]$ & \ref{chap:compost}\\
+Digester volume & $V=Q_{input}\times HRT$ & \ref{chap:biogas}\\
+Hydraulic power & $P_{hyd}=\rho g Q H$ & \ref{chap:energy_load}\\
+PV array size & $P_{PV}=E_{corrected}/(PSH\times\eta_{temp})$ & \ref{chap:solar_design}\\
+Battery bank & $E_{bat}=E_d\times N_{aut}/DoD$ & \ref{chap:solar_design}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\chapter{Numerical Values for Lomé, Togo}
+\label{app:values}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter}&\textbf{Value}\\
+\midrule
+Latitude & 6.14°N\\
+Annual mean temperature & 27°C\\
+Mean daily solar radiation (Oct--Apr) & 5.4 kWh/m²/day (GHI)\\
+Harmattan period & Dec--Feb (dust reduces solar by 5--15\%)\\
+Mean wind speed at 2 m & 2.0--3.5 m/s\\
+Mean relative humidity (dry season) & 55--70\%\\
+Mean ET$_0$ (dry season) & 4.5--8.5 mm/day\\
+Typical sandy loam $\theta_{fc}$ & 0.28--0.32 m$^3$/m$^3$\\
+Typical sandy loam $\theta_{wp}$ & 0.10--0.14 m$^3$/m$^3$\\
+CEET electricity tariff (industrial) & $\approx$80 XOF/kWh\\
+Diesel price (2024) & $\approx$700 XOF/L\\
+1 USD $\approx$ & 610 XOF\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\chapter{Python Code Snippets}
+\label{app:code}
+
+\section{Soil Water Balance Euler Integration}
+\begin{verbatim}
+import numpy as np
+
+z_r = 300  # root zone depth [mm]
+dt  = 0.5  # time step [h]
+theta = np.zeros(49)   # 24h / 0.5h = 48 steps + initial
+theta[0] = 0.55        # initial moisture
+
+ET_c = 0.30            # [mm/h], assumed constant
+I    = np.zeros(48)
+I[12:18] = 0.8         # irrigation 6h-9h (steps 12-17)
+
+for k in range(48):
+    theta[k+1] = theta[k] + dt/z_r * (I[k] - ET_c)
+    theta[k+1] = max(0.12, min(0.82, theta[k+1]))  # clamp
+
+print(f"Final moisture: {theta[-1]:.3f}")
+\end{verbatim}
+
+\section{Penman-Monteith ET$_0$ Calculation}
+\begin{verbatim}
+import numpy as np
+
+def ET0_PM(T_max, T_min, RH_mean, u2, Rs, lat_deg):
+    T = (T_max + T_min) / 2
+    # Saturation vapour pressure
+    es_max = 0.6108 * np.exp(17.27*T_max/(T_max+237.3))
+    es_min = 0.6108 * np.exp(17.27*T_min/(T_min+237.3))
+    es = (es_max + es_min) / 2
+    ea = es * RH_mean / 100
+    # Slope of saturation vapour pressure curve
+    delta = 4098 * (0.6108*np.exp(17.27*T/(T+237.3))) / (T+237.3)**2
+    gamma = 0.0674  # psychrometric constant [kPa/degC] at sea level
+    # Net radiation (simplified)
+    Rn = 0.77 * Rs - 3.5
+    G  = 0.0
+    # Penman-Monteith
+    num = 0.408*delta*(Rn-G) + gamma*(900/(T+273))*u2*(es-ea)
+    den = delta + gamma*(1 + 0.34*u2)
+    return num / den
+
+ET0 = ET0_PM(T_max=34, T_min=24, RH_mean=62, u2=2.1, Rs=18.4, lat_deg=6.14)
+print(f"ET0 = {ET0:.2f} mm/day")
+\end{verbatim}
+
+\section{Simple MPC Solver (cvxpy)}
+\begin{verbatim}
+import cvxpy as cp
+import numpy as np
+
+N = 5   # cells (one row)
+H = 48  # horizon (24h at 30-min steps)
+dt, zr = 0.5, 300.0
+delta = dt / zr
+alpha, beta = 1.0, 0.1
+theta_star = 0.65 * np.ones(N)
+I_max = 2.0   # mm/h
+Q_max = 5.0   # total flow mm/h
+
+theta0 = np.array([0.42, 0.55, 0.48, 0.60, 0.38])
+ET_c_forecast = 0.30 * np.ones((H, N))  # from LSTM
+
+U = cp.Variable((H, N))
+theta = {0: theta0}
+cost = 0
+constraints = []
+
+for k in range(H):
+    theta[k+1] = theta[k] + delta*(U[k] - ET_c_forecast[k])
+    cost += alpha * cp.sum_squares(theta[k+1] - theta_star)
+    cost += beta  * cp.sum_squares(U[k])
+    constraints += [U[k] >= 0, U[k] <= I_max]
+    constraints += [cp.sum(U[k]) <= Q_max]
+
+prob = cp.Problem(cp.Minimize(cost), constraints)
+prob.solve(solver=cp.OSQP)
+print("Optimal first irrigation:", U.value[0])
+\end{verbatim}
+
+\chapter{Glossary}
+\label{app:glossary}
+
+\begin{longtable}{ll}
+\toprule
+\textbf{Term}&\textbf{Meaning}\\
+\midrule
+$\theta$ [m$^3$/m$^3$] & Volumetric soil water content\\
+$\theta_{fc}$ & Field capacity\\
+$\theta_{wp}$ & Permanent wilting point\\
+$\theta^*$ & Optimal irrigation target\\
+$K_c$ & Crop coefficient (FAO-56)\\
+$K_s$ & Water stress coefficient\\
+$K_{y}$ & Yield response factor\\
+$ET_0$ & Reference evapotranspiration (Penman-Monteith)\\
+$ET_c$ & Crop evapotranspiration ($=K_c K_s ET_0$)\\
+$z_r$ [m] & Root zone depth\\
+$H$ (MPC) & Prediction horizon (number of steps)\\
+$J$ & Optimal control cost functional\\
+$\alpha$, $\beta$ & Cost weighting parameters (yield vs water)\\
+$Q_{max}$ & Maximum pump flow rate (mm/h)\\
+$R_n$ & Net radiation [MJ/m²/day]\\
+$\Delta$ & Slope of saturation vapour pressure curve [kPa/°C]\\
+$\gamma$ & Psychrometric constant [kPa/°C]\\
+$e_s$, $e_a$ & Saturation and actual vapour pressure [kPa]\\
+PSH & Peak Sun Hours [h/day]\\
+LCOE & Levelised Cost of Electricity [XOF/kWh]\\
+DoD & Depth of Discharge (battery)\\
+C:N & Carbon to Nitrogen ratio (composting)\\
+AD & Anaerobic Digestion\\
+UDDT & Urine Diversion Dry Toilet\\
+HRT & Hydraulic Retention Time (digester)\\
+MPC & Model Predictive Control\\
+LSTM & Long Short-Term Memory (neural network)\\
+GPR & Gaussian Process Regression\\
+QP & Quadratic Program\\
+KKT & Karush-Kuhn-Tucker (optimality conditions)\\
+PMP & Pontryagin's Maximum Principle\\
+MPPT & Maximum Power Point Tracking (solar)\\
+\bottomrule
+\end{longtable}
+
+\end{document}

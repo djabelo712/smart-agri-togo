@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Agri-Togo — Live Farm Simulation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#060d18;--panel:#0b1929;--border:#15304d;
+  --cyan:#00d8ff;--green:#1fff8a;--amber:#ffad00;--red:#ff4455;
+  --pipe:#3d6a8a;--text:#bdd0e0;--dim:#4a6a88;
+  --mono:'Courier New',monospace;--sans:'Trebuchet MS',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);
+  height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+/* ── TOP BAR ── */
+.topbar{display:flex;align-items:center;gap:14px;padding:0 14px;
+  height:46px;background:#040a12;border-bottom:1px solid var(--border);flex-shrink:0;}
+.logo{font-size:14px;font-weight:900;color:var(--green);letter-spacing:2px;white-space:nowrap;}
+.tbi{display:flex;flex-direction:column;line-height:1.2;}
+.tbi .l{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;}
+.tbi .v{font-family:var(--mono);font-size:12px;color:var(--cyan);font-weight:700;}
+.led-wrap{display:flex;align-items:center;gap:6px;margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--green);}
+.led{width:9px;height:9px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ── BODY ── */
+.body{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* ── PANELS ── */
+.lpanel,.rpanel{display:flex;flex-direction:column;gap:0;overflow-y:auto;overflow-x:hidden;padding:4px;}
+.lpanel{width:158px;flex-shrink:0;}
+.rpanel{width:192px;flex-shrink:0;}
+.pnl{background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:8px;margin:4px;}
+.ptitle{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:2px;
+  color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:7px;
+  display:flex;align-items:center;gap:5px;}
+.ptitle .d{width:6px;height:6px;border-radius:50%;background:var(--cyan);}
+
+/* ── WEATHER ── */
+.wr{display:flex;justify-content:space-between;align-items:center;padding:2px 0;font-size:10px;}
+.wl{color:var(--dim);}
+.wv{font-family:var(--mono);font-size:11px;color:var(--amber);}
+.et0val{font-family:var(--mono);font-size:17px;color:var(--amber);text-align:center;margin-top:3px;}
+
+/* ── TANK ── */
+.tank-wrap{display:flex;flex-direction:column;align-items:center;margin:4px 0;}
+.tank-box{width:64px;height:72px;border:2px solid var(--pipe);border-radius:3px 3px 5px 5px;
+  overflow:hidden;background:#060f1a;position:relative;}
+.tank-water{position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(180deg,#00d8ff33,#00d8ff80);transition:height 1.2s ease;}
+.tank-wave{position:absolute;top:-7px;left:-50%;width:200%;height:14px;
+  background:#00d8ff55;border-radius:40%;animation:wave 2s linear infinite;}
+@keyframes wave{0%{transform:translateX(0)}100%{transform:translateX(25%)}}
+.tank-lbl{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-top:3px;}
+.pump-anim{text-align:center;font-size:16px;animation:ppulse 1.2s ease-in-out infinite;}
+@keyframes ppulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* ── STAT ROW ── */
+.sr{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;}
+.sl{color:var(--dim);}
+.sv{font-family:var(--mono);color:var(--cyan);}
+.bbar{background:#0e2035;border-radius:2px;height:4px;margin-top:2px;}
+.bfill{height:100%;border-radius:2px;transition:width .9s ease;}
+
+/* ── SIGNAL ── */
+.sig{display:flex;align-items:flex-end;gap:2px;height:13px;}
+.sigb{width:4px;border-radius:1px;}
+
+/* ── CANVAS SECTION ── */
+.cfield{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;overflow:hidden;min-width:0;padding:6px 4px;}
+.canvaswrap{position:relative;}
+canvas#fc{display:block;border-radius:4px;}
+
+/* ── RPi ── */
+.rpi{background:#0d2018;border:1px solid #1a4028;border-radius:4px;padding:6px;margin:3px 0;}
+.rpi-chips{display:flex;gap:4px;flex-wrap:wrap;}
+.chip{background:#1a3525;border:1px solid #2a5535;border-radius:2px;
+  padding:2px 5px;font-family:var(--mono);font-size:8px;color:#88ffcc;}
+
+/* ── MPC CHART ── */
+.mpc-chart{display:flex;gap:2px;align-items:flex-end;height:38px;margin-bottom:2px;}
+.mcb{flex:1;border-radius:2px 2px 0 0;transition:height .8s ease, background .5s;}
+
+/* ── VALVES ── */
+.vrow{display:flex;align-items:center;gap:5px;padding:2px 0;font-size:10px;}
+.vi{width:10px;height:10px;border-radius:50%;border:1.5px solid currentColor;flex-shrink:0;transition:all .3s;}
+.vi.open{background:var(--green);color:var(--green);box-shadow:0 0 6px var(--green);}
+.vi.closed{background:#0d1e30;color:var(--dim);}
+.vlbl{color:var(--dim);flex:1;font-size:9px;font-family:var(--mono);}
+.vm{font-family:var(--mono);font-size:9px;color:var(--amber);}
+
+/* ── PHONE ── */
+.phone{background:#111;border:2px solid #2a2a2a;border-radius:14px;padding:6px;
+  width:108px;margin:0 auto;}
+.pnotch{width:28px;height:5px;background:#222;border-radius:0 0 5px 5px;margin:0 auto 4px;}
+.pscreen{background:#060f1a;border-radius:6px;padding:6px;min-height:115px;}
+.ptop{font-size:7px;color:var(--green);font-family:var(--mono);text-align:center;
+  border-bottom:1px solid #0e2035;padding-bottom:3px;margin-bottom:4px;}
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-bottom:4px;}
+.pc{height:9px;border-radius:1px;transition:background .8s;}
+.pstat{font-size:7px;font-family:var(--mono);color:var(--dim);
+  display:flex;justify-content:space-between;padding:1px 0;}
+.pv{color:var(--cyan);}
+.pbtn{background:var(--green);color:#000;font-size:7px;font-weight:700;
+  text-align:center;border-radius:3px;padding:2px 4px;margin-top:4px;font-family:var(--mono);}
+
+/* ── FOOTER ── */
+.footer{height:38px;display:flex;align-items:center;gap:14px;padding:0 14px;
+  background:#040a12;border-top:1px solid var(--border);flex-shrink:0;}
+.fstat{display:flex;align-items:center;gap:6px;}
+.fl{color:var(--dim);font-size:9px;}
+.fv{font-family:var(--mono);font-size:11px;color:var(--cyan);}
+.sbar{flex:1;height:5px;background:#0d1e30;border-radius:3px;overflow:hidden;}
+.sfill{height:100%;background:linear-gradient(90deg,var(--green),var(--amber));
+  border-radius:3px;transition:width 1s;}
+.spdbtn{padding:3px 7px;border:1px solid var(--border);border-radius:3px;
+  background:transparent;color:var(--text);font-family:var(--mono);font-size:9px;
+  cursor:pointer;transition:all .2s;}
+.spdbtn:hover,.spdbtn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,216,255,.08);}
+
+/* scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo">🌱 Smart Agri-Togo</div>
+  <div class="tbi"><span class="l">Sim Time</span><span class="v" id="simTime">Day 14 — 06:00</span></div>
+  <div class="tbi"><span class="l">Season</span><span class="v" style="color:var(--amber)">DRY / Counter</span></div>
+  <div class="tbi"><span class="l">Water Used</span><span class="v" id="topWater">1,240 L</span></div>
+  <div class="tbi"><span class="l">Avg Moisture</span><span class="v" id="topMoist">58%</span></div>
+  <div class="tbi"><span class="l">Valves Active</span><span class="v" id="topValves" style="color:var(--green)">0 / 5</span></div>
+  <div class="led-wrap"><div class="led"></div>SYSTEM ACTIVE</div>
+</header>
+
+<!-- MAIN BODY -->
+<div class="body">
+
+<!-- ══ LEFT PANEL ══ -->
+<aside class="lpanel">
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--amber)"></div>Weather Station</div>
+    <div class="wr"><span class="wl">🌡 Air Temp</span><span class="wv" id="wT">34.2°C</span></div>
+    <div class="wr"><span class="wl">💧 Humidity</span><span class="wv" id="wRH">62%</span></div>
+    <div class="wr"><span class="wl">☀ Solar Rad</span><span class="wv" id="wRs">18.4 MJ</span></div>
+    <div class="wr"><span class="wl">💨 Wind</span><span class="wv" id="wWd">2.1 m/s</span></div>
+    <div class="wr"><span class="wl">🌧 Rain</span><span class="wv" id="wRn">0.0 mm</span></div>
+    <div style="font-size:8px;color:var(--dim);font-family:var(--mono);margin-top:5px;">Penman-Monteith ET₀:</div>
+    <div class="et0val" id="wET0">6.84 mm/d</div>
+    <div style="font-size:8px;color:var(--dim);font-family:var(--mono);text-align:center;margin-top:2px;">LSTM Forecast ↑ <span id="wFc" style="color:var(--cyan)">7.1 mm/d</span></div>
+  </div>
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--cyan)"></div>Water System</div>
+    <div style="text-align:center;font-size:8px;color:var(--dim);font-family:var(--mono);">BOREHOLE — 40m ▼</div>
+    <div class="pump-anim" id="pumpIcon">⛽</div>
+    <div style="text-align:center;font-size:8px;color:var(--dim);font-family:var(--mono);">0.5 kW Submersible</div>
+    <div class="tank-wrap">
+      <div class="tank-box">
+        <div class="tank-water" id="tankFill" style="height:72%">
+          <div class="tank-wave"></div>
+        </div>
+      </div>
+      <div class="tank-lbl" id="tankLbl">72%</div>
+    </div>
+    <div class="sr"><span class="sl">Flow rate</span><span class="sv" id="flowR">3.8 L/s</span></div>
+    <div class="sr"><span class="sl">Pressure</span><span class="sv">2.4 bar</span></div>
+    <div class="sr"><span class="sl">Pump</span><span class="sv" id="pumpS" style="color:var(--green)">ON ✓</span></div>
+    <div class="sr"><span class="sl">Total vol.</span><span class="sv" id="totalVol">0 m³</span></div>
+  </div>
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--green)"></div>Connectivity</div>
+    <div class="sr"><span class="sl">📡 4G LTE MTN</span>
+      <div class="sig">
+        <div class="sigb" style="height:4px;background:var(--green)"></div>
+        <div class="sigb" style="height:7px;background:var(--green)"></div>
+        <div class="sigb" style="height:10px;background:var(--green)"></div>
+        <div class="sigb" style="height:13px;background:var(--green)"></div>
+      </div>
+    </div>
+    <div class="sr"><span class="sl">MQTT broker</span><span class="sv" style="color:var(--green)">● Live</span></div>
+    <div class="sr"><span class="sl">Firebase DB</span><span class="sv" style="color:var(--green)">● Sync</span></div>
+    <div class="sr"><span class="sl">Camera AI</span><span class="sv" style="color:var(--cyan)">● Online</span></div>
+    <div class="sr"><span class="sl">Uptime</span><span class="sv" id="uptimeEl">3d 14h</span></div>
+    <div style="font-size:8px;color:var(--dim);font-family:var(--mono);margin-top:3px;">SIM7600 GSM Module</div>
+  </div>
+
+</aside>
+
+<!-- ══ CANVAS FIELD ══ -->
+<section class="cfield">
+  <div style="font-family:var(--mono);font-size:8px;color:var(--dim);text-align:center;margin-bottom:5px;letter-spacing:2px;">
+    PILOT FIELD — 25m × 25m ▪ 5×5 GRID ▪ MPC DRIP CONTROL
+  </div>
+  <div class="canvaswrap">
+    <canvas id="fc" width="530" height="430"></canvas>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;margin-top:6px;font-size:9px;font-family:var(--mono);">
+    <div style="display:flex;align-items:center;gap:5px;color:var(--dim);">
+      <div style="width:60px;height:7px;border-radius:3px;background:linear-gradient(90deg,#6B1A0A,#8B4020,#1a9a50,#003a20);"></div>
+      <span>Dry → Wet</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:4px;color:var(--cyan);">
+      <div style="width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
+      Irrigating
+    </div>
+    <div style="display:flex;align-items:center;gap:4px;color:var(--amber);">
+      <div style="width:9px;height:9px;border-radius:50%;background:var(--amber);"></div>
+      Valve (open)
+    </div>
+    <div style="color:var(--dim);">Click a cell for details</div>
+  </div>
+</section>
+
+<!-- ══ RIGHT PANEL ══ -->
+<aside class="rpanel">
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d"></div>Edge Controller</div>
+    <div class="rpi">
+      <div class="rpi-chips">
+        <div class="chip">RPi 4B 4GB</div>
+        <div class="chip">Arduino Mega</div>
+        <div class="led" style="width:7px;height:7px;margin-left:auto;"></div>
+      </div>
+      <div style="margin-top:6px;font-size:8px;color:var(--dim);">
+        <div style="display:flex;justify-content:space-between;margin:2px 0;">
+          <span>CPU</span><span id="cpuV" style="color:#88ffcc;font-family:var(--mono);">23%</span>
+        </div>
+        <div class="bbar"><div class="bfill" id="cpuBar" style="width:23%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div></div>
+        <div style="display:flex;justify-content:space-between;margin:3px 0 2px;">
+          <span>RAM</span><span style="color:#88ffcc;font-family:var(--mono);">45%</span>
+        </div>
+        <div class="bbar"><div class="bfill" style="width:45%;background:linear-gradient(90deg,var(--amber),var(--red));"></div></div>
+      </div>
+      <div style="font-size:8px;color:var(--dim);margin-top:5px;font-family:var(--mono);">
+        MPC solve: <span id="mpcSolve" style="color:#88ffcc;">8.2 s</span><br>
+        Python 3.11 + CVXPY<br>
+        Loop: Δt = 30 min
+      </div>
+    </div>
+  </div>
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--amber)"></div>MPC Optimizer</div>
+    <div style="font-size:8px;font-family:var(--mono);color:var(--dim);margin-bottom:5px;">
+      Horizon H=48 steps (24h)<br>
+      QP solved via OSQP<br>
+      α=0.70 (yield)  β=0.30 (water)
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px;">
+      <span style="color:var(--dim);">Cost J(k)</span>
+      <span style="font-family:var(--mono);color:var(--amber);" id="mpcCost">2.341</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:6px;">
+      <span style="color:var(--dim);">θ* target</span>
+      <span style="font-family:var(--mono);color:var(--cyan);">65% FC</span>
+    </div>
+    <div style="font-size:8px;color:var(--dim);font-family:var(--mono);margin-bottom:3px;">Row moisture vs target:</div>
+    <div class="mpc-chart" id="mpcChart"></div>
+    <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--dim);font-family:var(--mono);">
+      <span>R1</span><span>R2</span><span>R3</span><span>R4</span><span>R5</span>
+    </div>
+  </div>
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--green)"></div>Valve Status</div>
+    <div id="valveList"></div>
+  </div>
+
+  <div class="pnl">
+    <div class="ptitle"><div class="d" style="background:var(--green)"></div>Mobile App Preview</div>
+    <div class="phone">
+      <div class="pnotch"></div>
+      <div class="pscreen">
+        <div class="ptop">🌱 AGRI-TOGO</div>
+        <div class="pgrid" id="phoneGrid"></div>
+        <div class="pstat"><span>ET₀</span><span class="pv" id="phET">6.84</span></div>
+        <div class="pstat"><span>Water</span><span class="pv" id="phW">1,240L</span></div>
+        <div class="pstat"><span>Valves</span><span class="pv" id="phV">0/5</span></div>
+        <div class="pstat"><span>Day</span><span class="pv" id="phD">14/100</span></div>
+        <div class="pbtn">📱 REMOTE CTRL</div>
+      </div>
+    </div>
+  </div>
+
+</aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="fstat"><span class="fl">Season Day</span><span class="fv" id="fdDay">14 / 100</span></div>
+  <div style="flex:1;display:flex;align-items:center;gap:7px;">
+    <span style="font-size:9px;color:var(--dim);">Progress</span>
+    <div class="sbar" style="flex:1;"><div class="sfill" id="sfill" style="width:14%"></div></div>
+  </div>
+  <div class="fstat"><span class="fl">Total Water</span><span class="fv" id="fdWat">1,240 L</span></div>
+  <div class="fstat"><span class="fl">WUE</span><span class="fv" id="fdWue">4.2 kg/m³</span></div>
+  <div class="fstat"><span class="fl">LSTM Forecast</span><span class="fv" id="fdFc">↑ 7.1 mm/d</span></div>
+  <div style="display:flex;gap:5px;margin-left:10px;align-items:center;">
+    <span style="font-size:8px;color:var(--dim);">Speed:</span>
+    <button class="spdbtn active" id="s1x" onclick="setSpeed(1)">1×</button>
+    <button class="spdbtn" id="s5x" onclick="setSpeed(5)">5×</button>
+    <button class="spdbtn" id="s20x" onclick="setSpeed(20)">20×</button>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+//  CONSTANTS & CONFIGURATION
+// ═══════════════════════════════════════════════
+const ROWS=5, COLS=5;
+const CROPS   =['🧅','🧅','🥕','🥬','🌽'];
+const CNAMES  =['Onion','Onion','Carrot','Lettuce','Maize'];
+const ET_RATE =[.0034,.0034,.0028,.004,.0048]; // per 30-min step
+const IRR_RATE= .024;
+const FC=.82, WP=.12, TARGET=.65, LOW=.40;
+
+// Canvas layout constants
+const CW=530, CH=430;
+const OX=95;  // field origin X (space for pipe+labels)
+const OY=32;  // field origin Y (space for top labels)
+const CS=74;  // cell size px
+// Row centers in canvas Y: OY + row*CS + CS/2
+// Col centers in canvas X: OX + col*CS + CS/2
+const PIPE_X = OX-38; // main pipe X position
+const FIELD_W = COLS*CS; // 370
+const FIELD_H = ROWS*CS; // 370
+
+// ═══════════════════════════════════════════════
+//  SIMULATION STATE
+// ═══════════════════════════════════════════════
+let simMin = 14*1440+360; // Day 14 06:00
+let totalWater=1240, tankLvl=72, speed=1;
+let animT=0; // animation time (for pipe dash animation)
+
+let cells=Array.from({length:25},(_,i)=>({
+  row:Math.floor(i/5), col:i%5,
+  moisture:.45+Math.random()*.28,
+  irrigating:false,
+  crop:CROPS[Math.floor(i/5)],
+  cname:CNAMES[Math.floor(i/5)],
+  etRate:ET_RATE[Math.floor(i/5)]*(0.8+Math.random()*.4)
+}));
+
+let valves=[false,false,false,false,false];
+let vTimers=[0,0,0,0,0];
+
+let wx={temp:34.2, rh:62, rs:18.4, wind:2.1, rain:0, et0:6.84};
+
+// Particle system for water drops
+let drops=[];
+
+// ═══════════════════════════════════════════════
+//  MPC (simplified greedy, pedagogically correct)
+// ═══════════════════════════════════════════════
+function mpcStep(){
+  // Compute max simultaneous open valves (pump capacity constraint)
+  const maxOpen=3;
+  let currentOpen=valves.filter(v=>v).length;
+
+  for(let r=0;r<ROWS;r++){
+    const rowCells=cells.filter(c=>c.row===r);
+    const avg=rowCells.reduce((s,c)=>s+c.moisture,0)/COLS;
+    // Decision: open if dry and capacity available
+    if(avg<LOW && !valves[r] && currentOpen<maxOpen){
+      valves[r]=true;
+      vTimers[r]=Math.floor(4+Math.random()*4);
+      currentOpen++;
+    }
+    // Close if target reached or timer expired
+    if(valves[r]){
+      if(avg>=TARGET) { valves[r]=false; continue; }
+      vTimers[r]--;
+      if(vTimers[r]<=0) valves[r]=false;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  SIMULATE ONE STEP (30 min)
+// ═══════════════════════════════════════════════
+function simStep(){
+  // Weather dynamics
+  const h=(simMin%1440)/60;
+  wx.temp=28+8*Math.sin((h-6)*Math.PI/12)+((Math.random()-.5)*.5);
+  wx.rh=55+20*Math.cos(h*Math.PI/12)+((Math.random()-.5)*3);
+  wx.wind=1.5+Math.random()*2;
+  wx.rs=Math.max(0,16*Math.sin((h-6)*Math.PI/12))+Math.random();
+  wx.rain=Math.random()<.004?.8:0;
+  wx.et0=Math.max(3.2,Math.min(9.5,4+wx.temp*.075+wx.wind*.12-wx.rh*.025));
+
+  mpcStep();
+
+  let irrVol=0;
+  cells.forEach(c=>{
+    const et=c.etRate*(0.7+Math.random()*.6);
+    const rain=wx.rain/48;
+    c.irrigating=valves[c.row];
+    c.moisture-=et;
+    c.moisture+=rain;
+    if(c.irrigating){
+      c.moisture+=IRR_RATE*(0.85+Math.random()*.3);
+      irrVol+=0.35;
+    }
+    c.moisture=Math.max(WP+.02, Math.min(FC-.02, c.moisture));
+  });
+
+  tankLvl-=irrVol*.7;
+  tankLvl+=1.8;
+  tankLvl=Math.max(28,Math.min(94,tankLvl));
+  totalWater+=irrVol*14;
+  simMin+=30;
+}
+
+// ═══════════════════════════════════════════════
+//  COLOR: moisture → RGB
+// ═══════════════════════════════════════════════
+function mColor(m){
+  const t=Math.max(0,Math.min(1,(m-WP)/(FC-WP)));
+  let r,g,b;
+  if(t<.28){
+    const f=t/.28;
+    r=107+~~((170-107)*f); g=26+~~((65-26)*f); b=10;
+  } else if(t<.55){
+    const f=(t-.28)/.27;
+    r=170+~~((30-170)*f); g=65+~~((150-65)*f); b=10+~~((30-10)*f);
+  } else {
+    const f=(t-.55)/.45;
+    r=30+~~((0-30)*f); g=150+~~((70-150)*f); b=30+~~((25-30)*f);
+  }
+  return `rgb(${r},${g},${b})`;
+}
+function mBarColor(m){
+  const t=(m-WP)/(FC-WP);
+  return t<.35?'#ff4455':t<.55?'#ffad00':'#1fff8a';
+}
+
+// ═══════════════════════════════════════════════
+//  CANVAS DRAW
+// ═══════════════════════════════════════════════
+const canvas=document.getElementById('fc');
+const ctx=canvas.getContext('2d');
+
+function drawRoundRect(x,y,w,h,r,fill,stroke,sw=1){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw;ctx.stroke();}
+}
+
+function drawFrame(t){
+  ctx.clearRect(0,0,CW,CH);
+  ctx.fillStyle='#060d18';
+  ctx.fillRect(0,0,CW,CH);
+
+  // ── FIELD BACKGROUND ──
+  ctx.fillStyle='#080f1e';
+  ctx.fillRect(OX,OY,FIELD_W,FIELD_H);
+
+  // ── GRID CELLS ──
+  cells.forEach((c,i)=>{
+    const x=OX+c.col*CS, y=OY+c.row*CS;
+    const color=mColor(c.moisture);
+
+    // Cell fill
+    drawRoundRect(x+1,y+1,CS-2,CS-2,3,color,null);
+
+    // Irrigating glow overlay
+    if(c.irrigating){
+      ctx.save();
+      ctx.shadowColor='#00d8ff';
+      ctx.shadowBlur=18;
+      drawRoundRect(x+1,y+1,CS-2,CS-2,3,null,'#00d8ff',2);
+      ctx.shadowBlur=0;
+      ctx.restore();
+      // Blue shimmer overlay
+      ctx.fillStyle='rgba(0,200,255,0.08)';
+      drawRoundRect(x+1,y+1,CS-2,CS-2,3,'rgba(0,200,255,0.08)',null);
+    }
+
+    // Cell border
+    ctx.strokeStyle=c.irrigating?'rgba(0,216,255,0.7)':'rgba(255,255,255,0.07)';
+    ctx.lineWidth=c.irrigating?1.5:.5;
+    drawRoundRect(x+1,y+1,CS-2,CS-2,3,null,ctx.strokeStyle,ctx.lineWidth);
+
+    // Crop emoji
+    ctx.font='20px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(c.crop, x+CS/2, y+CS/2-9);
+
+    // Moisture %
+    ctx.font='bold 10px Courier New, monospace';
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    ctx.fillText(Math.round(c.moisture*100)+'%', x+CS/2, y+CS/2+13);
+
+    // Moisture bar
+    const bw=CS-14, bx=x+7, by=y+CS-10;
+    ctx.fillStyle='rgba(0,0,0,0.35)';
+    ctx.beginPath(); ctx.roundRect(bx,by,bw,4,2); ctx.fill();
+    const tf=(c.moisture-WP)/(FC-WP);
+    ctx.fillStyle=mBarColor(c.moisture);
+    ctx.beginPath(); ctx.roundRect(bx,by,bw*Math.max(0,Math.min(1,tf)),4,2); ctx.fill();
+  });
+
+  // ── COLUMN LABELS (top) ──
+  ctx.font='9px Courier New, monospace';
+  ctx.fillStyle='#4a6a88'; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  for(let c=0;c<COLS;c++){
+    ctx.fillText('C'+(c+1), OX+c*CS+CS/2, OY-4);
+    // 5m label
+    ctx.font='7px Courier New'; ctx.fillStyle='#2a4a68';
+    ctx.fillText('5m', OX+c*CS+CS/2, OY-4);
+    ctx.font='9px Courier New'; ctx.fillStyle='#4a6a88';
+  }
+
+  // ── ROW CROP LABELS (right) ──
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  for(let r=0;r<ROWS;r++){
+    const cy=OY+r*CS+CS/2;
+    ctx.font='8px Courier New';
+    ctx.fillStyle=valves[r]?'#00d8ff':'#3a5a78';
+    ctx.fillText(CNAMES[r], OX+FIELD_W+8, cy);
+    if(valves[r]){
+      ctx.fillStyle='#1fff8a';
+      ctx.fillText(' ← IRR', OX+FIELD_W+8+40, cy);
+    }
+  }
+
+  // ── MAIN SUPPLY PIPE (vertical) ──
+  // Background pipe
+  ctx.strokeStyle='#2a4a6a'; ctx.lineWidth=9; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(PIPE_X, OY-20); ctx.lineTo(PIPE_X, OY+FIELD_H+15); ctx.stroke();
+
+  // Animated flow (if any valve open)
+  const anyOpen=valves.some(v=>v);
+  if(anyOpen){
+    ctx.strokeStyle='rgba(0,200,255,0.75)'; ctx.lineWidth=5;
+    ctx.setLineDash([10,12]); ctx.lineDashOffset=-t*24;
+    ctx.beginPath(); ctx.moveTo(PIPE_X, OY-20); ctx.lineTo(PIPE_X, OY+FIELD_H+15); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Pipe end cap / tank connection indicator
+  ctx.fillStyle='#0b1929'; ctx.strokeStyle='#00d8ff'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(PIPE_X, OY-18, 9, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  if(anyOpen){ctx.shadowColor='#00d8ff';ctx.shadowBlur=8;}
+  ctx.font='bold 7px Courier New'; ctx.fillStyle='#00d8ff';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('IN', PIPE_X, OY-18);
+  ctx.shadowBlur=0;
+
+  // "TANK" label above pipe
+  ctx.font='7px Courier New'; ctx.fillStyle='#4a6a88';
+  ctx.textAlign='center'; ctx.textBaseline='bottom';
+  ctx.fillText('⬆ TANK', PIPE_X, OY-28);
+
+  // ── LATERAL PIPES + VALVES ──
+  for(let r=0;r<ROWS;r++){
+    const cy=OY+r*CS+CS/2;
+    const open=valves[r];
+
+    // Lateral background
+    ctx.strokeStyle='#2a4a6a'; ctx.lineWidth=6; ctx.lineCap='round'; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(PIPE_X, cy); ctx.lineTo(OX+FIELD_W+3, cy); ctx.stroke();
+
+    // Animated lateral flow
+    if(open){
+      ctx.strokeStyle='rgba(0,200,255,0.72)'; ctx.lineWidth=3.5;
+      ctx.setLineDash([8,10]); ctx.lineDashOffset=-t*20;
+      ctx.beginPath(); ctx.moveTo(PIPE_X, cy); ctx.lineTo(OX+FIELD_W+3, cy); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Drip emitters at each cell center
+    for(let c=0;c<COLS;c++){
+      const ex=OX+c*CS+CS/2;
+      ctx.beginPath(); ctx.arc(ex, cy, 4.5, 0, Math.PI*2);
+      ctx.fillStyle=open?'#00d8ff':'#2a4a6a';
+      if(open){ctx.shadowColor='#00d8ff';ctx.shadowBlur=8;}
+      ctx.fill();
+      ctx.shadowBlur=0;
+    }
+
+    // Solenoid valve (circle at pipe junction)
+    ctx.beginPath(); ctx.arc(PIPE_X, cy, 14, 0, Math.PI*2);
+    ctx.fillStyle=open?'#002a3a':'#080f1a';
+    ctx.fill();
+    ctx.strokeStyle=open?'#00d8ff':'#2a4a6a';
+    ctx.lineWidth=open?2.5:1.5;
+    if(open){ctx.shadowColor='#00d8ff';ctx.shadowBlur=12;}
+    ctx.stroke(); ctx.shadowBlur=0;
+
+    // Valve label
+    ctx.font='bold 8px Courier New'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=open?'#00d8ff':'#3a6a8a';
+    ctx.fillText('V'+(r+1), PIPE_X, cy);
+
+    // Open/closed status dot
+    ctx.beginPath(); ctx.arc(PIPE_X+14, cy-14, 4, 0, Math.PI*2);
+    ctx.fillStyle=open?'#1fff8a':'#ff4455';
+    if(open){ctx.shadowColor='#1fff8a';ctx.shadowBlur=6;}
+    ctx.fill(); ctx.shadowBlur=0;
+  }
+
+  // ── WATER DROP PARTICLES ──
+  // Spawn new drops for open valves
+  if(Math.random()<.35){
+    for(let r=0;r<ROWS;r++){
+      if(valves[r]&&Math.random()<.4){
+        const col=Math.floor(Math.random()*COLS);
+        drops.push({
+          x: OX+col*CS+CS/2+(Math.random()-.5)*30,
+          y: OY+r*CS+CS/2-(CS/2)-5,
+          vy:.8+Math.random()*1.2,
+          life:1.0,
+          decay:.025+Math.random()*.015
+        });
+      }
+    }
+  }
+  // Update & draw drops
+  drops=drops.filter(d=>d.life>0);
+  drops.forEach(d=>{
+    d.y+=d.vy;
+    d.life-=d.decay;
+    ctx.globalAlpha=d.life*.85;
+    ctx.fillStyle='#00d8ff';
+    ctx.shadowColor='#00d8ff'; ctx.shadowBlur=4;
+    ctx.beginPath();
+    ctx.ellipse(d.x, d.y, 2, 3.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.globalAlpha=1;
+  });
+
+  // ── LEGEND / SCALE BAR ──
+  ctx.strokeStyle='#2a4a6a'; ctx.lineWidth=1.5; ctx.lineCap='butt';
+  ctx.beginPath(); ctx.moveTo(OX, OY+FIELD_H+22); ctx.lineTo(OX+CS, OY+FIELD_H+22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(OX, OY+FIELD_H+19); ctx.lineTo(OX, OY+FIELD_H+25); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(OX+CS, OY+FIELD_H+19); ctx.lineTo(OX+CS, OY+FIELD_H+25); ctx.stroke();
+  ctx.font='8px Courier New'; ctx.fillStyle='#3a5a78';
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillText('5 m', OX+CS/2, OY+FIELD_H+25);
+
+  // ── FIELD BOUNDARY ──
+  ctx.strokeStyle='rgba(40,80,120,0.5)'; ctx.lineWidth=1;
+  ctx.setLineDash([5,5]);
+  ctx.strokeRect(OX,OY,FIELD_W,FIELD_H);
+  ctx.setLineDash([]);
+
+  // ── NORTH ARROW ──
+  ctx.font='bold 10px Courier New'; ctx.fillStyle='#ffad00';
+  ctx.textAlign='right'; ctx.textBaseline='top';
+  ctx.fillText('N↑', OX+FIELD_W-2, OY+4);
+
+  // ── LSTM FORECAST MINI STRIP ──
+  drawForecastStrip(t);
+}
+
+function drawForecastStrip(t){
+  // Small ET0 forecast bar at top of canvas
+  const fx=OX, fy=4, fw=FIELD_W, fh=20;
+  ctx.fillStyle='rgba(10,20,35,0.6)';
+  ctx.fillRect(fx,fy,fw,fh);
+  ctx.font='7px Courier New'; ctx.fillStyle='#4a6a88';
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillText('LSTM ET₀ FORECAST  (next 48h):', fx+2, fy+2);
+
+  const barW=(fw-100)/12;
+  for(let i=0;i<12;i++){
+    const bh=Math.random()*6+4; // simulated forecast bars
+    const bx=fx+100+i*(barW+1);
+    const by=fy+fh-bh-1;
+    ctx.fillStyle=`rgba(0,200,255,${0.4+i*.04})`;
+    ctx.fillRect(bx,by,barW,bh);
+  }
+  ctx.fillStyle='#00d8ff';
+  ctx.font='bold 8px Courier New'; ctx.textAlign='right'; ctx.textBaseline='top';
+  ctx.fillText(wx.et0.toFixed(1)+' mm/d', OX+FIELD_W-2, fy+3);
+}
+
+// ═══════════════════════════════════════════════
+//  HTML PANEL UPDATES
+// ═══════════════════════════════════════════════
+function updateHTML(){
+  // Time
+  const d=14+Math.floor((simMin-14*1440)/1440);
+  const h=Math.floor((simMin%1440)/60).toString().padStart(2,'0');
+  const mn=(simMin%60).toString().padStart(2,'0');
+  document.getElementById('simTime').textContent=`Day ${d} — ${h}:${mn}`;
+  document.getElementById('fdDay').textContent=`${d} / 100`;
+  document.getElementById('sfill').style.width=d+'%';
+  document.getElementById('phD').textContent=`${d}/100`;
+
+  // Water
+  const wStr=totalWater>=1000?(totalWater/1000).toFixed(1)+'k L':Math.round(totalWater)+' L';
+  document.getElementById('topWater').textContent=wStr;
+  document.getElementById('fdWat').textContent=wStr;
+  document.getElementById('totalVol').textContent=(totalWater/1000).toFixed(2)+' m³';
+  document.getElementById('phW').textContent=wStr;
+
+  // Average moisture
+  const avgM=cells.reduce((s,c)=>s+c.moisture,0)/25;
+  document.getElementById('topMoist').textContent=Math.round(avgM*100)+'%';
+
+  // Valves
+  const nOpen=valves.filter(v=>v).length;
+  document.getElementById('topValves').textContent=nOpen+' / 5';
+  document.getElementById('phV').textContent=nOpen+'/5';
+
+  // Weather
+  document.getElementById('wT').textContent=wx.temp.toFixed(1)+'°C';
+  document.getElementById('wRH').textContent=Math.round(wx.rh)+'%';
+  document.getElementById('wRs').textContent=Math.abs(wx.rs).toFixed(1)+' MJ';
+  document.getElementById('wWd').textContent=wx.wind.toFixed(1)+' m/s';
+  document.getElementById('wRn').textContent=wx.rain.toFixed(1)+' mm';
+  document.getElementById('wET0').textContent=wx.et0.toFixed(2)+' mm/d';
+  document.getElementById('wFc').textContent=(wx.et0*1.04).toFixed(1)+' mm/d';
+  document.getElementById('fdFc').textContent='↑ '+(wx.et0*1.04).toFixed(1)+' mm/d';
+
+  // Tank
+  document.getElementById('tankFill').style.height=Math.round(tankLvl)+'%';
+  document.getElementById('tankLbl').textContent=Math.round(tankLvl)+'%';
+  document.getElementById('flowR').textContent=(nOpen*.76).toFixed(1)+' L/s';
+  const ps=document.getElementById('pumpS');
+  ps.textContent=nOpen>0?'ON ✓':'STANDBY';
+  ps.style.color=nOpen>0?'#1fff8a':'#ffad00';
+
+  // CPU
+  const cpu=15+nOpen*5+Math.random()*7;
+  document.getElementById('cpuV').textContent=Math.round(cpu)+'%';
+  document.getElementById('cpuBar').style.width=cpu+'%';
+  document.getElementById('mpcSolve').textContent=(7+Math.random()*3).toFixed(1)+' s';
+
+  // MPC Cost
+  const cost=((TARGET-avgM)**2*10+nOpen*.08).toFixed(3);
+  document.getElementById('mpcCost').textContent=cost;
+
+  // MPC Chart
+  const mc=document.getElementById('mpcChart');
+  mc.innerHTML='';
+  for(let r=0;r<ROWS;r++){
+    const avg=cells.filter(c=>c.row===r).reduce((s,c)=>s+c.moisture,0)/COLS;
+    const pct=Math.round((avg-WP)/(FC-WP)*100);
+    const b=document.createElement('div');
+    b.className='mcb';
+    b.style.height=pct+'%';
+    b.style.background=valves[r]
+      ?'linear-gradient(180deg,rgba(0,200,255,.9),rgba(0,100,150,.5))'
+      :'linear-gradient(180deg,rgba(255,170,0,.8),rgba(120,60,0,.4))';
+    mc.appendChild(b);
+  }
+
+  // Valve list
+  const vl=document.getElementById('valveList');
+  vl.innerHTML='';
+  for(let r=0;r<ROWS;r++){
+    const avg=cells.filter(c=>c.row===r).reduce((s,c)=>s+c.moisture,0)/COLS;
+    const d=document.createElement('div');
+    d.className='vrow';
+    d.innerHTML=`<div class="vi ${valves[r]?'open':'closed'}"></div>
+      <span class="vlbl">${CROPS[r]} Row ${r+1}</span>
+      <span class="vm">${Math.round(avg*100)}%</span>`;
+    vl.appendChild(d);
+  }
+
+  // Phone grid
+  const pg=document.getElementById('phoneGrid');
+  if(pg.children.length===0){
+    cells.forEach(()=>{const d=document.createElement('div');d.className='pc';pg.appendChild(d);});
+  }
+  Array.from(pg.children).forEach((el,i)=>{el.style.background=mColor(cells[i].moisture);});
+  document.getElementById('phET').textContent=wx.et0.toFixed(2);
+
+  // WUE (kg water / litre)
+  document.getElementById('fdWue').textContent=(3.8+Math.random()*.5).toFixed(1)+' kg/m³';
+
+  // Uptime
+  const uMin=Math.floor((simMin-14*1440));
+  document.getElementById('uptimeEl').textContent=`${Math.floor(uMin/1440)}d ${Math.floor((uMin%1440)/60)}h`;
+}
+
+// ═══════════════════════════════════════════════
+//  CLICK ON CELL — show info
+// ═══════════════════════════════════════════════
+canvas.addEventListener('click',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(CW/rect.width);
+  const my=(e.clientY-rect.top)*(CH/rect.height);
+  const col=Math.floor((mx-OX)/CS);
+  const row=Math.floor((my-OY)/CS);
+  if(col>=0&&col<COLS&&row>=0&&row<ROWS){
+    const c=cells[row*5+col];
+    const pct=Math.round(c.moisture*100);
+    const status=c.irrigating?'💧 Irrigating now'
+      :pct<42?'⚠️ Below threshold — MPC will open valve'
+      :pct>68?'✅ Well irrigated'
+      :'✅ Within optimal range';
+    // Flash border — store highlight
+    c._hl=1.0;
+    console.log(`Cell (R${row+1},C${col+1}) | ${c.cname} | Moisture: ${pct}% | ${status}`);
+    // Show tooltip overlay on canvas
+    showTooltip(c, col, row);
+  }
+});
+
+let tooltip=null;
+function showTooltip(c, col, row){
+  if(tooltip) clearTimeout(tooltip);
+  const x=OX+col*CS+CS/2, y=OY+row*CS+CS/2;
+  const pct=Math.round(c.moisture*100);
+  c._tip={x,y,pct,name:c.cname,irr:c.irrigating,timer:60};
+  tooltip=setTimeout(()=>{if(c._tip)delete c._tip;},3500);
+}
+
+// ═══════════════════════════════════════════════
+//  MAIN ANIMATION LOOP
+// ═══════════════════════════════════════════════
+let simTimer=null;
+function setSpeed(s){
+  speed=s;
+  clearInterval(simTimer);
+  simTimer=setInterval(()=>{simStep();updateHTML();}, Math.max(150, 2000/s));
+  document.querySelectorAll('.spdbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s'+s+'x').classList.add('active');
+}
+
+let lastRaf=0;
+function rafLoop(ts){
+  const dt=(ts-lastRaf)/1000;
+  lastRaf=ts;
+  animT+=dt;
+
+  drawFrame(animT);
+
+  // Draw tooltip if active
+  cells.forEach(c=>{
+    if(c._tip&&c._tip.timer-->0){
+      const {x,y,pct,name,irr}=c._tip;
+      ctx.fillStyle='rgba(5,15,30,0.92)';
+      drawRoundRect(x-52,y-42,104,38,5,'rgba(5,15,30,0.92)','#00d8ff',1.5);
+      ctx.font='bold 9px Courier New'; ctx.fillStyle='#00d8ff';
+      ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillText(name+' | '+pct+'% moisture', x, y-36);
+      ctx.font='8px Courier New'; ctx.fillStyle=irr?'#1fff8a':'#ffad00';
+      ctx.fillText(irr?'💧 Irrigating':'⏸ Valve closed', x, y-23);
+    }
+  });
+
+  requestAnimationFrame(rafLoop);
+}
+
+// ── INIT ──
+updateHTML();
+setSpeed(1);
+requestAnimationFrame(ts=>{lastRaf=ts;rafLoop(ts);});
+</script>
+</body>
+</html>

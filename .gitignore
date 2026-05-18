@@ -1,0 +1,79 @@
+# ============================================================
+#  Smart Agri-Togo — .gitignore
+# ============================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+env/
+venv/
+.venv/
+pip-wheel-metadata/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment & secrets
+.env
+.env.*
+secrets.json
+firebase_credentials.json
+service_account_key.json
+*.key
+*.pem
+
+# Data (large raw files — tracked separately or via DVC)
+data/weather/raw/*.json
+data/sensors/field_readings/*.csv
+data/harvest/*.csv
+
+# Keep processed data and sample files
+!data/weather/processed/.gitkeep
+!data/soil/.gitkeep
+!data/sensors/.gitkeep
+!data/harvest/.gitkeep
+
+# ML model weights (large binary files)
+software/ml_models/**/*.pt
+software/ml_models/**/*.pth
+software/ml_models/**/*.h5
+software/ml_models/**/*.pkl
+software/ml_models/**/*.joblib
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# LaTeX build artifacts
+docs/**/*.aux
+docs/**/*.log
+docs/**/*.out
+docs/**/*.toc
+docs/**/*.synctex.gz
+docs/**/*.fdb_latexmk
+docs/**/*.fls
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp

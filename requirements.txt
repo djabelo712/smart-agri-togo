@@ -1,0 +1,44 @@
+# ============================================================
+#  Smart Agri-Togo — Python Dependencies
+# ============================================================
+
+# ── Core scientific stack ──
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# ── Optimal control / optimisation ──
+cvxpy>=1.3.0
+osqp>=0.6.3
+casadi>=3.6.0
+
+# ── Machine learning ──
+scikit-learn>=1.3.0
+torch>=2.0.0
+gpytorch>=1.11.0
+stable-baselines3>=2.0.0
+
+# ── Data collection & APIs ──
+requests>=2.31.0
+openmeteo-requests>=1.1.0
+retry-requests>=2.0.0
+
+# ── IoT / hardware (Raspberry Pi only) ──
+# RPi.GPIO>=0.7.1
+# adafruit-circuitpython-ads1x15>=2.2.0
+
+# ── Cloud & database ──
+firebase-admin>=6.2.0
+paho-mqtt>=1.6.1
+fastapi>=0.100.0
+uvicorn>=0.23.0
+
+# ── Utilities ──
+python-dotenv>=1.0.0
+loguru>=0.7.0
+click>=8.1.0
+tqdm>=4.65.0
+schedule>=1.2.0
+pytz>=2023.3

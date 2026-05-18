@@ -1,0 +1,916 @@
+% ============================================================
+%  SMART AGRI-TOGO — Intelligent Irrigation System
+%  Full Project Report  (Research + Deployment Plan)
+%  Author: Ounimborbitibou DJABON
+% ============================================================
+\documentclass[12pt, a4paper]{report}
+
+% ---------- Packages ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=teal!80!black,
+  citecolor=teal!80!black,
+  urlcolor=teal!60!black
+}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+\usepackage{enumitem}
+\usepackage{cite}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+
+% ---------- Colors ----------
+\definecolor{agrigreen}{RGB}{34,110,54}
+\definecolor{skyblue}{RGB}{30,120,200}
+\definecolor{soilorange}{RGB}{200,100,30}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{80,80,80}
+
+% ---------- Headers ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Smart Agri-Togo — Intelligent Irrigation System}}
+\fancyhead[R]{\small\textit{O. Djabon}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Section styling ----------
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{agrigreen}}
+  {\chaptertitlename\ \thechapter}{14pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{agrigreen!80!black}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{agrigreen!60!black}}
+  {\thesubsection}{1em}{}
+
+% ---------- Custom boxes ----------
+\newtcolorbox{keybox}[1]{
+  colback=agrigreen!8, colframe=agrigreen!70!black,
+  title=#1, fonttitle=\bfseries, arc=4pt
+}
+\newtcolorbox{mathbox}[1]{
+  colback=skyblue!8, colframe=skyblue!70!black,
+  title=#1, fonttitle=\bfseries, arc=4pt
+}
+\newtcolorbox{warnbox}[1]{
+  colback=soilorange!10, colframe=soilorange!80!black,
+  title=#1, fonttitle=\bfseries, arc=4pt
+}
+
+% ---------- Theorem environments ----------
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+
+% ============================================================
+\begin{document}
+
+% ---- Title page ----
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[agrigreen!15] (current page.north west) rectangle
+        ([yshift=-4cm]current page.north east);
+  \fill[agrigreen] (current page.south west) rectangle
+        ([yshift=1.5cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{0.5cm}
+\begin{center}
+  {\color{agrigreen}\rule{\linewidth}{2pt}}\\[0.3cm]
+  {\Huge\bfseries\color{agrigreen!80!black}
+    SMART AGRI-TOGO}\\[0.4cm]
+  {\LARGE\bfseries Intelligent Irrigation System for\\
+   Counter-Season Agriculture}\\[0.3cm]
+  {\color{agrigreen}\rule{\linewidth}{1pt}}\\[0.8cm]
+
+  {\large\textit{A Research and Deployment Project Report}}\\[1.2cm]
+
+  \begin{tcolorbox}[colback=agrigreen!10, colframe=agrigreen!80, width=0.85\textwidth,
+    arc=6pt, boxrule=1pt]
+  \centering
+  {\large Combining \textbf{Optimal Control}, \textbf{Machine Learning},\\
+  and \textbf{IoT Technology} for Profitable\\
+  Smallholder Farming in Togo}
+  \end{tcolorbox}
+
+  \vspace{1.5cm}
+  {\Large\bfseries Ounimborbitibou DJABON}\\[0.3cm]
+  {\normalsize Master's Student — MPFA-PT (Physique Théorique)\\
+   Université de Lomé, Togo\\[0.2cm]
+   AgroLab Africa Team, AIMS Ghana}\\[1.2cm]
+
+  {\normalsize\color{darkgray}
+   \textbf{Date:} \today\\[0.2cm]
+   \textbf{Status:} Working Document — Research Phase v1.0}
+
+  \vspace{2cm}
+  {\color{agrigreen}\rule{\linewidth}{1pt}}
+\end{center}
+\end{titlepage}
+
+% ---- Table of contents ----
+\tableofcontents
+\newpage
+
+% ============================================================
+\chapter*{Executive Summary}
+\addcontentsline{toc}{chapter}{Executive Summary}
+\markboth{Executive Summary}{Executive Summary}
+
+This report presents the complete design, mathematical framework, and deployment roadmap for \textbf{Smart Agri-Togo}, an intelligent counter-season irrigation project targeting smallholder farmers in Togo. The system is built at the intersection of optimal control theory, machine learning (ML), and low-cost Internet-of-Things (IoT) hardware.
+
+\textbf{The problem is real and the opportunity is large.} In Togo, crops such as onion, maize, carrot, and lettuce become scarce and expensive during the dry season (October–May), precisely when no rain falls. Because most smallholders lack irrigation infrastructure or the technical skills to manage it efficiently, the market sits largely unfilled. A disciplined, technology-assisted operation can capture premium prices while dramatically reducing water waste.
+
+\textbf{The innovation is threefold:}
+\begin{enumerate}[leftmargin=2em]
+  \item \textit{Intelligent, model-based irrigation control} — replacing human intuition with a real-time optimal control loop (Model Predictive Control) that minimises water use while maximising crop yield.
+  \item \textit{Remote operation via smartphone} — a farmer can start, stop, or override any irrigation valve from Accra, Lomé, or anywhere with a mobile connection.
+  \item \textit{A rigorous research backbone} — the pilot phase is designed as a scientific experiment on a single square field, generating the data required to calibrate crop models, train ML predictors, and publish results.
+\end{enumerate}
+
+\textbf{Economic projection} for a modest 1-hectare pilot: estimated gross revenue of \textbf{3\,000\,000–5\,000\,000 XOF/season} from onion and carrot alone, with operating costs well below 1\,000\,000 XOF once the system is running autonomously.
+
+\textbf{Research output} expected: at least one peer-reviewed paper on data-driven irrigation scheduling under sub-Saharan dry-season conditions.
+
+\begin{keybox}{Bottom Line}
+Yes, this is an excellent project. It is technically feasible, economically sound, and socially impactful. The combination of rigorous mathematical modelling and practical smartphone control makes it uniquely attractive for both academic publication and real agricultural income.
+\end{keybox}
+
+\newpage
+
+% ============================================================
+\chapter{Context and Motivation}
+
+\section{Agriculture in Togo: Dry-Season Gap}
+
+Togo's climate is governed by two rainy seasons in the south (March–July and September–October) and one in the north (June–September), separated by dry spells that can last five to seven months. During these dry periods, fresh vegetables — onion (\textit{Allium cepa}), carrot (\textit{Daucus carota}), lettuce (\textit{Lactuca sativa}), and maize (\textit{Zea mays}) — effectively disappear from local markets or are imported from Burkina Faso and Ghana at high cost.
+
+Several key facts frame the opportunity:
+\begin{itemize}[leftmargin=2em]
+  \item The Lomé urban agglomeration exceeds 1.8 million inhabitants and depends on fresh produce sourced largely from rainfed farms. When the rains stop, prices for onion and carrot can triple relative to rainy-season levels.
+  \item Less than 12\% of cultivated land in Togo is equipped with any form of irrigation (FAO AQUASTAT, 2022), compared to a sub-Saharan average of 6\% — leaving enormous room for growth.
+  \item Youth unemployment in Togo stands above 35\% for the 15–35 age bracket (ILO, 2023). Agriculture is widely perceived as unattractive because it requires constant physical presence and offers unpredictable returns.
+\end{itemize}
+
+\section{Why Intelligent Irrigation?}
+
+Conventional irrigation operated manually wastes water (over- or under-irrigation), requires daily on-site labour, and is highly sensitive to operator error. Intelligent irrigation, by contrast, replaces manual judgment with sensor measurements and mathematical models that continuously optimise the water applied at each point in time. The key benefits are:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Water saving}: Studies in comparable West African settings report 30–50\% water savings with automated soil-moisture-based scheduling relative to calendar-based irrigation.
+  \item \textbf{Yield stability}: Maintaining soil water potential within a prescribed range prevents both drought stress and waterlogging, two of the main causes of yield variability.
+  \item \textbf{Labour reduction}: Once calibrated, the system runs with minimal human input — consistent with the ambition of making farming attractive to young people who reject backbreaking daily routines.
+  \item \textbf{Remote operation}: With a mobile app and a GSM/Wi-Fi-connected controller, a farmer can manage the entire field from a smartphone, whether they are on the farm, in the city, or anywhere with a signal.
+\end{itemize}
+
+\section{Positioning: Research Project First, Business Second}
+
+This project is designed in two explicit stages. In \textbf{Phase 1 (Research)}, a single square field (25 m $\times$ 25 m = 625 m$^{2}$) serves as a controlled experimental unit. Every sensor reading, every valve activation, and every harvest measurement is logged. The goal is to calibrate mathematical crop-water models and train ML predictors on real Togolese field data — producing both scientific knowledge and the operational parameters needed for scaling.
+
+In \textbf{Phase 2 (Deployment \& Scale)}, the calibrated system is replicated across larger areas and eventually franchised to other young farmers, with the initial project team providing the platform, the models, and technical support in exchange for a data-sharing and service agreement.
+
+% ============================================================
+\chapter{Crops, Markets, and Economic Baseline}
+
+\section{Selected Crops and Counter-Season Calendar}
+
+Table~\ref{tab:crops} summarises the four priority crops, their dry-season planting windows in southern Togo, water requirements, and indicative market prices.
+
+\begin{table}[H]
+\centering
+\caption{Priority crops for Smart Agri-Togo pilot}
+\label{tab:crops}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Crop} & \textbf{Planting window} & \textbf{Cycle (days)} &
+\textbf{Water req. (mm)} & \textbf{Dry-season price (XOF/kg)} \\
+\midrule
+Onion & Oct–Nov & 90–110 & 350–500 & 400–600 \\
+Carrot & Nov–Dec & 80–100 & 300–450 & 300–500 \\
+Lettuce & Oct–Mar & 45–60  & 150–250 & 200–350 \\
+Maize  & Nov–Dec & 90–120 & 500–800 & 150–250 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The planting windows are staggered so that harvests fall between January and April, when supply from rainfed agriculture is minimal. Onion and carrot offer the highest margin per square metre and are the primary cash crops; lettuce provides faster cash flow within the season; maize anchors food security and can be sold as green corn at premium prices.
+
+\section{First-Order Revenue Model}
+
+For a 1-hectare pilot field (10\,000 m$^{2}$) with the allocation below, annual dry-season revenue can be estimated as follows.
+
+\begin{table}[H]
+\centering
+\caption{Revenue projection — 1-hectare pilot, one counter-season}
+\label{tab:revenue}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Crop} & \textbf{Area (m$^2$)} & \textbf{Yield (t/ha)} &
+\textbf{Production (kg)} & \textbf{Price (XOF/kg)} & \textbf{Revenue (XOF)} \\
+\midrule
+Onion   & 4\,000 & 20 & 8\,000  & 450 & 3\,600\,000 \\
+Carrot  & 2\,000 & 18 & 3\,600  & 400 & 1\,440\,000 \\
+Lettuce & 2\,000 & 25 & 5\,000  & 280 & 1\,400\,000 \\
+Maize   & 2\,000 &  5 & 1\,000  & 200 &   200\,000 \\
+\midrule
+\textbf{Total} & 10\,000 & — & — & — & \textbf{6\,640\,000} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{warnbox}{Conservative Scenario}
+Even cutting yields by 30\% and prices by 20\% to account for market variability, total revenue still exceeds \textbf{3\,700\,000 XOF} ($\approx$ USD 6\,000) per season — from a single hectare. With operating costs (water, fertiliser, labour, maintenance) estimated at 1\,200\,000 XOF, the net margin is solidly positive in even the pessimistic scenario.
+\end{warnbox}
+
+% ============================================================
+\chapter{System Architecture}
+
+\section{Overview}
+
+Smart Agri-Togo integrates four layers: \textbf{physical field infrastructure}, \textbf{sensor network}, \textbf{edge computing controller}, and \textbf{cloud + mobile application}. Figure~\ref{fig:arch} illustrates the complete architecture.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.7cm and 1.2cm,
+  box/.style={rectangle, rounded corners=4pt, minimum width=2.8cm, minimum height=1cm,
+              text centered, font=\small\bfseries, text width=2.8cm},
+  arr/.style={-{Stealth[length=5pt]}, thick},
+  cloud/.style={ellipse, minimum width=2.8cm, minimum height=1.2cm,
+                text centered, font=\small\bfseries, text width=2.6cm}
+]
+% Layer 1 — Field
+\node[box, fill=agrigreen!25, draw=agrigreen] (sensors)
+  {Soil Sensors\\(moisture, temp,\\EC)};
+\node[box, fill=agrigreen!25, draw=agrigreen, right=of sensors] (weather)
+  {Weather\\Station\\(T, RH, Rain)};
+\node[box, fill=agrigreen!25, draw=agrigreen, right=of weather] (valves)
+  {Solenoid\\Valves +\\Pump};
+\node[box, fill=agrigreen!25, draw=agrigreen, right=of valves] (cam)
+  {Camera\\(leaf health\\monitoring)};
+
+\node[above=0.2cm of weather, font=\small\itshape\color{agrigreen}]
+  {\textbf{Layer 1 — Physical Field}};
+
+% Layer 2 — Edge controller
+\node[box, fill=skyblue!25, draw=skyblue!80,
+      below=1.4cm of weather, xshift=1.5cm] (rpi)
+  {Edge Controller\\(Raspberry Pi +\\Arduino)};
+
+\node[above=0.1cm of rpi, font=\small\itshape\color{skyblue}]
+  {\textbf{Layer 2 — Edge Computing}};
+
+% Layer 3 — Cloud
+\node[box, fill=soilorange!20, draw=soilorange!80,
+      below=1.4cm of rpi, xshift=-1.5cm] (cloud)
+  {Cloud Server\\(Firebase /\\MQTT broker)};
+\node[box, fill=soilorange!20, draw=soilorange!80,
+      right=1.4cm of cloud] (ml)
+  {ML Models\\(ET$_0$ prediction,\\crop stress)};
+
+\node[above=0.1cm of cloud, font=\small\itshape\color{soilorange}]
+  {\textbf{Layer 3 — Cloud \& AI}};
+
+% Layer 4 — User
+\node[box, fill=gray!20, draw=gray!60,
+      below=1.4cm of cloud, xshift=1.5cm] (app)
+  {Mobile App\\(Android/iOS\\dashboard)};
+
+\node[above=0.1cm of app, font=\small\itshape\color{darkgray}]
+  {\textbf{Layer 4 — User Interface}};
+
+% Arrows
+\draw[arr, agrigreen!70] (sensors.south) -- ++(0,-0.5) -| (rpi.north);
+\draw[arr, agrigreen!70] (weather.south) -- (rpi.north);
+\draw[arr, agrigreen!70] (cam.south)     -- ++(0,-0.5) -| (rpi.north);
+\draw[arr, agrigreen!70] (rpi.south)     -- ++(0,-0.3) -| (valves.south);
+
+\draw[arr, skyblue!70]   (rpi.south) -- (cloud.north);
+\draw[arr, skyblue!70, <->] (cloud.east) -- (ml.west);
+\draw[arr, soilorange!70] (cloud.south) -- (app.north);
+\draw[arr, soilorange!70, <-] (cloud.south) -- (app.north);
+
+\end{tikzpicture}
+\caption{Four-layer system architecture of Smart Agri-Togo}
+\label{fig:arch}
+\end{figure}
+
+\section{Physical Infrastructure — Pilot Field}
+
+The pilot is a \textbf{25 m $\times$ 25 m square field} (625 m$^{2}$), chosen deliberately for geometric simplicity: it enables exact spatial discretisation (see Chapter~\ref{chap:math}) and is large enough to be economically meaningful while remaining manageable by one or two people. The field is subdivided into a \textbf{5 $\times$ 5 grid of 5 m $\times$ 5 m cells}, each treated as an independent irrigation zone with its own solenoid valve and soil sensor cluster.
+
+\subsection{Irrigation Infrastructure}
+
+A drip irrigation system is preferred over sprinkler or flood irrigation because it:
+\begin{enumerate}[leftmargin=2em]
+  \item Applies water directly to the root zone, reducing evaporation losses by 30–50\%.
+  \item Enables precise volumetric control (litres/hour per emitter), directly compatible with the optimal control formulation.
+  \item Reduces foliar disease by keeping leaves dry.
+\end{enumerate}
+
+The main supply comes from an elevated tank (1\,000–2\,000 L) filled by a submersible pump from a borehole or water point. A solenoid valve on each of the 25 grid-cell laterals is controlled by the edge controller. The system can also be combined with fertigation (fertiliser injection through the drip line).
+
+\subsection{Sensor Network}
+
+Each of the 25 cells contains:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Capacitive soil moisture sensor} (e.g., Vegetronix VH400 or v1.2 soil hygro) — measures volumetric water content $\theta$ (m$^3$/m$^3$).
+  \item \textbf{Temperature probe} (DS18B20) — soil temperature $T_s$ at 10 cm depth.
+  \item \textbf{EC sensor} (optional) — electrical conductivity for salinity monitoring.
+\end{itemize}
+
+A central weather station records air temperature $T_a$, relative humidity $RH$, wind speed $u_2$, solar radiation $R_s$, and rainfall $P$ (precipitation). These are the inputs required to compute the reference evapotranspiration $ET_0$ using the FAO Penman-Monteith equation (Chapter~\ref{chap:math}).
+
+\section{Edge Controller}
+
+The edge controller is a \textbf{Raspberry Pi 4} running a Python-based control loop, connected to:
+\begin{itemize}[leftmargin=2em]
+  \item An Arduino Mega (or ESP32 array) that reads all sensors via I$^2$C/SPI and drives the relay board for solenoid valves.
+  \item A 4G/LTE GSM module (e.g., SIM7600) for internet connectivity in areas without Wi-Fi.
+  \item A real-time clock (RTC) module for time-stamped logging.
+\end{itemize}
+
+The control loop runs every 15–30 minutes (configurable), reads all sensor data, calls the ML prediction module, solves the MPC optimisation problem, and dispatches valve commands. All data is simultaneously pushed to the cloud database.
+
+\section{Mobile Application}
+
+A cross-platform mobile app (Flutter or React Native) provides:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Live dashboard} — real-time soil moisture map of the 5 $\times$ 5 grid, current valve states, tank level, weather data.
+  \item \textbf{Manual override} — the farmer can open or close any valve with a single tap.
+  \item \textbf{Irrigation schedule view} — the MPC-computed schedule for the next 24–48 hours.
+  \item \textbf{Alerts} — push notifications for sensor failures, rain events, critically low moisture, or abnormal plant stress detected by the camera.
+  \item \textbf{Harvest prediction} — estimated days to harvest and projected yield per zone.
+\end{enumerate}
+
+% ============================================================
+\chapter{Mathematical and Physical Modelling}
+\label{chap:math}
+
+\section{State Representation: Soil Water Balance}
+
+For each cell $i$ of the 5$\times$5 grid (indexed $i = 1, \ldots, N$, $N=25$), the state variable is the \textbf{volumetric soil water content} $\theta_i(t)$ [m$^3$/m$^3$]. The governing mass-balance equation over a soil layer of depth $z_r$ (root zone depth, typically 0.2–0.5 m) is:
+
+\begin{mathbox}{Soil Water Balance — Cell $i$}
+\begin{equation}
+  z_r \frac{d\theta_i}{dt} = I_i(t) + P(t) - ET_{c,i}(t) - D_i(t) - R_i(t),
+  \label{eq:water_balance}
+\end{equation}
+\end{mathbox}
+
+\noindent where:
+\begin{itemize}[leftmargin=2em]
+  \item $I_i(t) \geq 0$ [mm/h] is the irrigation rate applied to cell $i$ — the \textbf{control variable},
+  \item $P(t)$ [mm/h] is the rainfall rate (exogenous disturbance),
+  \item $ET_{c,i}(t)$ [mm/h] is the crop evapotranspiration at cell $i$,
+  \item $D_i(t)$ [mm/h] is deep percolation below the root zone,
+  \item $R_i(t)$ [mm/h] is surface runoff.
+\end{itemize}
+
+In discrete time with sampling interval $\Delta t$ (e.g., 30 min = 0.5 h), Eq.~\eqref{eq:water_balance} becomes:
+
+\begin{equation}
+  \theta_i^{k+1} = \theta_i^k + \frac{\Delta t}{z_r}\left[I_i^k + P^k - ET_{c,i}^k - D_i^k - R_i^k\right].
+  \label{eq:discrete_balance}
+\end{equation}
+
+\section{Evapotranspiration: FAO Penman-Monteith}
+
+The reference evapotranspiration $ET_0$ [mm/day] is computed from the standard FAO-56 Penman-Monteith formula:
+
+\begin{equation}
+  ET_0 = \frac{0.408\,\Delta(R_n - G) + \gamma\,\frac{900}{T+273}\,u_2\,(e_s - e_a)}
+               {\Delta + \gamma(1+0.34\,u_2)},
+  \label{eq:PM}
+\end{equation}
+
+where $R_n$ is net radiation [MJ/m$^2$/day], $G$ is soil heat flux, $T$ is mean daily air temperature [°C], $u_2$ is wind speed at 2 m height [m/s], $e_s$ and $e_a$ are saturated and actual vapour pressures [kPa], $\Delta$ is the slope of the vapour pressure curve [kPa/°C], and $\gamma$ is the psychrometric constant [kPa/°C].
+
+Crop-specific evapotranspiration is then:
+\begin{equation}
+  ET_{c,i}(t) = K_{c,i}(t)\,K_{s,i}(t)\,ET_0(t),
+  \label{eq:ETc}
+\end{equation}
+
+where $K_{c,i}(t)$ is the \textit{crop coefficient} (tabulated by FAO-56 for each crop and growth stage) and $K_{s,i}(t) \in [0,1]$ is the \textit{water stress coefficient}:
+
+\begin{equation}
+  K_{s,i} = \begin{cases}
+    1 & \text{if } \theta_i \geq \theta_{p,i}\\[4pt]
+    \dfrac{\theta_i - \theta_{wp}}{\theta_{p,i} - \theta_{wp}} & \text{if } \theta_{wp} \leq \theta_i < \theta_{p,i}\\[8pt]
+    0 & \text{if } \theta_i < \theta_{wp}
+  \end{cases}
+  \label{eq:Ks}
+\end{equation}
+
+Here $\theta_{wp}$ is the wilting-point water content and $\theta_{p,i}$ is the depletion threshold below which stress begins ($\theta_{p} = \theta_{fc} - p\,(\theta_{fc}-\theta_{wp})$, where $\theta_{fc}$ is field capacity and $p$ is a crop-specific depletion fraction from FAO-56, typically 0.3–0.5).
+
+\section{Spatial Discretisation: 2D PDE Model}
+
+For a more accurate description of water movement across the square field, the 2D Richards equation is used in its simplified form (assuming vertical drainage dominates lateral flow in a drip-irrigated field):
+
+\begin{equation}
+  \frac{\partial \theta}{\partial t} = \nabla\cdot\!\left[K(\theta)\,\nabla h\right] - S(\mathbf{x},t),
+  \label{eq:Richards}
+\end{equation}
+
+where $h$ is the soil water pressure head [m], $K(\theta)$ is the unsaturated hydraulic conductivity [m/s], and $S(\mathbf{x},t)$ is the sink term due to root water uptake. The van Genuchten–Mualem model parameterises $K(\theta)$ and $h(\theta)$.
+
+On the 5 $\times$ 5 grid, the field domain $\Omega = [0,25]\times[0,25]$ m$^2$ is discretised with $\Delta x = \Delta y = 5$ m, reducing Eq.~\eqref{eq:Richards} to the 25-dimensional ODE system of Eq.~\eqref{eq:discrete_balance}. This is the \textbf{state-space model} used by the MPC controller.
+
+% ============================================================
+\chapter{Optimal Control Framework}
+
+\section{Problem Formulation}
+
+The irrigation scheduling problem is cast as a \textbf{finite-horizon discrete-time optimal control problem}. At each decision epoch $k$, the controller solves:
+
+\begin{mathbox}{Irrigation Optimal Control Problem}
+\begin{align}
+  \min_{\{I_i^k\}} \quad & J = \sum_{k=0}^{H-1}\sum_{i=1}^{N}
+    \left[\alpha\,\phi\!\left(\theta_i^k\right) + \beta\,w_i\,(I_i^k)^2\right]
+    + \sum_{i=1}^{N} \Phi\!\left(\theta_i^H\right)
+    \label{eq:OCP}\\[4pt]
+  \text{s.t.} \quad
+  & \theta_i^{k+1} = f_i\!\left(\theta_i^k, I_i^k, P^k, ET_{c,i}^k\right), \quad \forall\,i,k \label{eq:dyn}\\
+  & 0 \leq I_i^k \leq I_{\max}, \quad \forall\,i,k \label{eq:ctrl_bound}\\
+  & \sum_{i=1}^{N} I_i^k \leq Q_{\max}^k, \quad \forall\,k \label{eq:pump_limit}\\
+  & \theta_{wp} \leq \theta_i^k \leq \theta_{fc}, \quad \forall\,i,k \label{eq:state_bound}
+\end{align}
+\end{mathbox}
+
+\noindent The stage cost has two terms:
+\begin{itemize}[leftmargin=2em]
+  \item $\phi(\theta_i^k)$: a \textit{crop stress penalty} that penalises deviations of soil moisture from the optimal target $\theta^* = \theta_{fc} - 0.5(\theta_{fc}-\theta_{wp})$:
+    \begin{equation}
+      \phi(\theta_i) = \left(\theta_i - \theta^*\right)^2.
+    \end{equation}
+  \item $(I_i^k)^2$: a \textit{water use penalty} scaled by cell weight $w_i$ (inversely proportional to crop value density).
+\end{itemize}
+
+Parameters $\alpha$ and $\beta$ are tuning weights that trade off yield maximisation ($\alpha$ large) against water conservation ($\beta$ large).
+
+Constraint~\eqref{eq:pump_limit} enforces the total pump flow capacity $Q_{\max}^k$ [mm/h summed over all cells], which varies with tank level and pump curve.
+
+\section{Model Predictive Control (MPC)}
+
+The OCP above is solved in a \textbf{receding-horizon} fashion: at time $k$, the controller uses the current measured state $\bm{\theta}^k = (\theta_1^k,\ldots,\theta_N^k)^T$ and a $H$-step forecast of rainfall and $ET_0$ (from the ML module) to compute the optimal irrigation sequence $\{I_i^{k}, \ldots, I_i^{k+H-1}\}$. Only the first step $I_i^k$ is applied; the problem is re-solved at $k+1$ with new measurements.
+
+\begin{definition}[MPC Horizon]
+The prediction horizon $H$ is chosen as 48 time steps (24 hours for $\Delta t = 30$ min). This balances computational load on the Raspberry Pi ($\sim$10 s per solve) against the quality of the forecast.
+\end{definition}
+
+The OCP is a \textbf{quadratic program} (QP) when $\phi$ and the water-use terms are quadratic and the dynamics~\eqref{eq:dyn} are treated as linear around an operating point. The Python library \texttt{cvxpy} or \texttt{CasADi} can solve this QP in real time on the edge controller.
+
+\begin{proposition}
+If $\phi(\theta_i)$ is strictly convex and constraints~\eqref{eq:ctrl_bound}–\eqref{eq:state_bound} are feasible, the QP has a unique optimal solution.
+\end{proposition}
+
+\section{PID Baseline Controller}
+
+For comparison purposes and as a fallback, a classical \textbf{Proportional-Integral-Derivative (PID)} controller is implemented for each zone:
+
+\begin{equation}
+  I_i(t) = K_p\,e_i(t) + K_i\int_0^t e_i(\tau)\,d\tau + K_d\,\frac{de_i}{dt},
+  \label{eq:PID}
+\end{equation}
+
+where the error signal is $e_i(t) = \theta^* - \theta_i(t)$. The PID is simpler to implement and requires no forecast, but cannot handle constraints or multi-cell coordination. It serves as the \textbf{Phase 1 baseline} against which the MPC is benchmarked.
+
+\section{Reinforcement Learning Extension}
+
+Beyond the MPC, a \textbf{deep reinforcement learning (DRL)} agent can be trained on simulation data to learn a policy $\pi: \bm{\theta} \mapsto \mathbf{I}$ that implicitly captures non-linearities not captured by the QP. The state space is $\mathbb{R}^{N+M}$ (soil moistures + weather features), the action space is $[0, I_{\max}]^N$ (continuous), and the reward is:
+
+\begin{equation}
+  r^k = -\sum_{i=1}^N \left[\alpha\,\phi(\theta_i^k) + \beta\,w_i\,(I_i^k)^2\right].
+\end{equation}
+
+A Proximal Policy Optimisation (PPO) or Soft Actor-Critic (SAC) agent trained over thousands of simulated growing seasons can provide a near-optimal policy that runs with negligible computation at inference time.
+
+\section{Yield Optimisation Problem}
+
+The ultimate objective is to maximise \textbf{harvest yield} $Y_i$ [kg/m$^2$] at the end of the growing season $T_f$. The FAO crop response function relates yield to cumulative water stress:
+
+\begin{equation}
+  \frac{Y_{a,i}}{Y_{m,i}} = \prod_{j \in \text{stages}} \left[1 - K_{y,j}\left(1 - \frac{ET_{a,j}}{ET_{m,j}}\right)\right],
+  \label{eq:yield}
+\end{equation}
+
+where $Y_{a,i}$ and $Y_{m,i}$ are the actual and maximum yields, $K_{y,j}$ is the yield response factor for growth stage $j$, and $ET_{a,j}/ET_{m,j}$ is the ratio of actual to maximum evapotranspiration in that stage.
+
+Maximising Eq.~\eqref{eq:yield} subject to the water balance and pump constraints defines the \textbf{seasonal-scale optimal control problem}, which is solved offline (before planting) using dynamic programming or gradient-based NLP solvers (\texttt{CasADi}/\texttt{IPOPT}).
+
+% ============================================================
+\chapter{Machine Learning Components}
+
+\section{Architecture Overview}
+
+The ML layer performs four distinct tasks, each addressed by a separate model:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{$ET_0$ and rainfall short-term forecasting} — providing the MPC with 24–48 h disturbance predictions.
+  \item \textbf{Soil moisture nowcasting} — filling sensor gaps and detecting malfunctioning probes.
+  \item \textbf{Crop health monitoring} — leaf-level disease and stress detection from camera images.
+  \item \textbf{Yield prediction} — estimating end-of-season yield from mid-season sensor trajectories.
+\end{enumerate}
+
+\section{Evapotranspiration Forecasting}
+
+$ET_0$ is computed hourly from the weather station using Eq.~\eqref{eq:PM}. For the MPC horizon, a \textbf{Long Short-Term Memory (LSTM)} network is trained to predict $ET_0$ and $P$ for the next 48 steps, given the past 72 hours of weather data and a weather API forecast (e.g., Open-Meteo, free for non-commercial use).
+
+The LSTM input at time $k$ is the feature vector:
+\begin{equation}
+  \mathbf{x}^k = \left[T_a^{k-L:k},\, RH^{k-L:k},\, R_s^{k-L:k},\, u_2^{k-L:k},\, \widehat{T}_a^{k:k+H},\, \widehat{RH}^{k:k+H}\right],
+\end{equation}
+
+where $L=144$ (3 days lookback) and $(\hat{\cdot})$ denotes API forecast values. The LSTM is trained by minimising:
+\begin{equation}
+  \mathcal{L}_{ET} = \frac{1}{T}\sum_{k=1}^T \left\|\widehat{ET}_0^{k:k+H} - ET_0^{k:k+H}\right\|_2^2.
+\end{equation}
+
+\section{Soil Moisture Nowcasting}
+
+A \textbf{Gaussian Process Regression (GPR)} model is trained on historical $(\theta_i, I_i, P, ET_0)$ data to fill missing sensor readings and smooth noisy measurements. The spatial correlation between adjacent cells is captured through a squared-exponential kernel:
+
+\begin{equation}
+  k(\mathbf{x}_i, \mathbf{x}_j) = \sigma_f^2 \exp\!\left(-\frac{d_{ij}^2}{2\ell^2}\right),
+\end{equation}
+
+where $d_{ij}$ is the distance between cells $i$ and $j$ (in metres), $\ell$ is the length-scale (to be fitted), and $\sigma_f^2$ is the signal variance. This allows the controller to infer moisture in a cell whose sensor has failed from readings in neighbouring cells.
+
+\section{Crop Stress and Disease Detection}
+
+A \textbf{MobileNetV3-Small} convolutional neural network is fine-tuned on a dataset of crop leaf images. This lightweight architecture runs comfortably on the Raspberry Pi (or can be offloaded to the cloud). The model outputs:
+\begin{itemize}[leftmargin=2em]
+  \item A stress classification: \{healthy, water-stressed, nutrient-deficient, diseased\}.
+  \item A confidence score $p \in [0,1]$.
+\end{itemize}
+
+Images are captured daily by a low-cost camera module mounted on a mobile support that traverses the rows of the field. The AgroScan West Africa pipeline already developed for AIMS can be directly adapted here.
+
+\section{Yield Prediction Model}
+
+A \textbf{Random Forest Regressor} is trained at mid-season (when 50\% of the growing cycle has elapsed) to predict final yield $Y_{a,i}$ from the trajectory of $\theta_i$, $K_s^i$, $T_s^i$, and $ET_{c,i}$ accumulated so far. This gives the farmer a 30-day-ahead harvest estimate displayed in the mobile app.
+
+% ============================================================
+\chapter{Research Phase: Experimental Protocol}
+
+\section{Pilot Field Setup}
+
+The pilot field is the \textbf{single 25 m $\times$ 25 m square}. Before planting, the following characterisation is performed:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Soil sampling}: 5 composite samples (one per column of the grid) sent to a laboratory for $\theta_{fc}$, $\theta_{wp}$, $K_s$ (saturated hydraulic conductivity), and texture analysis.
+  \item \textbf{Borehole/water point assessment}: flow rate, static water level, quality (pH, EC).
+  \item \textbf{Topographic survey}: elevation differences across the field; relevant for uniform pressure distribution.
+  \item \textbf{Baseline weather data collection}: minimum 2 weeks prior to planting.
+\end{enumerate}
+
+\section{Experimental Treatments}
+
+The 5 $\times$ 5 grid is divided into three treatment blocks:
+
+\begin{table}[H]
+\centering
+\caption{Experimental treatment allocation}
+\label{tab:treatments}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Treatment} & \textbf{Controller} & \textbf{Number of cells} & \textbf{Replications}\\
+\midrule
+T1 — PID baseline      & PID (Eq.~\ref{eq:PID})  & 9 & 3 \\
+T2 — MPC (QP)          & MPC (Eq.~\ref{eq:OCP}) & 9 & 3 \\
+T3 — Manual (control)  & Farmer's judgment       & 7 & — \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The manual treatment (T3) mimics current farming practice and provides the economic and agronomic baseline. Comparing T1 and T2 against T3 directly quantifies the value of automation.
+
+\section{Data Collection and Logging}
+
+Every 30 minutes, the following variables are recorded per cell:
+\begin{itemize}[leftmargin=2em]
+  \item $\theta_i$ (soil moisture), $T_{s,i}$ (soil temperature), $EC_i$ (electrical conductivity).
+  \item $I_i^k$ (irrigation volume applied), $I_i^{k,\text{set}}$ (setpoint from controller).
+  \item Valve open/close events with timestamp.
+  \item Camera image (once daily at 7:00 AM local time).
+\end{itemize}
+
+At the weather station: $T_a$, $RH$, $R_s$, $u_2$, $P$ (rainfall) at 10-minute resolution.
+
+At harvest: fresh weight yield per cell ($Y_{a,i}$), grading (commercial vs. non-commercial fraction), water footprint per kg.
+
+\section{Metrics and Success Criteria}
+
+\begin{table}[H]
+\centering
+\caption{Key performance indicators for the research phase}
+\label{tab:kpi}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{KPI} & \textbf{Formula} & \textbf{Target (MPC vs.\ Manual)}\\
+\midrule
+Water Use Efficiency (WUE) & $Y_{a,i}/\sum_k I_i^k\,\Delta t$ & $\geq +30\%$ \\
+Total water applied        & $\sum_{k,i} I_i^k\,\Delta t\,A_i$ [m$^3$] & $\leq -25\%$ \\
+Yield under MPC vs.\ manual & $\bar{Y}_{\text{MPC}}/\bar{Y}_{\text{manual}}$ & $\geq 1.10$ \\
+Soil moisture RMSE         & $\|\theta_i^k - \theta^*\|_{\text{RMS}}$ & $< 0.03$ m$^3$/m$^3$ \\
+MPC solve time             & $t_{\text{solve}}$ [s] & $< 30$ s on RPi 4 \\
+System uptime              & Days online / total days & $> 95\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\chapter{Implementation Roadmap}
+
+\section{Phase 1 — Research Pilot (Month 1–8)}
+
+\begin{table}[H]
+\centering
+\caption{Phase 1 implementation timeline}
+\label{tab:timeline1}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{cll}
+\toprule
+\textbf{Month} & \textbf{Milestone} & \textbf{Responsible}\\
+\midrule
+1  & Site selection, soil analysis, borehole assessment          & Djabon + agronomist \\
+1–2 & Hardware procurement: RPi, sensors, drip kit, valves      & Djabon \\
+2  & Field infrastructure installation (drip lines, valves)     & Local technician \\
+2–3 & Sensor network wiring and calibration                     & Djabon \\
+3  & Edge controller software: data logging + PID baseline      & Djabon (Python) \\
+3–4 & Cloud setup (Firebase), mobile app v1 (manual override)   & Roland / Djabon \\
+4  & MPC implementation in Python (cvxpy), unit tests           & Djabon \\
+4–5 & Planting Season 1 (onion + carrot pilot)                  & All \\
+5–7 & Data collection, LSTM training on local weather data      & Djabon \\
+7–8 & Harvest, yield measurement, first-season analysis        & All \\
+8  & Scientific paper draft submitted to a journal             & Djabon \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Phase 2 — Scale-Up (Month 9–18)}
+
+Following the research pilot, the system is replicated at full 1-hectare scale and opened to a second farmer (partner pilot). Priorities in this phase:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Model calibration}: Update all soil and crop parameters with Phase 1 data for the specific Togolese conditions.
+  \item \textbf{ML retraining}: Retrain LSTM and Random Forest on two seasons of local data.
+  \item \textbf{Mobile app v2}: Full dashboard with yield prediction, fertigation scheduling, and market price alert integration.
+  \item \textbf{Second crop (lettuce + maize)}: Extend the system to the remaining two crops.
+  \item \textbf{Business model refinement}: Decide between (a) owning and operating farms, (b) selling systems to other young farmers, or (c) a hybrid SaaS model where farmers pay a monthly subscription for the cloud platform and ML predictions.
+\end{enumerate}
+
+\section{Phase 3 — Franchising and Regional Expansion (Month 18+)}
+
+The ultimate vision is a \textbf{network of 50–100 smart farms} across southern Togo and the Lomé peri-urban belt, all connected to the same cloud platform. Each new farm contributes data that improves the shared ML models. Revenue streams include:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Direct agricultural production}: the project team's own farm(s).
+  \item \textbf{Hardware kit sales}: assembled sensor-controller kits at FCFA 300\,000–500\,000 per installation.
+  \item \textbf{Platform subscription}: FCFA 10\,000–20\,000/month per farm for cloud services and ML predictions.
+  \item \textbf{Consulting and training}: workshops for agricultural extension services and NGOs.
+  \item \textbf{Carbon credits}: if eligible under a voluntary carbon market scheme for water-efficient agriculture.
+\end{itemize}
+
+% ============================================================
+\chapter{Budget Estimation — Phase 1}
+
+\begin{table}[H]
+\centering
+\caption{Estimated budget for Phase 1 pilot (625 m$^2$ field)}
+\label{tab:budget}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Item} & \textbf{Unit cost (XOF)} & \textbf{Total (XOF)}\\
+\midrule
+\multicolumn{3}{l}{\textit{Hardware}}\\
+\quad Raspberry Pi 4 (4 GB) + case + power & 75\,000 & 75\,000 \\
+\quad Arduino Mega + relay board (8-ch) $\times$ 4 & 25\,000 & 100\,000 \\
+\quad Capacitive soil moisture sensors $\times$ 25 & 5\,000 & 125\,000 \\
+\quad Solenoid valves 12V $\times$ 25 & 8\,000 & 200\,000 \\
+\quad DS18B20 temperature probes $\times$ 25 & 2\,500 & 62\,500 \\
+\quad Weather station (Davis or Ecowitt) & 120\,000 & 120\,000 \\
+\quad GSM/4G module (SIM7600) & 40\,000 & 40\,000 \\
+\quad Water pump (submersible, 0.5 kW) & 80\,000 & 80\,000 \\
+\quad Water tank (2000 L HDPE) & 60\,000 & 60\,000 \\
+\quad Drip kit (25 m $\times$ 25 m, 25 laterals) & 150\,000 & 150\,000 \\
+\quad Wiring, connectors, conduit & & 50\,000 \\
+\quad Camera module (RPi HQ or equivalent) & 35\,000 & 35\,000 \\
+\midrule
+\textit{Hardware subtotal} & & \textbf{1\,097\,500} \\
+\midrule
+\multicolumn{3}{l}{\textit{Field \& Civil Works}}\\
+\quad Land preparation and levelling & & 100\,000 \\
+\quad Borehole or water point connection & & 200\,000 \\
+\quad Drip system installation labour & & 80\,000 \\
+\quad Soil analysis (lab, 5 samples) & & 75\,000 \\
+\midrule
+\textit{Field subtotal} & & \textbf{455\,000} \\
+\midrule
+\multicolumn{3}{l}{\textit{Inputs (one season)}}\\
+\quad Seeds (4 crops) & & 50\,000 \\
+\quad Fertiliser + pesticides & & 150\,000 \\
+\quad Water (electricity for pump, 1 season) & & 80\,000 \\
+\midrule
+\textit{Inputs subtotal} & & \textbf{280\,000} \\
+\midrule
+\multicolumn{3}{l}{\textit{Software \& Connectivity}}\\
+\quad SIM card + data plan (8 months) & 10\,000/mo & 80\,000 \\
+\quad Cloud hosting (Firebase free tier / minimal) & & 0 \\
+\quad Software development (opportunity cost) & & 0 \\
+\midrule
+\textit{Software subtotal} & & \textbf{80\,000} \\
+\midrule
+\textbf{Total Phase 1 budget} & & \textbf{$\approx$ 1\,912\,500 XOF}\\
+\quad ($\approx$ USD 3\,100 at current rate) & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{keybox}{Return on Investment}
+With a projected conservative revenue of 3\,700\,000 XOF from the first 1-hectare season and Phase 1 capital investment of $\approx$ 1\,900\,000 XOF, the \textbf{simple payback period is less than one season}. By Season 2, nearly all revenue is net profit (minus recurring inputs and maintenance of $\approx$ 400\,000 XOF/season).
+\end{keybox}
+
+% ============================================================
+\chapter{Social Impact and Youth Engagement}
+
+\section{Making Agriculture Attractive}
+
+A central thesis of Smart Agri-Togo is that the reason young Togolese avoid agriculture is not an aversion to entrepreneurship but an aversion to \textit{unproductive physical drudgery with unpredictable returns}. The intelligent irrigation system directly addresses both problems:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Physical effort} is reduced to supervision, maintenance checks, and harvesting — tasks that can be done in 1–2 hours per day once the system is running.
+  \item \textbf{Return predictability} is improved by the yield forecasting module and the systematic market calendar built around the dry season window.
+  \item \textbf{Technology prestige}: operating a sensor network and a smartphone-controlled irrigation system positions the farmer as a \textit{tech entrepreneur}, not a subsistence farmer — a crucial distinction for attracting educated youth.
+\end{itemize}
+
+\section{Capacity Building and Replication}
+
+Each successful farm serves as a living demonstration unit. A structured training programme (2-day workshop) will teach other young farmers to:
+\begin{enumerate}[leftmargin=2em]
+  \item Install and calibrate the sensor network.
+  \item Interpret the mobile app dashboard.
+  \item Perform basic troubleshooting.
+  \item Understand the MPC logic at a conceptual level.
+\end{enumerate}
+
+This is not a charity model: trained farmers pay for the hardware kit and the platform subscription, which funds the continued development of the ML models and the cloud infrastructure.
+
+% ============================================================
+\chapter{Scientific Publication Strategy}
+
+\section{Target Journals and Conferences}
+
+The research phase generates data and results suitable for publication in:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textit{Agricultural Water Management} (Elsevier, IF $\approx$ 6.6) — for the MPC vs.\ baseline water-use comparison.
+  \item \textit{Computers and Electronics in Agriculture} (Elsevier, IF $\approx$ 8.3) — for the full system (sensor network + ML + control) paper.
+  \item \textit{Biosystems Engineering} (Elsevier, IF $\approx$ 5.8) — for the crop model calibration and FAO-PM validation in Togolese conditions.
+  \item \textit{IEEE International Symposium on Circuits and Systems (ISCAS)} or \textit{ICASSP} — for the signal processing and ML architecture aspects.
+  \item African-focused venues: \textit{Journal of Agriculture and Food Research}, \textit{Heliyon (Agriculture section)}.
+\end{itemize}
+
+\section{Paper 1 — Proposed Outline}
+
+\textbf{Title}: ``Data-Driven Model Predictive Control for Drip Irrigation Scheduling Under West African Dry-Season Conditions: A Field Experiment in Togo''
+
+\textbf{Contributions}:
+\begin{enumerate}[leftmargin=2em]
+  \item First published calibration of FAO-56 crop coefficients and van Genuchten soil parameters for counter-season onion and carrot under Lomé conditions.
+  \item Comparative field trial: MPC vs.\ PID vs.\ manual scheduling over one full growing season.
+  \item LSTM-based $ET_0$ forecasting with Open-Meteo API on a West African dataset.
+  \item Open-source release of the sensor firmware, control software, and collected dataset.
+\end{enumerate}
+
+% ============================================================
+\chapter{Conclusion and Recommendations}
+
+Smart Agri-Togo is a well-scoped, technically sound, and economically compelling project. The key conclusions are:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{The market opportunity is real.} Counter-season vegetable prices in Lomé are 2–4$\times$ rainy-season prices. A well-managed 1-hectare plot can generate over 3\,500\,000 XOF net per season, well above any comparable urban income for a young person with modest capital.
+
+  \item \textbf{The technology is mature and affordable.} All hardware components are available globally and locally sourceable in Accra or Lomé at the costs estimated in Chapter~8. The software stack (Python, cvxpy, Firebase, Flutter) is free and open-source.
+
+  \item \textbf{The research design is rigorous.} The 5$\times$5 grid treatment design, combined with the FAO-56 model and the MPC framework, produces publishable results that position the project in a well-established international literature.
+
+  \item \textbf{Scaling is organic.} Each farm deployed adds data to the shared platform and generates revenue that funds the next deployment. The franchise/SaaS model can eventually make Smart Agri-Togo a regional platform rather than a single farm.
+
+  \item \textbf{Your skills are an exact match.} Your background in theoretical physics (optimal control, Hamiltonian mechanics), computation (Python, numerical methods), and the AgroScan work (ML, mobile applications) covers precisely the technical core of this project. Very few people in West Africa hold this combination — it is a genuine competitive advantage.
+\end{enumerate}
+
+\begin{keybox}{Recommended Next Steps}
+\begin{enumerate}[leftmargin=1.5em]
+  \item Identify and visit 2–3 candidate field sites near Lomé within the next 30 days.
+  \item Contact ICAT (Institut de Conseil et d'Appui Technique, Togo) and ITRA for technical collaboration and potential co-funding.
+  \item Submit a short project proposal to the AIMS Ghana Innovation Fund or similar seed grant (budget: $\sim$2\,000\,000 XOF).
+  \item Begin hardware procurement (sensors + Raspberry Pi) in parallel — most items are available on AliExpress with 3–4 week delivery to Accra/Lomé.
+  \item Start the weather data collection pipeline immediately using a low-cost Davis Vantage Vue or an Ecowitt station — every day of data now is future LSTM training data.
+\end{enumerate}
+\end{keybox}
+
+% ============================================================
+\appendix
+\chapter{Nomenclature}
+
+\begin{longtable}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Unit} \\
+\midrule
+$\theta_i$ & Volumetric soil water content in cell $i$ & m$^3$/m$^3$ \\
+$\theta_{fc}$ & Field capacity & m$^3$/m$^3$ \\
+$\theta_{wp}$ & Permanent wilting point & m$^3$/m$^3$ \\
+$\theta^*$ & Optimal irrigation target moisture & m$^3$/m$^3$ \\
+$I_i$ & Irrigation rate in cell $i$ & mm/h \\
+$P$ & Precipitation (rainfall) rate & mm/h \\
+$ET_0$ & Reference evapotranspiration (FAO-PM) & mm/day \\
+$ET_{c,i}$ & Crop evapotranspiration in cell $i$ & mm/h \\
+$K_c$ & Crop coefficient & — \\
+$K_s$ & Water stress coefficient & — \\
+$K_{y,j}$ & Yield response factor, growth stage $j$ & — \\
+$Y_{a,i}$ & Actual yield in cell $i$ & kg/m$^2$ \\
+$Y_{m,i}$ & Maximum (unstressed) yield in cell $i$ & kg/m$^2$ \\
+$z_r$ & Root zone depth & m \\
+$H$ & MPC prediction horizon & steps \\
+$\Delta t$ & Sampling interval & min \\
+$N$ & Number of grid cells & — \\
+$J$ & Optimal control cost functional & — \\
+$\alpha, \beta$ & Cost weighting parameters & — \\
+$Q_{\max}$ & Maximum total pump flow rate & mm/h \\
+$R_n$ & Net radiation & MJ/m$^2$/day \\
+$T_a$ & Air temperature & °C \\
+$RH$ & Relative humidity & \% \\
+$u_2$ & Wind speed at 2 m height & m/s \\
+$e_s$ & Saturation vapour pressure & kPa \\
+$e_a$ & Actual vapour pressure & kPa \\
+\bottomrule
+\end{longtable}
+
+\chapter{Software Stack Summary}
+
+\begin{table}[H]
+\centering
+\caption{Technology stack for Smart Agri-Togo}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lll}
+\toprule
+\textbf{Layer} & \textbf{Tool / Library} & \textbf{Purpose} \\
+\midrule
+Edge control loop & Python 3.11 + \texttt{RPi.GPIO} & Sensor reading, valve control \\
+Optimal control (MPC) & \texttt{cvxpy} or \texttt{CasADi} & QP solve in real time \\
+ML — time series & \texttt{PyTorch} + LSTM & $ET_0$ and rainfall forecasting \\
+ML — spatial GPR & \texttt{GPyTorch} & Soil moisture interpolation \\
+ML — image CNN & \texttt{TensorFlow Lite} (MobileNetV3) & Crop health detection \\
+ML — yield RF & \texttt{scikit-learn} & Mid-season yield prediction \\
+Database (cloud) & Firebase Realtime DB & Time-series storage and sync \\
+MQTT broker & \texttt{Mosquitto} (local) & Edge-to-cloud messaging \\
+Mobile app & Flutter (Dart) & Cross-platform iOS/Android \\
+Backend API & FastAPI (Python) & REST endpoints for mobile app \\
+Simulation & Python + \texttt{scipy.integrate} & Model calibration and DRL training \\
+RL agent & \texttt{Stable-Baselines3} (PPO/SAC) & Policy learning \\
+Visualisation & \texttt{matplotlib}, \texttt{plotly} & Research figures and app charts \\
+Version control & Git + GitHub & All source code \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
