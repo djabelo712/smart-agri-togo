@@ -1,0 +1,83 @@
+{
+  "model_name": "SmartFarm Togo \u2014 ET\u2080 Estimator v1.0",
+  "model_type": "XGBoost Regressor",
+  "target_variable": "ET0_PM (FAO-56 Penman-Monteith, mm/day)",
+  "features": [
+    "Tmax",
+    "Tmin",
+    "Tmean",
+    "RH",
+    "Wind",
+    "Rs",
+    "Rain",
+    "Tdelta",
+    "VPD",
+    "Ra",
+    "doy_sin",
+    "doy_cos",
+    "month",
+    "ET0_lag1",
+    "ET0_lag2",
+    "ET0_lag7",
+    "Tmean_lag1",
+    "Tmean_lag7",
+    "ET0_roll7",
+    "ET0_roll30",
+    "Tmax_roll7",
+    "Tmax_roll30",
+    "RH_roll7",
+    "RH_roll30",
+    "Rs_roll7",
+    "Rs_roll30"
+  ],
+  "n_features": 26,
+  "location": {
+    "name": "Lom\u00e9, Togo",
+    "latitude": 6.1375,
+    "longitude": 1.2123,
+    "elevation": 10
+  },
+  "dataset": {
+    "source": "NASA POWER Daily Reanalysis",
+    "url": "https://power.larc.nasa.gov",
+    "period": "1984-01-01 to 2024-12-31",
+    "n_records": 14949
+  },
+  "split": {
+    "train": "1984-01-01 to 2021-12-31",
+    "test": "2022-01-01 to 2024-12-31",
+    "strategy": "Temporal (no random shuffle)"
+  },
+  "hyperparameters": {
+    "n_estimators": 800,
+    "learning_rate": 0.05,
+    "max_depth": 5,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "min_child_weight": 5,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0,
+    "gamma": 0.05,
+    "random_state": 42,
+    "n_jobs": -1,
+    "tree_method": "hist",
+    "eval_metric": "rmse"
+  },
+  "cv_results": {
+    "n_folds": 5,
+    "mean_RMSE": 0.09804241078354876,
+    "std_RMSE": 0.012604594020216837,
+    "mean_NSE": 0.979394586060466,
+    "std_NSE": 0.006022383212207551
+  },
+  "test_metrics": {
+    "test_RMSE": 0.14479209728372006,
+    "test_MAE": 0.038723700301839505,
+    "test_R2": 0.9642596916548363,
+    "test_NSE": 0.9642596916548363,
+    "baseline_RMSE": 2.9099712381323255,
+    "baseline_NSE": -13.435969982191349
+  },
+  "trained_at": "2026-05-22T11:02:41.348926",
+  "best_iteration": 253
+}
