@@ -1,0 +1,95 @@
+# SmartFarm Togo - Daily Weather Data Collection
+# ================================================
+# This workflow runs automatically every day at 07:00 UTC (08:00 West Africa time).
+# It collects weather data for both Lome and Bangeli via Open-Meteo API,
+# appends new records to the CSV files, and commits the result to the repo.
+#
+# You never need to run this manually -- GitHub handles everything.
+# Check the Actions tab on GitHub to see the daily run logs.
+
+name: Daily Weather Logger
+
+on:
+  schedule:
+    # Every day at 07:00 UTC = 08:00 West Africa time (GMT+1)
+    - cron: "0 7 * * *"
+
+  # Allow manual trigger from GitHub Actions tab if needed
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: "Backfill full history from 2015-01-01?"
+        required: false
+        default: "false"
+
+jobs:
+  collect-weather:
+    name: Collect Daily Weather Data
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests pandas
+
+      # Step 4: Create output directories
+      - name: Create data directories
+        run: |
+          mkdir -p data/weather/processed
+          mkdir -p data/weather/raw
+
+      # Step 5: Run weather logger
+      - name: Run weather logger
+        run: |
+          if [ "${{ github.event.inputs.backfill }}" = "true" ]; then
+            python software/data_logger/weather_logger.py --once --backfill
+          else
+            python software/data_logger/weather_logger.py --once
+          fi
+
+      # Step 6: Check if any files changed
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --name-only
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No new data today -- all locations already up to date."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "New weather data collected."
+          fi
+
+      # Step 7: Commit and push if there are new records
+      - name: Commit and push new data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "SmartFarm Bot"
+          git config user.email "bot@smartfarmtogo.org"
+          git add data/weather/processed/
+          git commit -m "data: daily weather update $(date -u +'%Y-%m-%d') [automated]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 8: Log result
+      - name: Log result
+        run: |
+          echo "Run completed at $(date -u)"
+          echo "CSV files:"
+          ls -lh data/weather/processed/ 2>/dev/null || echo "No files yet"
