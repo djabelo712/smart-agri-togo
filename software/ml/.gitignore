@@ -1,0 +1,13 @@
+# Raw data (large files — re-downloadable from NASA POWER)
+*/data/*.csv
+
+# Generated figures (reproducible from notebook)
+*/figures/*.png
+*/figures/*.pdf
+
+# Jupyter checkpoints
+**/.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc

@@ -77,3 +77,16 @@ logs/
 tmp/
 temp/
 *.tmp
+# Flutter build artifacts
+software/smart_farm_togo/build/
+software/smart_farm_togo/.dart_tool/
+software/smart_farm_togo/.flutter-plugins
+software/smart_farm_togo/.flutter-plugins-dependencies
+
+# Local database
+data/field_data.sqlite
+
+# Python cache
+__pycache__/
+*.pyc
+.env

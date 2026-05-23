@@ -1,0 +1,11 @@
+# Copier ce fichier vers android/key.properties (NE PAS commiter key.properties)
+# Générer le keystore une seule fois :
+#
+# keytool -genkey -v -keystore ~/smartfarm_keystore.jks \
+#   -keyalg RSA -keysize 2048 -validity 10000 \
+#   -alias smartfarm_key
+
+storePassword=VOTRE_MOT_DE_PASSE_KEYSTORE
+keyPassword=VOTRE_MOT_DE_PASSE_CLE
+keyAlias=smartfarm_key
+storeFile=/chemin/absolu/vers/smartfarm_keystore.jks
