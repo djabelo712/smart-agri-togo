@@ -1,0 +1,216 @@
+{
+  "CROPS": {
+    "Oignon": {
+      "Ym_kgm2": 4.5,
+      "stages": [
+        {
+          "name": "initial",
+          "days": 15,
+          "Kc": 0.5,
+          "Ky": 0.45
+        },
+        {
+          "name": "development",
+          "days": 25,
+          "Kc": 0.75,
+          "Ky": 0.7
+        },
+        {
+          "name": "mid_season",
+          "days": 70,
+          "Kc": 1.05,
+          "Ky": 0.8
+        },
+        {
+          "name": "late_season",
+          "days": 40,
+          "Kc": 0.75,
+          "Ky": 0.3
+        }
+      ]
+    },
+    "Carotte": {
+      "Ym_kgm2": 3.5,
+      "stages": [
+        {
+          "name": "initial",
+          "days": 20,
+          "Kc": 0.7,
+          "Ky": 0.35
+        },
+        {
+          "name": "development",
+          "days": 30,
+          "Kc": 0.95,
+          "Ky": 0.6
+        },
+        {
+          "name": "mid_season",
+          "days": 50,
+          "Kc": 1.1,
+          "Ky": 0.8
+        },
+        {
+          "name": "late_season",
+          "days": 30,
+          "Kc": 0.85,
+          "Ky": 0.4
+        }
+      ]
+    },
+    "Laitue": {
+      "Ym_kgm2": 3.0,
+      "stages": [
+        {
+          "name": "initial",
+          "days": 20,
+          "Kc": 0.7,
+          "Ky": 0.45
+        },
+        {
+          "name": "development",
+          "days": 25,
+          "Kc": 0.95,
+          "Ky": 0.6
+        },
+        {
+          "name": "mid_season",
+          "days": 30,
+          "Kc": 1.0,
+          "Ky": 0.95
+        }
+      ]
+    },
+    "Mais": {
+      "Ym_kgm2": 0.8,
+      "stages": [
+        {
+          "name": "initial",
+          "days": 20,
+          "Kc": 0.4,
+          "Ky": 0.3
+        },
+        {
+          "name": "development",
+          "days": 35,
+          "Kc": 0.8,
+          "Ky": 0.3
+        },
+        {
+          "name": "mid_season",
+          "days": 40,
+          "Kc": 1.15,
+          "Ky": 1.25
+        },
+        {
+          "name": "late_season",
+          "days": 30,
+          "Kc": 0.7,
+          "Ky": 0.5
+        }
+      ]
+    }
+  },
+  "TREATMENTS": {
+    "MPC": {
+      "Ks_mean": 0.91,
+      "Ks_std": 0.06,
+      "Ks_min": 0.75
+    },
+    "PID": {
+      "Ks_mean": 0.78,
+      "Ks_std": 0.12,
+      "Ks_min": 0.55
+    },
+    "Manuel": {
+      "Ks_mean": 0.65,
+      "Ks_std": 0.18,
+      "Ks_min": 0.3
+    }
+  },
+  "FEATURE_COLS": [
+    "Ks_mean_s1",
+    "Ks_min_s1",
+    "Ks_std_s1",
+    "stress_days_s1",
+    "severe_stress_s1",
+    "Ks_mean_s2",
+    "Ks_min_s2",
+    "Ks_std_s2",
+    "stress_days_s2",
+    "severe_stress_s2",
+    "Ks_mean_s3",
+    "Ks_min_s3",
+    "Ks_std_s3",
+    "stress_days_s3",
+    "severe_stress_s3",
+    "Ks_mean_s4",
+    "Ks_min_s4",
+    "Ks_std_s4",
+    "stress_days_s4",
+    "severe_stress_s4",
+    "Ks_mean_season",
+    "Ks_min_season",
+    "Ks_std_season",
+    "Ks_p10_season",
+    "stress_days_total",
+    "season_length",
+    "crop_encoded",
+    "treatment_encoded",
+    "stewart_estimate"
+  ],
+  "CELL_CROPS": {
+    "C00": "Oignon",
+    "C01": "Oignon",
+    "C02": "Oignon",
+    "C03": "Oignon",
+    "C04": "Oignon",
+    "C10": "Oignon",
+    "C11": "Oignon",
+    "C12": "Oignon",
+    "C13": "Oignon",
+    "C14": "Oignon",
+    "C20": "Carotte",
+    "C21": "Carotte",
+    "C22": "Carotte",
+    "C23": "Carotte",
+    "C24": "Carotte",
+    "C30": "Laitue",
+    "C31": "Laitue",
+    "C32": "Laitue",
+    "C33": "Laitue",
+    "C34": "Laitue",
+    "C40": "Mais",
+    "C41": "Mais",
+    "C42": "Mais",
+    "C43": "Mais",
+    "C44": "Mais"
+  },
+  "CELL_TREATMENTS": {
+    "C00": "MPC",
+    "C01": "MPC",
+    "C02": "MPC",
+    "C10": "MPC",
+    "C11": "MPC",
+    "C12": "MPC",
+    "C20": "MPC",
+    "C21": "MPC",
+    "C22": "MPC",
+    "C03": "PID",
+    "C04": "PID",
+    "C13": "PID",
+    "C14": "PID",
+    "C23": "PID",
+    "C24": "PID",
+    "C30": "Manuel",
+    "C31": "Manuel",
+    "C32": "Manuel",
+    "C33": "Manuel",
+    "C34": "Manuel",
+    "C40": "Manuel",
+    "C41": "Manuel",
+    "C42": "Manuel",
+    "C43": "Manuel",
+    "C44": "Manuel"
+  }
+}
