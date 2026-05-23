@@ -1,0 +1,102 @@
+{
+  "model_name": "SmartFarm Togo - ET0 7-day LSTM Forecast v2.0",
+  "target": "ET0 (mm/day) for days +1 to +7",
+  "rain_source": "Open-Meteo NWP (not ML)",
+  "n_features": 33,
+  "lookback": 21,
+  "horizon": 7,
+  "feature_cols": [
+    "Tmax",
+    "Tmin",
+    "Tmean",
+    "RH",
+    "Wind",
+    "Rs",
+    "VPD",
+    "Ra",
+    "Tdelta",
+    "doy_sin",
+    "doy_cos",
+    "month",
+    "year_norm",
+    "ET0_lag1",
+    "ET0_lag2",
+    "ET0_lag3",
+    "ET0_lag7",
+    "ET0_lag14",
+    "ET0_roll7",
+    "ET0_std7",
+    "ET0_roll14",
+    "ET0_std14",
+    "ET0_roll21",
+    "Tmax_roll7",
+    "Rs_roll7",
+    "RH_roll7",
+    "SST_C",
+    "SST_anom",
+    "MSLP_hPa",
+    "DewPt_C",
+    "DewPt_dep",
+    "CloudCover_pct",
+    "SurfPres_hPa"
+  ],
+  "split": {
+    "train": "to 2019-12-31",
+    "val": "to 2021-12-31",
+    "test": "2022-2024"
+  },
+  "best_val_loss": 0.174206,
+  "best_epoch": 3,
+  "test_metrics": [
+    {
+      "Day": 1,
+      "RMSE": 0.5505,
+      "MAE": 0.4083,
+      "R2": 0.4897,
+      "NSE": 0.4897
+    },
+    {
+      "Day": 2,
+      "RMSE": 0.5612,
+      "MAE": 0.4188,
+      "R2": 0.4696,
+      "NSE": 0.4696
+    },
+    {
+      "Day": 3,
+      "RMSE": 0.5618,
+      "MAE": 0.4189,
+      "R2": 0.4681,
+      "NSE": 0.4681
+    },
+    {
+      "Day": 4,
+      "RMSE": 0.5649,
+      "MAE": 0.4212,
+      "R2": 0.4622,
+      "NSE": 0.4622
+    },
+    {
+      "Day": 5,
+      "RMSE": 0.567,
+      "MAE": 0.4227,
+      "R2": 0.4569,
+      "NSE": 0.4569
+    },
+    {
+      "Day": 6,
+      "RMSE": 0.5671,
+      "MAE": 0.4229,
+      "R2": 0.4558,
+      "NSE": 0.4558
+    },
+    {
+      "Day": 7,
+      "RMSE": 0.572,
+      "MAE": 0.428,
+      "R2": 0.4466,
+      "NSE": 0.4466
+    }
+  ],
+  "trained_at": "2026-05-23T08:12:44.904431"
+}
