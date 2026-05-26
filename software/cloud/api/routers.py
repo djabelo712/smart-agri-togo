@@ -89,6 +89,9 @@ def et0_today():
     No authentication required -- read-only.
     """
     try:
+        # Ensure model is loaded
+        if et0_svc._model1 is None:
+            et0_svc.load_models()
         # Use latest row from historical data as today's weather proxy
         import pandas as pd
         RENAME = {
@@ -121,6 +124,8 @@ def et0_forecast():
     No authentication required -- read-only.
     """
     try:
+        if et0_svc._model1 is None:
+            et0_svc.load_models()
         result = et0_svc.predict_et0_7days()
         return ET0ForecastResponse(**result)
     except Exception as e:
