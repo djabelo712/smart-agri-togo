@@ -260,9 +260,13 @@ def _compute_et0_column(df: pd.DataFrame) -> pd.DataFrame:
 def _load_recent_history(days: int = 35) -> pd.DataFrame:
     """Load last N days of weather + ET0 from NASA POWER CSV."""
     RENAME = {
-        "T2M": "Tmean", "T2M_MAX": "Tmax", "T2M_MIN": "Tmin",
-        "RH2M": "RH", "WS2M": "Wind",
-        "ALLSKY_SFC_SW_DWN": "Rs", "PRECTOTCORR": "Rain",
+        "T_max_C":      "Tmax",
+        "T_min_C":      "Tmin",
+        "T_mean_C":     "Tmean",
+        "RH_mean_pct":  "RH",
+        "wind_2m_ms":   "Wind",
+        "Rs_MJm2day":   "Rs",
+        "precip_mm":    "Rain",
     }
     df = pd.read_csv(settings.NASA_CSV_PATH, index_col="date", parse_dates=True)
     df = df.rename(columns=RENAME)

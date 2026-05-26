@@ -92,9 +92,13 @@ def et0_today():
         # Use latest row from historical data as today's weather proxy
         import pandas as pd
         RENAME = {
-            "T2M": "Tmean", "T2M_MAX": "Tmax", "T2M_MIN": "Tmin",
-            "RH2M": "RH", "WS2M": "Wind",
-            "ALLSKY_SFC_SW_DWN": "Rs", "PRECTOTCORR": "Rain",
+            "T_max_C":     "Tmax",
+            "T_min_C":     "Tmin",
+            "T_mean_C":    "Tmean",
+            "RH_mean_pct": "RH",
+            "wind_2m_ms":  "Wind",
+            "Rs_MJm2day":  "Rs",
+            "precip_mm":   "Rain",
         }
         df = pd.read_csv(settings.NASA_CSV_PATH, index_col="date", parse_dates=True)
         df = df.rename(columns=RENAME).replace(-999.0, float("nan")).ffill()

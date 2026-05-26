@@ -90,3 +90,5 @@ data/field_data.sqlite
 __pycache__/
 *.pyc
 .env
+software/cloud/api/firebase-credentials.json
+software/cloud/api/.env
