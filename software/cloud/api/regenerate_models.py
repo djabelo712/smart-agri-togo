@@ -132,7 +132,8 @@ rf.fit(X, y)
 print(f"OOB R2: {rf.oob_score_:.4f}")
 
 # Save
-MODEL_DIR = Path("../../ml_models/yield_model")
+import os
+MODEL_DIR = Path(os.environ.get("PROJECT_ROOT", "/opt/render/project/src")) / "software" / "ml_models" / "yield_model"
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 joblib.dump(rf, MODEL_DIR / "yield_rf_model.pkl")
 
