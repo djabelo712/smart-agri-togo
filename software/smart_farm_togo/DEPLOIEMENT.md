@@ -74,16 +74,24 @@ firebase appdistribution:distribute \
 ## 6. Vérifications avant publication
 
 ```bash
-flutter analyze
-flutter test
+chmod +x scripts/verify_project.sh
+./scripts/verify_project.sh
 ```
 
-Checklist :
+Checklist code (fait) :
 
-- [ ] Mode démo et Firebase testés sur Android 10 et 13+
-- [ ] Notifications (test dans Réglages)
-- [ ] `key.properties` et `*.jks` hors Git
-- [ ] Aucun secret dans le dépôt
+- [x] `flutter analyze` / `flutter test`
+- [x] API ML `https://smart-agri-togo.onrender.com`
+- [x] Sécurité JWT, validation, session 30 min
+- [x] Build Android : NDK 27, minSdk 23, desugaring, ProGuard
+- [x] `key.properties` et `*.jks` dans `.gitignore`
+
+Checklist terrain (vous) :
+
+- [ ] APK/AAB release installé sur Android 10 et 13+
+- [ ] Notifications (Réglages → test)
+- [ ] Firebase prod (`flutterfire configure`)
+- [ ] Keystore release (`android/key.properties`)
 
 ## Identifiants
 

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../providers/control_provider.dart';
 import '../../../providers/energy_provider.dart';
+import '../../../core/security/hardware_confirmation.dart';
 import '../../../widgets/confirm_dialog.dart';
 import '../../../widgets/sf_card.dart';
 import '../../../widgets/sf_chip.dart';
@@ -153,12 +154,13 @@ class _PumpCardState extends ConsumerState<PumpCard> {
   }
 
   Future<void> _startPump(BuildContext context) async {
-    final ok = await showConfirmDialog(
-      context: context,
-      title: 'Démarrer la pompe',
-      message: 'Démarrer la pompe principale pendant $_durationMin minutes ?',
+    final ok = await requireDoubleConfirmation(
+      context,
+      action: 'Démarrer la pompe',
+      detail:
+          'Démarrer la pompe principale pendant $_durationMin minutes.',
     );
-    if (ok != true || !context.mounted) return;
+    if (!ok || !context.mounted) return;
 
     ref.read(pumpRunningOverrideProvider.notifier).state = true;
     await ref

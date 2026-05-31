@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-
+import '../utils/logger.dart';
 import '../../firebase_options.dart';
 import '../../data/repositories/field_repository.dart';
 import '../../providers/settings_provider.dart';
@@ -26,18 +25,17 @@ Future<bool> bootstrapFirebase() async {
       try {
         FieldRepository.enableOfflinePersistence();
       } catch (e) {
-        debugPrint('SmartFarm: persistance Firebase ignorée — $e');
+        AppLogger.info('Persistance Firebase ignorée — $e');
       }
-      debugPrint('SmartFarm: Firebase initialisé.');
+      AppLogger.info('Firebase initialisé.');
       return true;
     }
-  } catch (e, st) {
-    debugPrint('SmartFarm: Firebase non disponible — $e');
-    if (kDebugMode) debugPrint('$st');
+  } catch (e) {
+    AppLogger.error('Firebase non disponible', e);
   }
 
   isFirebaseInitialized = false;
   await ensureDemoModeEnabled();
-  debugPrint('SmartFarm: mode démo activé (Firebase indisponible).');
+  AppLogger.info('Mode démo activé (Firebase indisponible).');
   return false;
 }

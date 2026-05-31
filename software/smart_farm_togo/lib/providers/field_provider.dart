@@ -6,6 +6,8 @@ import '../data/models/cell_model.dart';
 import '../data/repositories/field_repository.dart';
 import 'settings_provider.dart';
 
+/// Flux temps réel des 25 cellules (Firebase ou mock selon mode démo).
+
 final firebaseDatasourceProvider = Provider<FirebaseDatasource?>((ref) {
   if (!firebaseAvailable) return null;
   return FirebaseDatasource();

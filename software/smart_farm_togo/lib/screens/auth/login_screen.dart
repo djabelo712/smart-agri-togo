@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/firebase/firebase_bootstrap.dart';
-import '../../data/repositories/auth_repository.dart';
+import '../../core/errors/app_exception.dart';
+import '../../providers/api_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 
@@ -60,6 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _enterDemo() async {
+    await ref.read(apiConnectedProvider.notifier).setConnected(false);
     await ref.read(demoModeProvider.notifier).setDemoMode(true);
     if (!mounted) return;
     context.go('/app/accueil');

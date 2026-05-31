@@ -16,7 +16,12 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-Mode **démo** activé par défaut (données simulées, sans Firebase).
+Mode **démo** par défaut si Firebase absent. Après test API réussi (Réglages), les **modèles ML** passent en production (`https://smart-agri-togo.onrender.com`).
+
+```bash
+chmod +x scripts/verify_project.sh
+./scripts/verify_project.sh   # analyze + tests
+```
 
 ## Build release Android
 
@@ -101,13 +106,23 @@ lib/
 
 ## Checklist avant livraison
 
-- [ ] `flutter analyze` sans erreur
-- [ ] `flutter test`
-- [ ] `flutter build apk --release` et `appbundle --release`
-- [ ] Tests Android 10 et 13+
-- [ ] `google-services.json` et `firebase_options.dart` configurés (prod)
-- [ ] Keystore et `key.properties` hors dépôt Git
-- [ ] Mode démo et notifications testées
+### Code (fait dans le dépôt)
+
+- [x] `flutter analyze` sans erreur
+- [x] `flutter test` (widget + sécurité)
+- [x] Intégration ML FastAPI (Models 1–3)
+- [x] Sécurité : SecureStorage, validation, session, confirmations hardware
+- [x] API Render : timeouts, reconnexion au démarrage
+- [x] `key.properties` / `*.jks` dans `.gitignore`
+
+### À faire sur votre machine (hors Git)
+
+- [ ] `flutter build apk --release` et `appbundle --release` (`./scripts/build_release.sh`)
+- [ ] Tests terrain Android 10 et 13+
+- [ ] `flutterfire configure` → `google-services.json` + `firebase_options.dart`
+- [ ] Keystore release : `android/key.properties` (voir `key.properties.example`)
+- [ ] Icônes / captures Play Store (`assets/store/README.md`)
+- [ ] `export FIREBASE_APP_ID=...` puis `./scripts/distribute_firebase.sh` pour testeurs
 
 ## Licence
 

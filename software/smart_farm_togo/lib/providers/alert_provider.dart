@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/datasources/api_datasource.dart';
 import '../data/models/alert_model.dart';
 import '../data/repositories/control_repository.dart';
-import 'auth_provider.dart';
+import 'api_provider.dart';
 import 'field_provider.dart';
 
 final alertsStreamProvider = StreamProvider<List<FarmAlert>>((ref) {

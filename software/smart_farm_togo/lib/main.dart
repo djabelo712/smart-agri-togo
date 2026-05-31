@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/bootstrap/api_bootstrap.dart';
 import 'core/firebase/firebase_bootstrap.dart';
 import 'core/notifications/notification_service.dart';
 import 'core/router/app_router.dart';
@@ -9,12 +10,14 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/date_utils.dart';
 import 'providers/settings_provider.dart';
 import 'widgets/notification_listener_scope.dart';
+import 'widgets/session_activity_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeSharedPreferences();
   await initializeFrenchLocale();
   await bootstrapFirebase();
+  await bootstrapApiConnection();
   await NotificationService.instance.initialize();
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -26,9 +29,11 @@ Future<void> main() async {
   );
 
   runApp(
-    ProviderScope(
-      child: NotificationListenerScope(
-        child: const SmartFarmApp(),
+    const ProviderScope(
+      child: SessionActivityScope(
+        child: NotificationListenerScope(
+          child: SmartFarmApp(),
+        ),
       ),
     ),
   );

@@ -47,11 +47,11 @@ class MockData {
     solarRadWm2: 720.0,
     windSpeedMs: 2.4,
     rainfallMm: 0.0,
-    et0MmDay: 8.3,
+    et0MmDay: 4.2,
   );
 
   static final FieldForecast mockForecast = const FieldForecast(
-    et0Next7Days: [8.1, 8.4, 7.9, 8.6, 8.2, 8.0, 8.5],
+    et0Next7Days: [4.2, 4.5, 3.9, 4.7, 4.3, 4.1, 4.6],
     rainNext7Days: [0.0, 0.0, 2.1, 0.0, 0.0, 0.0, 0.0],
   );
 

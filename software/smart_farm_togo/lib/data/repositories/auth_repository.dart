@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../core/errors/app_exception.dart';
 import '../../core/firebase/firebase_bootstrap.dart';
+import '../../core/security/secure_storage.dart';
 
+/// Authentification Firebase + jeton JWT FastAPI.
 class AuthRepository {
   AuthRepository();
 
@@ -32,6 +35,7 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
+    await clearApiToken();
     if (!_canUseFirebase) return;
     await FirebaseAuth.instance.signOut();
   }
@@ -42,12 +46,15 @@ class AuthRepository {
     if (user == null) return null;
     return user.getIdToken();
   }
-}
 
-class AuthException implements Exception {
-  const AuthException(this.message);
-  final String message;
+  /// JWT FastAPI en priorité, puis token Firebase.
+  Future<String?> getToken() async {
+    final apiToken = await SecureStorage.getToken();
+    if (apiToken != null && apiToken.isNotEmpty) return apiToken;
+    return getIdToken();
+  }
 
-  @override
-  String toString() => message;
+  Future<void> saveApiToken(String token) => SecureStorage.saveToken(token);
+
+  Future<void> clearApiToken() => SecureStorage.deleteToken();
 }

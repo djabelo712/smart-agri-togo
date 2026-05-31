@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../providers/control_provider.dart';
 import '../../../providers/energy_provider.dart';
+import '../../../core/security/hardware_confirmation.dart';
 import '../../../widgets/confirm_dialog.dart';
 
 final controllerModeOverrideProvider = StateProvider<String?>((ref) => null);
@@ -78,16 +79,23 @@ class ModeSelector extends ConsumerWidget {
   ) async {
     if (mode == current) return;
 
-    final message = mode == 'Manuel'
-        ? 'Le passage en Manuel désactive le contrôle automatique. Êtes-vous sûr ?'
-        : 'Passer le contrôleur en mode $mode ?';
-
-    final ok = await showConfirmDialog(
-      context: context,
-      title: 'Changer de mode',
-      message: message,
-    );
-    if (ok != true || !context.mounted) return;
+    final bool ok;
+    if (mode == 'Manuel') {
+      ok = await requireDoubleConfirmation(
+        context,
+        action: 'Mode Manuel',
+        detail:
+            'Le passage en Manuel désactive le contrôle automatique MPC/PID.',
+      );
+    } else {
+      final confirmed = await showConfirmDialog(
+        context: context,
+        title: 'Changer de mode',
+        message: 'Passer le contrôleur en mode $mode ?',
+      );
+      ok = confirmed == true;
+    }
+    if (!ok || !context.mounted) return;
 
     ref.read(controllerModeOverrideProvider.notifier).state = mode;
 

@@ -13,6 +13,7 @@ class RendementTab extends ConsumerWidget {
 
   SfChipVariant _statusVariant(String status) {
     switch (status) {
+      case 'Excellent':
       case 'Bon':
         return SfChipVariant.green;
       case 'Moyen':
@@ -85,6 +86,11 @@ class RendementTab extends ConsumerWidget {
                   ),
                 );
               }),
+              const SizedBox(height: 8),
+              const Text(
+                'Prédiction · Model 3 Random Forest R²=0.9999',
+                style: TextStyle(fontSize: 10, color: AppColors.textMuted),
+              ),
             ],
           ),
         ),

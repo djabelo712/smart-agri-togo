@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/firebase/firebase_bootstrap.dart';
 import '../../core/notifications/notification_service.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/api_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/energy_provider.dart';
 import '../../providers/notification_settings_provider.dart';
@@ -12,6 +13,7 @@ import '../../providers/settings_provider.dart';
 import '../../widgets/confirm_dialog.dart';
 import '../../widgets/sf_card.dart';
 import 'alerts_list.dart';
+import 'widgets/api_connection_section.dart';
 
 class ReglagesScreen extends ConsumerWidget {
   const ReglagesScreen({super.key});
@@ -32,7 +34,8 @@ class ReglagesScreen extends ConsumerWidget {
       data: (u) => u?.email ?? 'demo@smartfarm-togo.local',
       orElse: () => 'demo@smartfarm-togo.local',
     );
-    final userRole = demo ? 'Mode démo' : 'Opérateur champ';
+    final userRole = ref.watch(userRoleLabelProvider);
+    final apiConnected = ref.watch(apiConnectedProvider);
 
     final controllerMode = system.maybeWhen(
       data: (s) => s?.controllerMode ?? 'MPC',
@@ -110,7 +113,7 @@ class ReglagesScreen extends ConsumerWidget {
                 const Divider(height: 0.5, indent: 14, endIndent: 14),
                 _ReadOnlyRow(
                   label: 'Connexion',
-                  value: firebaseOk ? 'Firebase' : 'Locale (démo)',
+                  value: ref.watch(systemConnectionLabelProvider),
                 ),
                 const Divider(height: 0.5, indent: 14, endIndent: 14),
                 const _ReadOnlyRow(
@@ -120,6 +123,8 @@ class ReglagesScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 20),
+          const ApiConnectionSection(),
           const SizedBox(height: 20),
           const _SectionLabel('NOTIFICATIONS'),
           SfCard(
@@ -184,13 +189,27 @@ class ReglagesScreen extends ConsumerWidget {
             child: SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text('Mode démo (données simulées)'),
-              subtitle: !firebaseOk
-                  ? const Text('Requis sans configuration Firebase')
-                  : null,
+              subtitle: Text(
+                apiConnected
+                    ? 'Désactivé tant que l\'API est connectée. Réactivez pour simuler le champ.'
+                    : !firebaseOk
+                        ? 'Requis sans configuration Firebase'
+                        : 'Données champ simulées au lieu de Firebase',
+                style: const TextStyle(fontSize: 11),
+              ),
               value: demo || !firebaseOk,
               onChanged: !firebaseOk
                   ? null
-                  : (v) => ref.read(demoModeProvider.notifier).setDemoMode(v),
+                  : (v) async {
+                      await ref
+                          .read(demoModeProvider.notifier)
+                          .setDemoMode(v);
+                      if (v) {
+                        await ref
+                            .read(apiConnectedProvider.notifier)
+                            .setConnected(false);
+                      }
+                    },
             ),
           ),
           const SizedBox(height: 20),

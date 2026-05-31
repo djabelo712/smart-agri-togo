@@ -68,12 +68,31 @@ class AppConstants {
   AppConstants._();
 
   static const String appName = 'SmartFarm Togo';
-  static const String appVersion = '1.0';
+  static const String appVersion = '1.0.0';
   static const String locationLabel = 'Lomé, Togo';
   static const String footerOrg = 'AgroLab Africa';
 
   /// Heartbeat considéré hors ligne après 5 minutes.
   static const Duration offlineThreshold = Duration(minutes: 5);
 
-  static const String defaultApiBaseUrl = 'https://api.smartfarm-togo.local';
+  static const String defaultApiBaseUrl =
+      'https://smart-agri-togo.onrender.com';
+
+  static const Duration apiConnectTimeout = Duration(seconds: 10);
+  static const Duration apiReceiveTimeout = Duration(seconds: 30);
+  static const Duration apiSendTimeout = Duration(seconds: 10);
+
+  /// Render.com : le 1er appel après inactivité peut prendre jusqu'à ~60 s.
+  static const Duration apiHealthConnectTimeout = Duration(seconds: 60);
+  static const Duration apiHealthReceiveTimeout = Duration(seconds: 60);
+  static const Duration sessionTimeout = Duration(minutes: 30);
+
+  static const List<String> validCropNames = [
+    'Oignon',
+    'Carotte',
+    'Laitue',
+    'Maïs',
+  ];
+
+  static const List<String> controllerModes = ['MPC', 'PID', 'Manuel'];
 }

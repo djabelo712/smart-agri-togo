@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../widgets/demo_data_banner.dart';
 import '../widgets/offline_banner.dart';
 
 class MainShell extends StatelessWidget {
@@ -21,6 +22,7 @@ class MainShell extends StatelessWidget {
       body: Column(
         children: [
           const OfflineBanner(),
+          const DemoDataBanner(),
           Expanded(child: navigationShell),
         ],
       ),

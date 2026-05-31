@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../data/models/cell_model.dart';
 import '../firebase/firebase_bootstrap.dart';
+import '../utils/logger.dart';
 import 'background_fcm_handler.dart';
 
 /// Notifications locales + FCM — SmartFarm Togo.
@@ -72,7 +72,7 @@ class NotificationService {
     }
 
     _initialized = true;
-    debugPrint('SmartFarm: notifications initialisées.');
+    AppLogger.info('Notifications initialisées.');
   }
 
   Future<void> _setupFcm() async {
@@ -101,19 +101,14 @@ class NotificationService {
 
       FirebaseMessaging.onMessage.listen(_showFcmForeground);
 
-      final token = await messaging.getToken();
-      if (kDebugMode && token != null) {
-        debugPrint('SmartFarm FCM token: ${token.substring(0, 20)}...');
-      }
+      await messaging.getToken();
     } catch (e) {
-      debugPrint('SmartFarm: FCM non disponible — $e');
+      AppLogger.error('FCM non disponible', e);
     }
   }
 
   void _onNotificationTap(NotificationResponse response) {
-    if (kDebugMode) {
-      debugPrint('SmartFarm: tap notif ${response.payload}');
-    }
+    AppLogger.debug('Tap notification ${response.payload}');
   }
 
   Future<void> _showFcmForeground(RemoteMessage message) async {

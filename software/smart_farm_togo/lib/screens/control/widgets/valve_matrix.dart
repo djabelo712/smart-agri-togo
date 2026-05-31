@@ -6,6 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../data/models/cell_model.dart';
 import '../../../providers/control_provider.dart';
 import '../../../providers/field_provider.dart';
+import '../../../core/security/hardware_confirmation.dart';
 import '../../../widgets/confirm_dialog.dart';
 
 String _cropAbbr(String crop) {
@@ -84,12 +85,12 @@ class ValveMatrix extends ConsumerWidget {
       if (!context.mounted) return;
       _snackResult(context, ref, cell.id, success: 'Vanne ${cell.id} fermée');
     } else {
-      final ok = await showConfirmDialog(
-        context: context,
-        title: 'Ouvrir la vanne',
-        message: 'Ouvrir la vanne ${cell.id} pendant 15 minutes ?',
+      final ok = await requireDoubleConfirmation(
+        context,
+        action: 'Ouvrir la vanne ${cell.id}',
+        detail: 'Irrigation de la zone ${cell.id} pendant 15 minutes.',
       );
-      if (ok != true || !context.mounted) return;
+      if (!ok || !context.mounted) return;
 
       ref.read(valveOptimisticProvider.notifier).update((m) => {
             ...m,

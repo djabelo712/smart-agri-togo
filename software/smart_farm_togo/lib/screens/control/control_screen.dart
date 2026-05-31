@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/control_provider.dart';
 import '../../providers/field_provider.dart';
-import '../../widgets/confirm_dialog.dart';
+import '../../core/security/hardware_confirmation.dart';
 import 'widgets/mode_selector.dart';
 import 'widgets/pump_card.dart';
 import 'widgets/valve_matrix.dart';
@@ -79,22 +79,12 @@ class ControlScreen extends ConsumerWidget {
   }
 
   Future<void> _closeAllValves(BuildContext context, WidgetRef ref) async {
-    final first = await showConfirmDialog(
-      context: context,
-      title: 'Tout fermer',
-      message: 'Fermer toutes les vannes ouvertes du champ ?',
-      isDanger: true,
+    final ok = await requireDoubleConfirmation(
+      context,
+      action: 'Tout fermer',
+      detail: 'Fermer toutes les vannes ouvertes et arrêter toute irrigation.',
     );
-    if (first != true || !context.mounted) return;
-
-    final second = await showConfirmDialog(
-      context: context,
-      title: 'Confirmation',
-      message: 'Cette action arrête toute irrigation en cours. Confirmer ?',
-      confirmLabel: 'Oui, tout fermer',
-      isDanger: true,
-    );
-    if (second != true || !context.mounted) return;
+    if (!ok || !context.mounted) return;
 
     final cells = ref.read(cellsStreamProvider).valueOrNull ?? {};
     final overrides = ref.read(valveOptimisticProvider);
